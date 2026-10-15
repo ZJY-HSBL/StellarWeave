@@ -50,7 +50,9 @@ def test_manual_alignment_is_unverified():
 
 def test_two_band_selection_shared_ids():
     n=30
-    cat={'source_id':np.arange(1,n+1,dtype=float)}
+    cat={'source_id':np.arange(1,n+1,dtype=float),
+         'ra_deg':np.linspace(100,100.01,n),
+         'dec_deg':np.linspace(-30,-30.01,n)}
     for band in ('f606w','f814w'):
         cat['mag_'+band]=np.full(n,20.0 if band=='f606w' else 19.0)
         cat['magerr_'+band]=np.full(n,.02)
