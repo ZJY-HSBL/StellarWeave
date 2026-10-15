@@ -104,7 +104,7 @@ def write_tiles(image, valid, catalog_positions, reference_rows, out_dir,
     return files
 
 def prepare_dataset(fits_path, catalog_path, out_dir, band='f606w',
-                    tile_size=256, guard=64, alignment='auto',
+                    tile_size=256, guard=64, alignment='affine',
                     dx=None, dy=None, split='spatial',
                     max_mag_error=.2, max_psf_quality=.5, max_crowding=.5):
     image, valid, wcs, header = read_fits_science(fits_path)
@@ -115,42 +115,25 @@ def prepare_dataset(fits_path, catalog_path, out_dir, band='f606w',
         raise ValueError('No stars passed conservative reference-quality selection')
     pos = project_catalog(table, wcs, mask)
     q = {k: v[mask] for k,v in table.items()}
-    h, w = image.shape
-    onchip = (np.isfinite(pos).all(axis=1) & (pos[:, 0]>=-60) & (pos[:,0]<w+60)
-              & (pos[:,1]>=-60) & (pos[:,1]<h+60))
-    if onchip.sum() < 12:
-        raise ValueError('Too few catalog stars projected onto this FITS field; check catalog/image identity')
-    if alignment == 'auto':
-        from .detection import scipy_peak_detector
-        near_idx = np.where(onchip)[0]
-        bright_idx = near_idx[np.argsort(q['mag_'+band][near_idx])][:500]
-        detections = scipy_peak_detector(image, nsigma=6)
-        report = estimate_translation(pos[bright_idx], detections)
-    elif alignment == 'wcs':
-        if dx is not None or dy is not None:
-            raise ValueError('Explicit shift requires --alignment manual')
-        report = {'dx_px': 0., 'dy_px': 0., 'status': 'UNVERIFIED_WCS_ONLY',
-                  'warning': 'No measured residual; do not use labels for a scientific benchmark'}
-    elif alignment == 'manual':
-        if dx is None or dy is None:
-            raise ValueError('Both dx and dy are required for manual alignment')
-        report = {'dx_px': float(dx), 'dy_px': float(dy), 'status': 'UNVERIFIED_USER_SHIFT',
-                  'warning': 'Manual shift not verified by source matching'}
-    else:
-        raise ValueError('alignment must be auto, wcs, or manual')
-    pos += [report['dx_px'], report['dy_px']]
+    from .registration_pipeline import register_catalog
+    pos, report, verified = register_catalog(
+        image, pos, q['mag_'+band], mode=alignment, dx=dx, dy=dy)
+    # WCS-only/manual registration is diagnostic; forbid normal train/val
+    # exports so unverified labels cannot silently enter a training set.
+    if not verified and split != 'test-only':
+        raise ValueError('Unverified registration requires --split test-only')
     rows = {'source_id': q['source_id'], 'mag': q['mag_'+band],
             'mag_error': q['magerr_'+band]}
     outputs = write_tiles(image, valid, pos, rows, out_dir, tile_size,
                           guard=guard, mode=split)
-    summary = {'version': '0.2.0', 'reference_is_incomplete': True,
+    summary = {'version': '0.3.0', 'reference_is_incomplete': True,
                'science_grade_photometry': False,
                'catalog_schema': 'Anderson2008 Table4:21col; inspect .adj.zpt variant',
                'fits_path': str(fits_path), 'catalog_path': str(catalog_path),
                'band': band, 'quality_defaults': {'max_mag_error': max_mag_error,
                 'max_psf_quality': max_psf_quality, 'max_crowding': max_crowding},
                'fits_metadata': header, 'alignment': report,
-               'registration_passed_qc': alignment == 'auto',
+               'registration_passed_qc': verified,
                'registration_requires_visual_inspection': True,
                'input_sha256': {'image': checksum(fits_path), 'catalog': checksum(catalog_path)},
                'split_policy': split, 'guard_px': guard, 'tile_size': tile_size,

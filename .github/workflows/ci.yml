@@ -54,4 +54,6 @@ jobs:
       - name: Run tests including generated FITS/WCS
         run: python -m pytest -q
       - name: Verify data preparation CLI
-        run: python -m stellarweave.prepare_hst --help
+        run: |
+          python -m stellarweave.prepare_hst --help
+          python -m stellarweave.dualband --help

@@ -4,14 +4,14 @@ import json
 from .dataset import prepare_dataset
 
 def main(argv=None):
-    p = argparse.ArgumentParser(description='StellarWeave v0.2.0 HST dataset builder')
+    p = argparse.ArgumentParser(description='StellarWeave v0.3.0 HST dataset builder')
     p.add_argument('--fits', required=True, help='ACSGGCT reference image (.fits)')
     p.add_argument('--catalog', required=True, help='Corresponding RDVIQ text catalog')
     p.add_argument('--out', default='data/processed')
     p.add_argument('--band', choices=['f606w','f814w'], default='f606w')
     p.add_argument('--tile-size', type=int, default=256)
     p.add_argument('--guard', type=int, default=64)
-    p.add_argument('--alignment', choices=['auto','wcs','manual'], default='auto')
+    p.add_argument('--alignment', choices=['affine','wcs','manual'], default='affine')
     p.add_argument('--dx', type=float)
     p.add_argument('--dy', type=float)
     p.add_argument('--split', choices=['spatial','test-only'], default='spatial')

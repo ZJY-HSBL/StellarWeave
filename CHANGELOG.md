@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.3.0 — 2026-10-15
+
+**Six-parameter astrometric registration and shared-ID two-filter catalog pairing.**
+
+- Added translation-initialized iterative affine least-squares mapping with one-to-one matches and outlier clipping.
+- Added fail-closed inlier fraction, RMS, 95th percentile residual, source field coverage and scale/shear sanity gates; record a 3-by-3 local residual diagnostic.
+- Updated FITS-to-catalog dataset preparation to store full affine quality results rather than assuming a shift-only fit is sufficient.
+- Added high-quality F606W/F814W common-ID catalog export with independent per-band WCS and affine mapping, calibrated catalog magnitudes, colors and measurement errors.
+- Added generated-data regression and Astropy FITS/WCS integration tests.
+- Disabled ordinary train/validation exports for manual or unverified WCS alignment.
+- Documented that archived ACSGGCT product compatibility and real-field residuals remain unverified.
+
+**Unfinished:** live MAST paired-file verification, high-precision crowded-star PSF photometry, artificial-star recovery, calibrated measurement uncertainty, any trained deep model.
+
 ## v0.2.0 — 2026-10-15
 
 **Real-data pipeline foundation and conservative registration.**

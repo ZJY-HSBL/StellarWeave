@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.2.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
+**v0.3.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
 
 ## Purpose / 研究目标
 
@@ -50,13 +50,13 @@ Specific archive URLs are used instead of searching arbitrary observations. If a
 python -m stellarweave.prepare_hst \
   --fits data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f606w_v2_img.fits \
   --catalog data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_r.rdviq.cal.adj.zpt \
-  --band f606w --alignment auto --tile-size 256 --guard 64 \
+  --band f606w --alignment affine --tile-size 256 --guard 64 \
   --out data/processed/ngc6397
 ```
 
 **3. Inspect the output before training.** `alignment_qc.png` plots candidate label positions on the actual image, and `manifest.json` records reference-quality cuts, SHA-256 input hashes, estimated translation, crossmatch inliers/RMS, and train/validation/test tile counts.
 
-The auto-registration attempts only a **global shift** and rejects matches with too few one-to-one inliers or excessive residual. It cannot guarantee that spatially varying distortions and instrument calibration are correct. If auto alignment fails, investigate the frame; do **not** silently use unverified labels.
+The default alignment initializes from a global translation and fits a **six-parameter affine transformation** with one-to-one matching, residual clipping, RMS/p95/coverage QC, and a 3×3 local-residual grid. It is not a complete optical-distortion or absolute astrometric solution. If auto alignment fails, investigate the frame; do **not** silently use unverified labels.
 
 For diagnostic-only projection:
 
@@ -82,17 +82,37 @@ Each `.npz` contains raw float32 `image`, a `valid` mask, and `labels` with tile
 
 The default data split uses spatially separated vertical stripes and a guard region to limit data leakage. Boundary tiles are intentionally discarded, **not counted as missed detections**. To reserve an entire different cluster: add `--split test-only`, and never tune thresholds on it.
 
+## Two-filter association / F606W + F814W 关联（v0.3）
+
+First download the F606W/F814W science mosaics and the accompanying **shared** ACS photometric catalog from the [same cluster directory](https://archive.stsci.edu/pub/hlsp/acsggct/ngc6397/). The official catalog contains the identity and photometry in both filters; **do not** infer identity from a positional nearest-neighbor search across images.
+
+```bash
+python -m stellarweave.download_acsggct --cluster ngc6397 --band f606w
+python -m stellarweave.download_acsggct --cluster ngc6397 --band f814w
+python -m stellarweave.dualband \
+  --f606w data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f606w_v2_img.fits \
+  --f814w data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f814w_v2_img.fits \
+  --catalog data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_r.rdviq.cal.adj.zpt \
+  --out data/processed/ngc6397/paired
+```
+
+Products: `paired_reference.csv` with each common source ID, RA/Dec, independently mapped F606W and F814W pixel coordinates, calibrated Vega magnitudes, color, and errors; `dualband_manifest.json` includes per-filter affine residual QC and input SHA-256 hashes. The two bands are **not resampled onto one pixel grid**, and those magnitudes originate from the published catalog; no new photometric inference is performed.
+
+The affine fitting uses a conservative initialization based on a near-identity WCS projection. Large initial rotations, scales, and incorrect WCS may fail closed rather than producing misleading labels. For field calibration one must examine the accepted matches spatially and adjust image/catalog selection or use professional astrometric tools.
+
+Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, and v0.3 prevents their export into regular train/validation sets unless the output split is explicitly `test-only`. This is still not scientific benchmark truth.
+
 ## Scientific limitations / 科学限制
 
 1. A catalog built from multiple exposures is not a perfect label set for one mosaic; faint or blended stars can be missing in either.
 2. The original published RDVIQ column definitions may need checking against the archived `.adj.zpt` variant.
-3. Verified *translation-only* fit is not a complete astrometric solution; visual QC and local residual checks are required.
+3. Verified affine correspondence is not complete astronomical astrometry; a QC plot and the 3×3 residual grid still require human inspection.
 4. ACS `BUNIT`, exposure, zeropoints, DQ masks, correlated noise and PSF vary. This release does not do calibrated PSF flux fitting.
 5. Real HST download + catalog correspondence **could not be run in this execution environment**; end-to-end tests use constructed FITS fixtures.
 
 ## Roadmap / 开发路线
 
-- **v0.3**: real-field catalog verification, affine/local astrometric residual map, two-band associations.
+- **v0.3**: affine/local astrometric residual maps and reference-catalog two-band association implemented on constructed data; **real archive verification remains outstanding**.
 - **v0.4**: artificial-star injection and recovery, completeness vs. brightness and stellar density.
 - **v0.5**: PSF photometry baselines and uncertainty validation; then evaluate physically informed neural improvements.
 
