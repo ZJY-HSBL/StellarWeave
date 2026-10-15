@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stellarweave-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-smoke.txt
+      - name: Install
+        run: python -m pip install -r requirements-smoke.txt
+      - name: Verify release tests
+        run: |
+          python -m pytest -q
+          python -m stellarweave.cli --detector scipy --size 128 --stars 15 --seed 42 --out outputs/release-smoke
+      - name: Choose version and verify tag correspondence
+        id: version
+        env:
+          INPUT_REF_TYPE: ${{ github.ref_type }}
+          INPUT_REF_NAME: ${{ github.ref_name }}
+        run: |
+          version=$(python -c "from stellarweave import __version__; print(__version__)")
+          tag="v${version}"
+          if [[ "$INPUT_REF_TYPE" == "tag" && "$INPUT_REF_NAME" != "$tag" ]]; then
+            echo "::error::Tag $INPUT_REF_NAME does not match package version $tag"
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - name: Check whether release exists
+        id: existing
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build ZIP and SHA-256
+        if: steps.existing.outputs.exists == 'false'
+        env:
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          mkdir -p dist
+          git archive --format=zip --prefix=StellarWeave/ -o "dist/StellarWeave_${RELEASE_TAG}_source.zip" HEAD
+          cd dist
+          sha256sum "StellarWeave_${RELEASE_TAG}_source.zip" > "StellarWeave_${RELEASE_TAG}_SHA256.txt"
+      - name: Publish release and matching tag
+        if: steps.existing.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          flags=(--generate-notes)
+          if [[ "$RELEASE_TAG" == v0.* ]]; then flags+=(--prerelease); fi
+          gh release create "$RELEASE_TAG"             "dist/StellarWeave_${RELEASE_TAG}_source.zip"             "dist/StellarWeave_${RELEASE_TAG}_SHA256.txt"             --target "$RELEASE_SHA"             --title "StellarWeave $RELEASE_TAG"             "${flags[@]}"

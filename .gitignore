@@ -1,0 +1,11 @@
+__pycache__/
+.pytest_cache/
+.venv/
+*.py[cod]
+data/
+outputs/
+*.fits
+*.fit
+*.fts
+*.log
+dist/
