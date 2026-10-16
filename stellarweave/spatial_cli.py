@@ -27,6 +27,8 @@ def main(argv=None):
         'catalog_rows':result['catalog_rows'],
         'registration':result['catalog_wcs_registration']['status'],
         'raw_wcs_matches':result['catalog_wcs_registration']['raw_wcs_match_count'],
+        'wide_shift_status':result['wide_shift_heldout_plate_search']['status'],
+        'wide_shift_holdout_matches':result['wide_shift_heldout_plate_search'].get('holdout_matches'),
         'psf_candidate_cells':result['psf_candidate_cells'],
         'output':str(Path(args.out).resolve()),
         'science_grade':False},indent=2))

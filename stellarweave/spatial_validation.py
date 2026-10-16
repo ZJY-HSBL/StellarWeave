@@ -18,6 +18,7 @@ from .catalog import read_acsggct_catalog, project_catalog, quality_mask
 from .detection import scipy_peak_detector
 from .real_hst import empirical_psf, read_science_crop
 from .astrometry import fit_affine, apply_affine
+from .robust_plate import plate_diagnostics
 
 
 def match_unique(reference_xy, detected_xy, radius=2.5):
@@ -164,6 +165,21 @@ def write_spatial_report(fits_path,catalog_path,out_dir,*,size=512,x0=None,
     mag=np.asarray(catalog['mag_f606w'][quality])
     registration,refs,detected,matrix=correspondence_diagnostics(
         image,valid,positions,mag,radius=matching_radius)
+    # Separate wide-shift search and held-out source validation, independent
+    # from the legacy narrow-WCS nearest-neighbor diagnostic.
+    h,w=image.shape
+    pos=np.asarray(positions,float).reshape(-1,2)
+    onfield=(np.isfinite(pos).all(axis=1)&np.isfinite(mag)
+             &(pos[:,0]>8)&(pos[:,0]<w-8)
+             &(pos[:,1]>8)&(pos[:,1]<h-8))
+    candidates=pos[onfield]
+    candidatemag=mag[onfield]
+    if len(candidates)>500:
+        candidates=candidates[np.argsort(candidatemag)[:500]]
+    wide_plate=plate_diagnostics(
+        candidates,detected,shape=image.shape,
+        max_shift_px=192.,train_limit=260,holdout_limit=150,seed=42,
+        initial_radius=3.5,match_radius=1.4)
     grid,stamps=spatial_psf_grid(image,valid,cells=cells,
                                 stamp_size=stamp_size,fwhm=fwhm,
                                 min_stars=min_stars)
@@ -179,6 +195,7 @@ def write_spatial_report(fits_path,catalog_path,out_dir,*,size=512,x0=None,
             'quality_f606w':int(quality.sum()),
             'crop_origin_xy':meta['crop_xy'],
             'catalog_wcs_registration':registration,
+            'wide_shift_heldout_plate_search':wide_plate,
             'psf_grid':grid,'psf_candidate_cells':sum(x['status']=='CANDIDATE' for x in grid),
             'scientific_astrometry_validated':False,
             'instrument_grade_epsf':False,

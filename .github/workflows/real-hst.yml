@@ -9,6 +9,7 @@ on:
       - stellarweave/catalog.py
       - stellarweave/spatial_validation.py
       - stellarweave/spatial_cli.py
+      - stellarweave/robust_plate.py
       - .github/workflows/real-hst.yml
   workflow_dispatch:
 
@@ -70,6 +71,12 @@ jobs:
           assert report['kind']=='EXPLORATORY_SPATIAL_HST_DIAGNOSTIC'
           assert report['scientific_astrometry_validated'] is False
           print('Raw WCS association:',report['catalog_wcs_registration'])
+          wide=report['wide_shift_heldout_plate_search']
+          print('Wide-shift/holdout candidate:',wide)
+          assert wide['status'] in ('HELDOUT_QC_PASS','HELDOUT_QC_REJECTED',
+                                    'NO_RELIABLE_TRAIN_FIT','INSUFFICIENT_SOURCES',
+                                    'INSUFFICIENT_HOLDOUT')
+          assert wide['science_calibrated'] is False
           print('PSF candidate cells:',report['psf_candidate_cells'])
           print('The findings are exploratory diagnostics, not absolute calibration.')
           PY
