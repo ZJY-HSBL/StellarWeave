@@ -25,13 +25,30 @@ from .real_hst import sha256_file
 NULL_OFFSETS=((39.,0.),(-39.,0.),(0.,39.),(0.,-39.),(27.,31.),(-27.,-31.))
 
 
-def tile_origins(shape,size,grid=3):
-    """Generate a fixed 3x3 disjoint tiling, anchored to outer image margins."""
+def tile_origins(shape,size,grid=3,*,anchor_center_xy=None):
+    """Deterministic nonoverlapping tiling, optionally near the WCS catalog footprint.
+
+    Choosing the center using projected catalog sky positions uses NO image
+    detections and no fit results. It is a geometric design decision, not
+    a pass/fail-optimized search. All test tiles remain disjoint from anchor.
+    """
     h,w=map(int,shape)
     if size<64 or grid not in (2,3) or h<grid*size or w<grid*size:
         raise ValueError('Need image >= grid*size in both dimensions and size >=64')
-    xs=[int(round(i*(w-size)/(grid-1))) for i in range(grid)]
-    ys=[int(round(i*(h-size)/(grid-1))) for i in range(grid)]
+    if anchor_center_xy is None:
+        xs=[int(round(i*(w-size)/(grid-1))) for i in range(grid)]
+        ys=[int(round(i*(h-size)/(grid-1))) for i in range(grid)]
+    else:
+        point=np.asarray(anchor_center_xy,dtype=float).reshape(2)
+        if not np.isfinite(point).all():
+            raise ValueError('Invalid WCS catalog footprint center')
+        anchor_index=(grid*grid)//2
+        ix=anchor_index%grid
+        iy=anchor_index//grid
+        cx=int(np.clip(round(point[0]-size/2),ix*size,w-(grid-ix)*size))
+        cy=int(np.clip(round(point[1]-size/2),iy*size,h-(grid-iy)*size))
+        xs=[cx+(i-ix)*size for i in range(grid)]
+        ys=[cy+(i-iy)*size for i in range(grid)]
     points=[(x,y) for y in ys for x in xs]
     for i,(x1,y1) in enumerate(points):
         for x2,y2 in points[i+1:]:
@@ -125,7 +142,16 @@ def assess_mosaic(image,valid,reference_xy,magnitudes,*,tile_size=512,grid=3,
     if im.ndim!=2 or good.shape!=im.shape:
         raise ValueError('Invalid image/valid mask geometry')
     positions,mags=_clean_references(reference_xy,magnitudes)
-    origins=tile_origins(im.shape,tile_size,grid=grid)
+    # Astronomical mosaics have blank margins around useful footprints.
+    # Position tiles around the *pre-detection* WCS reference-star distribution;
+    # never move tiles in response to measured matching performance.
+    footprint=((positions[:,0]>=0)&(positions[:,0]<im.shape[1])
+               &(positions[:,1]>=0)&(positions[:,1]<im.shape[0]))
+    if not footprint.any():
+        raise ValueError('No WCS reference stars project into the FITS mosaic')
+    center_xy=np.median(positions[footprint],axis=0)
+    origins=tile_origins(im.shape,tile_size,grid=grid,
+                         anchor_center_xy=center_xy)
     center=(grid*grid)//2
     tiles=[]
     # Per-tile local fits are diagnostics only; *never* use them to
@@ -169,6 +195,8 @@ def assess_mosaic(image,valid,reference_xy,magnitudes,*,tile_size=512,grid=3,
     return {'version':'0.9.0','kind':'INTERNAL_ASTROMETRY_SPATIAL_GENERALIZATION',
             'image_shape':list(im.shape),'tile_size':int(tile_size),
             'grid':grid,'tile_count':len(tiles),'anchor_index':center,
+            'tile_selection':'WCS_CATALOG_MEDIAN_FIXED_3x3_NO_DETECTION_TUNING',
+            'footprint_median_xy':center_xy.tolist(),
             'anchor_status':anchor.get('status'),
             'anchor_affine_global':model.tolist() if model is not None else None,
             'transfer_tiles_pass':passes,'transfer_tiles_total':len(held),

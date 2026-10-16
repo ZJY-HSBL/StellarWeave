@@ -22,6 +22,22 @@ def test_disjoint_tiles():
         tile_origins((400,400),256,3)
 
 
+def test_reference_footprint_drives_disjoint_tile_selection():
+    shape=(8000,8000)
+    cells=tile_origins(shape,512,grid=3,anchor_center_xy=(4010,3970))
+    assert cells[4][0]>3000 and cells[4][0]<4400
+    assert cells[4][1]>3000 and cells[4][1]<4400
+    assert all(x>=0 and x+512<=8000 and y>=0 and y+512<=8000
+               for x,y in cells)
+    assert all(abs(x-u)>=512 or abs(y-v)>=512
+               for i,(x,y) in enumerate(cells) for u,v in cells[i+1:])
+    # A footprint near the mosaic edge must be moved as a whole, not
+    # individually clipped into overlapping tiles.
+    near_edge=tile_origins(shape,512,grid=3,anchor_center_xy=(25,50))
+    assert near_edge[0]==(0,0)
+    assert near_edge[4]==(512,512)
+
+
 def test_affine_lift_to_full_mosaic():
     a=np.array([[1.0002,-.0004,12.1],[.0003,.9998,-7.5]])
     origin=(380,920)
