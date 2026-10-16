@@ -7,6 +7,8 @@ on:
       - stellarweave/real_hst_cli.py
       - stellarweave/download_acsggct.py
       - stellarweave/catalog.py
+      - stellarweave/spatial_validation.py
+      - stellarweave/spatial_cli.py
       - .github/workflows/real-hst.yml
   workflow_dispatch:
 
@@ -52,6 +54,25 @@ jobs:
           assert 'F814W' not in d['input']['filters'] or 'F606W' in d['input']['filters']
           print('Real archive read + candidate PSF audit passed. NO science-calibrated validation claimed.')
           PY
+      - name: Spatial catalog-WCS and native-pixel PSF diagnostics
+        run: |
+          python -m stellarweave.spatial_cli \
+            --fits data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f606w_v2_img.fits \
+            --catalog data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_r.rdviq.cal.adj.zpt \
+            --size 512 --grid-cells 2 --stamp-size 15 --fwhm 2.6 \
+            --min-stars 3 --match-radius 3 \
+            --out outputs/ngc6397_spatial_v07
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('outputs/ngc6397_spatial_v07/spatial_diagnostics.json').read_text())
+          assert report['catalog_rows'] > 1000
+          assert report['kind']=='EXPLORATORY_SPATIAL_HST_DIAGNOSTIC'
+          assert report['scientific_astrometry_validated'] is False
+          print('Raw WCS association:',report['catalog_wcs_registration'])
+          print('PSF candidate cells:',report['psf_candidate_cells'])
+          print('The findings are exploratory diagnostics, not absolute calibration.')
+          PY
       - name: Upload only diagnostic QA artifacts (not large FITS/catalog data)
         if: always()
         uses: actions/upload-artifact@v4
@@ -62,5 +83,9 @@ jobs:
             outputs/ngc6397_real_audit/selected_psf_stars.csv
             outputs/ngc6397_real_audit/psf_preview.png
             outputs/ngc6397_real_audit/empirical_prf_native.npy
+            outputs/ngc6397_spatial_v07/spatial_diagnostics.json
+            outputs/ngc6397_spatial_v07/spatial_psf_grid.png
+            outputs/ngc6397_spatial_v07/astrometry_overlay.png
+            outputs/ngc6397_spatial_v07/psf_*.npy
           if-no-files-found: ignore
           retention-days: 14

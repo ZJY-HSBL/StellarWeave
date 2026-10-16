@@ -79,3 +79,4 @@ jobs:
         run: |
           python -m stellarweave.prepare_hst --help
           python -m stellarweave.dualband --help
+          python -m stellarweave.spatial_cli --help
