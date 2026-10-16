@@ -30,6 +30,10 @@ jobs:
         run: |
           python -m stellarweave.download_acsggct --cluster ngc6397 \
             --band f606w --out data/raw --max-mb 200
+      - name: Inspect official catalog header for schema compatibility
+        run: |
+          head -n 14 data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_r.rdviq.cal.adj.zpt | cut -c1-240
+          file data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_r.rdviq.cal.adj.zpt
       - name: Audit real HST FITS and catalog, measure local empirical stamp
         run: |
           python -m stellarweave.real_hst_cli \

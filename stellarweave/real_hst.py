@@ -36,6 +36,8 @@ def filter_tokens(headers):
 
 def read_science_crop(path,size=512,x0=None,y0=None):
     """Inspect FITS SCI image with an optional matched ERR/DQ plane crop."""
+    if not Path(path).is_file():
+        raise FileNotFoundError(path)
     from astropy.io import fits
     from astropy.wcs import WCS
     with fits.open(path,memmap=True) as hdus:
