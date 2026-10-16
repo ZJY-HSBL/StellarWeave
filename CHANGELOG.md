@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.6.0 — 2026-10-17
+
+**Real ACSGGCT FITS/catalog audit and a critical column-schema correction.**
+
+- Official NGC 6397 directory verified: one F606W reference FITS and one joint F606W/F814W star catalog; no corresponding F814W image in this HLSP folder.
+- Corrected severe 21-column catalog assumption. The actual archive header contains 23 columns; RA and Dec are columns 22/23, not 20/21.
+- Added strict header-aware catalog reader; updated source quality diagnostics and all synthetic regression fixtures.
+- Added FITS SCI/ERR/DQ crop auditing, BUNIT/exposure/WCS metadata and SHA-256 provenance.
+- Added isolated-star native-pixel empirical PRF stamp estimator, summary JSON and QA preview.
+- Added a separate real-archive GitHub Actions workflow that downloads genuine NASA/STScI NGC 6397 products and uploads small QA artifacts.
+- The initial real-run yielded 16,100 catalog entries, a 512×512 fully valid crop and 79 candidate PSF stars. No science-grade photometric uncertainty or completeness result is claimed.
+
+**Unfinished:** quantitative real-image/cross-catalog registration, calibrated HST ePSF or noise model, detector gain and drizzle covariance, real-star flux-bias and completeness benchmarking.
 ## v0.5.0 — 2026-10-17
 
 **Common-sample PSF fitting baseline for artificial-star recovery.**

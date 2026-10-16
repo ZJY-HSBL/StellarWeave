@@ -4,12 +4,39 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.5.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
+**v0.6.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
 
 ## Purpose / 研究目标
 
 StellarWeave is designed to investigate faint stellar source detection, deblending, and measurement reliability in crowded telescope imagery. We are developing physically informed baselines, not merely applying YOLO to astronomy.
 
+## v0.6.0 — Genuine HST FITS & Catalog Audit / 真实天文观测数据审计
+
+**Real official NGC 6397 was successfully downloaded and inspected in GitHub Actions.** In the tested release candidate, the official ASCII catalog contained **16,100 records**, and the selected 512×512 FITS crop had **100% valid pixels**. A robust native-pixel candidate PSF was estimated from **79 isolated bright source candidates**. These are raw data-quality figures, **not detection completeness or measurement accuracy**.
+
+Official directory: https://archive.stsci.edu/pub/hlsp/acsggct/ngc6397/
+
+Download the actual F606W image and paired catalog:
+
+```bash
+python -m stellarweave.download_acsggct --cluster ngc6397 --band f606w --out data/raw
+```
+
+Audit the files and create a native-pixel candidate PRF:
+
+```bash
+python -m stellarweave.real_hst_cli \
+  --fits data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f606w_v2_img.fits \
+  --catalog data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_r.rdviq.cal.adj.zpt \
+  --size 512 --stamp-size 15 --fwhm 2.6 \
+  --out outputs/ngc6397_real_audit
+```
+
+Outputs: `audit.json` for FITS unit/exposure/filter/ERR/DQ/WCS presence, catalog row counts, and SHA-256; `selected_psf_stars.csv` for isolated candidate positions; `empirical_prf_native.npy` (unit-normalized local PSF stamp), and `psf_preview.png`.
+
+The audit records FITS scientific pixels, not scientifically verified WCS star matches. The PSF is only a single-tile, native-pixel empirical estimate: **not an oversampled HST instrumental ePSF**, not photometrically calibrated, and not guaranteed transferable to another location. Real HST detection completeness, per-star flux accuracy, noise covariance and physical uncertainty propagation are **not measured**.
+
+[View the Real HST Archive Audit workflow](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/real-hst.yml). GitHub artifacts contain only small QA products, not redistributed original FITS/catalog files.
 ## v0.5.0 — PSF photometry benchmark / 精密测光基线
 
 This research baseline compares **DAOStarFinder centroids**, **PSFPhotometry**, and **IterativePSFPhotometry**, as implemented in Photutils 3.x, using the **same injected images, source positions, and input flux levels** in every trial. An optional SciPy centroid control is also available.
@@ -88,9 +115,9 @@ Reference: [Photutils PSF photometry](https://photutils.readthedocs.io/en/stable
 
 ## Source data / 公开数据（不需人工逐星标注）
 
-Use the [ACS Survey of Galactic Globular Clusters](https://archive.stsci.edu/prepds/acsggct/) from NASA/STScI's MAST archive. Its stellar photometric catalogs are **reference measurements**, not exhaustive ground truth. [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) Table 4 documents the original 21-column RDVIQ catalog: ID, reference-frame x/y, F606W and F814W magnitudes/errors, number of exposures, unsaturated/saturated flags, neighbor contamination, PSF quality, and RA/Dec.
+Use the [ACS Survey of Galactic Globular Clusters](https://archive.stsci.edu/prepds/acsggct/) from NASA/STScI's MAST archive. Its stellar photometric catalogs are **reference measurements**, not exhaustive ground truth. [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) Table 4 documents the actual 23-column RDVIQ catalog: ID, reference-frame x/y, F606W and F814W magnitudes/errors, number of exposures, unsaturated/saturated flags, neighbor contamination, PSF quality, and RA/Dec.
 
-Default NGC 6397, then independent clusters NGC 6752 and NGC 104. Note that the archived `.rdviq.cal.adj.zpt` file variant still requires a live check of column compatibility and alignment against the specific image.
+Default NGC 6397, then independent clusters NGC 6752 and NGC 104. Note that the actual `.rdviq.cal.adj.zpt` file header has been checked and verified as 23-column and alignment against the specific image.
 
 ## Install / 安装
 
@@ -160,16 +187,12 @@ The default data split uses spatially separated vertical stripes and a guard reg
 
 ## Two-filter association / F606W + F814W 关联（v0.3）
 
-First download the F606W/F814W science mosaics and the accompanying **shared** ACS photometric catalog from the [same cluster directory](https://archive.stsci.edu/pub/hlsp/acsggct/ngc6397/). The official catalog contains the identity and photometry in both filters; **do not** infer identity from a positional nearest-neighbor search across images.
+The public ACSGGCT NGC 6397 / NGC 104 / NGC 6752 directories contain a single **F606W reference FITS image** and a two-filter photometry catalog; **no corresponding F814W FITS reference image** is present in those directories. Earlier README instructions claiming that an F814W image can be downloaded from the same directory were incorrect. The downloader now rejects such a request.
+
+The joint catalog already has F606W and F814W magnitudes for color–magnitude analyses. The optional `stellarweave.dualband` program requires a **separately obtained, matched-field F814W FITS file with independently checked WCS**; it does not fetch or validate such a file automatically.
 
 ```bash
 python -m stellarweave.download_acsggct --cluster ngc6397 --band f606w
-python -m stellarweave.download_acsggct --cluster ngc6397 --band f814w
-python -m stellarweave.dualband \
-  --f606w data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f606w_v2_img.fits \
-  --f814w data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f814w_v2_img.fits \
-  --catalog data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_r.rdviq.cal.adj.zpt \
-  --out data/processed/ngc6397/paired
 ```
 
 Products: `paired_reference.csv` with each common source ID, RA/Dec, independently mapped F606W and F814W pixel coordinates, calibrated Vega magnitudes, color, and errors; `dualband_manifest.json` includes per-filter affine residual QC and input SHA-256 hashes. The two bands are **not resampled onto one pixel grid**, and those magnitudes originate from the published catalog; no new photometric inference is performed.
@@ -181,17 +204,18 @@ Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, 
 ## Scientific limitations / 科学限制
 
 1. A catalog built from multiple exposures is not a perfect label set for one mosaic; faint or blended stars can be missing in either.
-2. The original published RDVIQ column definitions may need checking against the archived `.adj.zpt` variant.
+2. The actual `.adj.zpt` archive contains 23 columns. v0.6 correctly maps wV/wI, xsig/ysig, othV/othI and qfitV/qfitI before RA/Dec. These are survey diagnostics; their interpretation needs domain validation.
 3. Verified affine correspondence is not complete astronomical astrometry; a QC plot and the 3×3 residual grid still require human inspection.
 4. ACS `BUNIT`, exposure, zeropoints, DQ masks, correlated noise and PSF vary. This release does not do calibrated PSF flux fitting.
-5. Real HST download + catalog correspondence **could not be run in this execution environment**; end-to-end tests use constructed FITS fixtures.
+5. The separate GitHub workflow has downloaded and audited the real NGC 6397 FITS and catalog. This does not yet establish their star-by-star astrometric registration or scientifically calibrated PSF photometry.
 
 ## Roadmap / 开发路线
 
 - **v0.3**: affine/local astrometric residual maps and reference-catalog two-band association implemented on constructed data; **real archive verification remains outstanding**.
 - **v0.4**: synthetic and guarded FITS injection/recovery protocol implemented; real scientific calibration and noise modeling remain outstanding.
 - **v0.5**: common-injection PSF and iterative-PSF baselines implemented; science-grade uncertainty validation remains future work.
-- **v0.6**: real-HST artifact ingestion, instrument PSF and noise models, spatially resolved completeness/flux-bias maps.
+- **v0.6**: real archive ingest, fixed 23-column catalog, DQ/ERR/BUNIT/WCS metadata audit, native-pixel PSF diagnostic; instrument-calibrated physical models remain future work.
+- **v0.7**: scientifically validated real-field catalog registration, spatially variable ePSF, exposure/noise modeling and calibrated completeness.
 
 Cite the [survey archive](https://archive.stsci.edu/prepds/acsggct/), [Sarajedini et al. (2007)](https://arxiv.org/abs/astro-ph/0612598), and [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) when using the data.
 

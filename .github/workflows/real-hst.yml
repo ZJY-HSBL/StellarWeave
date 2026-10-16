@@ -61,5 +61,6 @@ jobs:
             outputs/ngc6397_real_audit/audit.json
             outputs/ngc6397_real_audit/selected_psf_stars.csv
             outputs/ngc6397_real_audit/psf_preview.png
+            outputs/ngc6397_real_audit/empirical_prf_native.npy
           if-no-files-found: ignore
           retention-days: 14
