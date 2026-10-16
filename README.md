@@ -4,12 +4,45 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.8.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
+**v0.9.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
 
 ## Purpose / 研究目标
 
 StellarWeave is designed to investigate faint stellar source detection, deblending, and measurement reliability in crowded telescope imagery. We are developing physically informed baselines, not merely applying YOLO to astronomy.
 
+## v0.9.0 — Three-cluster, eight-region frozen-transfer validation / 三星团跨区域验证
+
+**Actual telescope images and public photometric catalogs. No manual star labeling.**
+
+The earlier v0.8 512px central-tile plate solution looked internally consistent, but it had not been tested outside the original crop. v0.9 now uses three independent ACSGGCT targets: **NGC 6397, NGC 6752 and NGC 104**. Each target receives its **own** plate solution fitted to one prespecified center tile; this transform is then FROZEN and evaluated on eight disjoint, non-overlapping test tiles from the same target. No target shares an affine transform with another cluster.
+
+### Verified GitHub matrix results (2026-10-17)
+
+| Cluster | Public photometric catalog rows | Center-fit QC | Disjoint transfer tiles |
+|---|---:|---|---:|
+| NGC 6397 | 16,100 | PASS | 8/8 |
+| NGC 6752 | 52,817 | PASS | 8/8 |
+| NGC 104 | 158,154 | PASS | 8/8 |
+| **Overall** | **227,071** | **3/3** | **24/24** |
+
+The first mosaic-wide nine-grid layout produced only 0–2 passing tiles per cluster because some mosaic corners had **no reference stars**. The protocol was corrected *before the reported final run*: tiles are positioned around the **median projected sky position of existing survey references**, not chosen after inspecting detection success. This is a pre-measurement geometrical sampling rule, and all final 512×512 tiles remain disjoint. The fixed spatial sampling rule is shared across all clusters.
+
+These successes mean each nonoverlapping region passes predefined **internal matched-source and null-control QC**, NOT that all stars are recovered, not that absolute sky coordinates are externally calibrated, and not that cross-cluster affine parameters transfer. This is **not** an astronomical completeness or flux-accuracy result. The catalogs and FITS mosaics originate from the same survey program, so their errors may be correlated.
+
+Reproduce **one target** using publicly downloaded archive files:
+
+```bash
+python -m stellarweave.download_acsggct --cluster ngc6752 --band f606w
+python -m stellarweave.survey_cli \
+  --fits data/raw/ngc6752/hlsp_acsggct_hst_acs-wfc_ngc6752_f606w_v2_img.fits \
+  --catalog data/raw/ngc6752/hlsp_acsggct_hst_acs-wfc_ngc6752_r.rdviq.cal.adj.zpt \
+  --cluster ngc6752 --grid 3 --tile-size 512 --seed 42 \
+  --out outputs/cross_region_ngc6752
+```
+
+Results: `cross_region.json` contains each tile's coordinates, local diagnostic fit, fixed-anchor transfer result, rejection reason, source counts, match fractions and null controls; `cross_region.csv` supplies a tabular comparison. The CI [Cross-region / Cross-cluster Astrometry workflow](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/cross-region.yml) downloads all three clusters separately, enforces a conservative no-regression criterion, and generates a combined machine-readable summary as a GitHub Artifact.
+
+**Outstanding scientific validation:** external or withheld independent reference catalogs, plate distortion across entire HST mosaics, local ePSF and correlated noise estimation, calibrated magnitude completeness, and a full DOLPHOT/Photutils science-baseline comparison.
 ## v0.8.0 — Wide-shift plate registration with held-out QC / 大偏移星场配准
 
 **Major real-observation result:** the prior 3-pixel near-WCS matcher rejected NGC 6397 because the correct observed offset was approximately **(+11, −1) pixels**. The new workflow searches multiple initial translations up to ±192 px using displacement voting, optimizes a near-identity affine transformation, and checks matched stars on a disjoint held-out subset. It also uses displaced-catalog null controls to diagnose chance matches in dense star fields.
@@ -287,7 +320,8 @@ Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, 
 - **v0.6**: real archive ingest, fixed 23-column catalog, DQ/ERR/BUNIT/WCS metadata audit, native-pixel PSF diagnostic; instrument-calibrated physical models remain future work.
 - **v0.7**: actual NGC 6397 raw WCS/catalog matching and spatial native-pixel PSF diagnostics, with rejected affine QC explicitly recorded.
 - **v0.8**: wide-shift WCS-guided candidate plate solution; 98.1% train / 98.0% held-out matches on NGC 6397, not yet absolute astrometry.
-- **v0.9 (planned)**: repeat across independent crops and clusters, validate with external astrometric measurements, improve PSF and noise models, and only then measure calibrated completeness.
+- **v0.9**: independent 3-cluster, 3×3 nonoverlapping crop benchmark. Fixed center transform passes 24/24 same-cluster test regions, with full per-tile reports; no external astrometric certification.
+- **v0.10 (planned)**: independently held-out telescope observations or external astrometry, location-aware instrument ePSF, correlated-noise accounting, and calibrated artificial-star completeness.
 
 Cite the [survey archive](https://archive.stsci.edu/prepds/acsggct/), [Sarajedini et al. (2007)](https://arxiv.org/abs/astro-ph/0612598), and [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) when using the data.
 

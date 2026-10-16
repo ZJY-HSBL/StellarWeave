@@ -56,6 +56,8 @@ jobs:
           assert report['heldout_tiles_physically_nonoverlapping']
           assert report['transform_frozen_on_heldout_regions']
           assert report['science_calibrated'] is False
+          assert report['anchor_status']=='HELDOUT_QC_PASS', 'Anchor failed QC'
+          assert report['transfer_tiles_pass']>=6, 'Spatial transfer regressed'
           print('Independent spatial transfer statistics:')
           print(json.dumps({
               'cluster':c,'catalog_rows':report['catalog_rows'],
@@ -74,4 +76,62 @@ jobs:
             outputs/cross_region_${{ matrix.cluster }}/cross_region.json
             outputs/cross_region_${{ matrix.cluster }}/cross_region.csv
           if-no-files-found: ignore
+          retention-days: 30
+
+  three-cluster-summary:
+    needs: heldout-mosaic
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: spatial-transfer-*
+          path: combined
+      - name: Aggregate without cherry-picking failed tiles
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          roots=sorted(Path('combined').rglob('cross_region.json'))
+          assert len(roots)==3, f'Expected 3 cluster artifacts, got {len(roots)}'
+          reports=[json.loads(p.read_text()) for p in roots]
+          names={r['cluster'] for r in reports}
+          assert names=={'ngc6397','ngc6752','ngc0104'}
+          total=sum(r['transfer_tiles_total'] for r in reports)
+          success=sum(r['transfer_tiles_pass'] for r in reports)
+          anchors=sum(r['anchor_status']=='HELDOUT_QC_PASS' for r in reports)
+          assert total==24
+          assert success>=18
+          assert anchors==3
+          summary={
+              'version':'0.9.0','scientific_astrometry_calibrated':False,
+              'clusters':[{ 'cluster':r['cluster'],
+                          'catalog_rows':r['catalog_rows'],
+                          'anchor_status':r['anchor_status'],
+                          'passed':r['transfer_tiles_pass'],
+                          'tested':r['transfer_tiles_total'],
+                          'failed':r['failed_transfer_tiles']}
+                          for r in reports],
+              'anchor_passed':anchors,'anchor_total':3,
+              'region_passed':success,'region_total':total,
+              'design':'Disjoint WCS-footprint-centered tiles; fit center only; evaluate frozen transform in eight test tiles per independently fitted cluster'
+          }
+          Path('cross_cluster_summary.json').write_text(
+              json.dumps(summary,indent=2))
+          rows=['## Three-cluster spatial transfer (NOT absolute astrometry)',
+                '| Cluster | Anchor | Passed regions |',
+                '|:--|:--|--:|']
+          for r in reports:
+              rows.append(f"| {r['cluster']} | {r['anchor_status']} | {r['transfer_tiles_pass']}/{r['transfer_tiles_total']} |")
+          rows += [f'**Total: {success}/{total} disjoint transfer tiles.**',
+                   'All inputs are NASA/STScI HST archival images and survey-derived catalogs.',
+                   'This does not certify external absolute astrometry, completeness or calibrated flux.']
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('\n'.join(rows)+'\n')
+          print(json.dumps(summary,indent=2))
+          PY
+      - name: Store three-cluster summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: stellarweave-three-cluster-summary
+          path: cross_cluster_summary.json
           retention-days: 30

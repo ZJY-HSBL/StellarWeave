@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.9.0 — 2026-10-17
+
+**Real HST cross-region and independent three-cluster validation.**
+
+- Added `stellarweave/survey_validation.py` and `survey_cli.py` for predeclared non-overlapping mosaic regions, central anchor affine registration and frozen-transform evaluation in eight disjoint tiles.
+- Added per-region independent local fits as diagnostic-only comparisons, never substituted into the frozen-anchor transfer score.
+- Added transfer-match fractions, median/p95 residuals, six displaced-catalog null controls, rejection reasons and source counts.
+- Corrected the first full-extent mosaic tiling: many corner tiles have no reference stars. The final footprint-centered tiling is determined by median WCS-projected catalog positions before peak detection, not by outcome selection.
+- Corrected reference splitting when sparse tiles have fewer reference stars than the v0.8 fixed holdout target.
+- Added generated-FITS/WCS regression tests and a three-cluster GitHub Actions matrix with machine-readable per-cluster and aggregate summaries; acceptance thresholds prevent silent performance regressions.
+- Genuine HST ACSGGCT catalog rows: NGC6397=16,100, NGC6752=52,817, NGC0104=158,154. Center-fit internal QC passes 3/3; fixed-transfer tile QC passes 8/8 for each cluster (24/24 total).
+
+**Not proven:** calibrated absolute sky coordinates, independent external validation, per-star completeness or photometric accuracy, an adaptive HST ePSF model, or novel neural-model superiority.
 ## v0.8.0 — 2026-10-17
 
 **Wide-shift astrometric search recovers real NGC 6397 catalog-to-image association.**
