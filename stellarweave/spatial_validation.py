@@ -230,15 +230,26 @@ def write_spatial_report(fits_path,catalog_path,out_dir,*,size=512,x0=None,
     ax.imshow(image,cmap='gray',origin='lower',vmin=low,
               vmax=max(high,low+1e-8))
     if len(refs):
-        transformed=apply_affine(refs,matrix)
-        ax.scatter(transformed[:,0],transformed[:,1],s=25,facecolors='none',
-                   edgecolors='cyan',linewidths=.55,label='Catalog WCS + proposed affine')
+        # Always show raw catalog WCS independently of any proposed fit.
+        ax.scatter(refs[:,0],refs[:,1],s=18,facecolors='none',
+                   edgecolors='cyan',linewidths=.45,label='Raw WCS reference')
+        corrected=wide_plate.get('training_affine')
+        if wide_plate['status']=='HELDOUT_QC_PASS' and corrected is not None:
+            proposed=apply_affine(refs,corrected['matrix'])
+            ax.scatter(proposed[:,0],proposed[:,1],s=27,facecolors='none',
+                       edgecolors='lime',linewidths=.65,
+                       label='Wide-shift affine (held-out QC passed)')
+        elif registration['status']=='CANDIDATE_AFFINE_QC_PASSED':
+            transformed=apply_affine(refs,matrix)
+            ax.scatter(transformed[:,0],transformed[:,1],s=27,facecolors='none',
+                       edgecolors='yellow',linewidths=.65,
+                       label='Narrow-match affine candidate')
     if len(detected):
         sample=detected[:400]
         ax.scatter(sample[:,0],sample[:,1],s=5,color='orange',
                    alpha=.35,label='Image peaks (first 400)')
     ax.legend(loc='upper right',fontsize=7)
-    ax.set_title('Exploratory alignment overlay; inspect visually')
+    ax.set_title('Raw WCS / candidate affine / image peaks — not absolute calibration')
     fig.tight_layout()
     fig.savefig(out/'astrometry_overlay.png',dpi=155)
     plt.close(fig)

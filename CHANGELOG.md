@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.8.0 — 2026-10-17
+
+**Wide-shift astrometric search recovers real NGC 6397 catalog-to-image association.**
+
+- Added bounded sparse displacement voting with multiple large-translation initialization proposals and iterative, geometry-constrained affine fits.
+- Split reference stars into disjoint training and withheld validation groups; withheld stars never participate in selecting the transform.
+- Added six displaced-catalog null-control checks, affine sanity gates, footprint coverage and held-out match/residual diagnostics.
+- Added a real HST workflow diagnostic report and an overlay that distinguishes raw WCS positions from the accepted candidate affine solution.
+- Real NGC 6397 central 512x512 crop: train matched **255/260**, held-out matched **147/150**; affine translation **(+10.9713, -0.9434) px**, train RMS **0.4058 px**, held-out median residual **0.3759 px**.
+- The previous 3-pixel raw-WCS detector only matched 36/350 reference stars; the correct displacement explains the failure of the narrow initial search.
+- Automated tests include wide-shift recovery with outliers, independent held-out matching, incorrect-field rejection and generated FITS/WCS fixtures.
+
+**Caution:** HELDOUT_QC_PASS is internally consistent astrometry, not an externally calibrated plate solution. No measured true HST completeness, instrument ePSF or calibrated photometric uncertainty is claimed.
 ## v0.7.0 — 2026-10-17
 
 **Real NGC 6397 spatial PSF diagnostics and falsifiable astrometric QC.**

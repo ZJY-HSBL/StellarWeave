@@ -4,12 +4,46 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.7.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
+**v0.8.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
 
 ## Purpose / 研究目标
 
 StellarWeave is designed to investigate faint stellar source detection, deblending, and measurement reliability in crowded telescope imagery. We are developing physically informed baselines, not merely applying YOLO to astronomy.
 
+## v0.8.0 — Wide-shift plate registration with held-out QC / 大偏移星场配准
+
+**Major real-observation result:** the prior 3-pixel near-WCS matcher rejected NGC 6397 because the correct observed offset was approximately **(+11, −1) pixels**. The new workflow searches multiple initial translations up to ±192 px using displacement voting, optimizes a near-identity affine transformation, and checks matched stars on a disjoint held-out subset. It also uses displaced-catalog null controls to diagnose chance matches in dense star fields.
+
+Reproduce the analysis on officially downloaded NGC 6397 F606W data:
+
+```bash
+python -m stellarweave.spatial_cli \
+  --fits data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f606w_v2_img.fits \
+  --catalog data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_r.rdviq.cal.adj.zpt \
+  --size 512 --grid-cells 2 --match-radius 3 \
+  --out outputs/ngc6397_spatial_v08
+```
+
+Results for the specified public FITS image central 512×512 crop (GitHub Actions run on 2026-10-17):
+
+| Statistic | Value |
+|---|---:|
+| Training reference sources | 260 |
+| Training matched | **255 (98.1%)** |
+| Held-out reference sources | 150 |
+| Held-out matched | **147 (98.0%)** |
+| Affine translation x, y | **+10.9713 px, −0.9434 px** |
+| Training RMS | **0.4058 px** |
+| Held-out median / 95th percentile residual | **0.3759 / 0.6023 px** |
+| Shifted-null match-count median (six controls) | **2** |
+| Held-out versus null-count ratio | **73.5** |
+| Candidate PSF cells | **4/4** |
+
+The legacy narrow-window matcher still reports `AFFINE_QC_REJECTED`, whereas the new wide-shift matcher reports **`HELDOUT_QC_PASS`**. This is important **internal geometric corroboration**: the fitted sources are not an independently calibrated absolute astrometric reference, and withheld catalog sources are not fully statistically independent because both reference sets share the same image detections. Null shifts are diagnostics, **not a formal p-value**. We therefore continue to mark `science_calibrated: false`.
+
+The improved `astrometry_overlay.png` plots raw WCS stars separately from the held-out-QC-passing affine alignment in different marker colors, so that the change is visually inspectable. Machine-readable training/held-out residuals, shift hypothesis and null controls are in `spatial_diagnostics.json` under `wide_shift_heldout_plate_search`.
+
+**Research limitation:** this is a WCS-guided small-rotation/scale plate corrector, not an unrestricted blind plate solver. It assumes roughly correct orientation/scale, a translation within the configured range, and enough stars. Scientific release requires multi-crop and independent external-catalog verification, distortion and ePSF characterization, and physically calibrated uncertainty estimates.
 ## v0.7.0 — Spatial PSF and Catalog-WCS Diagnostics / 空间 PSF 与星表配准诊断
 
 **This release performs exploratory spatial diagnostics on genuine HST data. It does NOT deliver a validated astrometric solution or science-grade ePSF.**
@@ -252,7 +286,8 @@ Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, 
 - **v0.5**: common-injection PSF and iterative-PSF baselines implemented; science-grade uncertainty validation remains future work.
 - **v0.6**: real archive ingest, fixed 23-column catalog, DQ/ERR/BUNIT/WCS metadata audit, native-pixel PSF diagnostic; instrument-calibrated physical models remain future work.
 - **v0.7**: actual NGC 6397 raw WCS/catalog matching and spatial native-pixel PSF diagnostics, with rejected affine QC explicitly recorded.
-- **v0.8 (planned)**: independently verified plate alignment, cross-matched reference stars, per-location instrumental ePSF, physically consistent uncertainty model and genuine recovery/completeness testing.
+- **v0.8**: wide-shift WCS-guided candidate plate solution; 98.1% train / 98.0% held-out matches on NGC 6397, not yet absolute astrometry.
+- **v0.9 (planned)**: repeat across independent crops and clusters, validate with external astrometric measurements, improve PSF and noise models, and only then measure calibrated completeness.
 
 Cite the [survey archive](https://archive.stsci.edu/prepds/acsggct/), [Sarajedini et al. (2007)](https://arxiv.org/abs/astro-ph/0612598), and [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) when using the data.
 
