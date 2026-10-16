@@ -180,8 +180,16 @@ def plate_diagnostics(reference_xy,detected_xy,*,shape=None,
     # for disjoint fit/validation sets.
     n=min(len(a),train_limit+holdout_limit)
     sample=rng.permutation(len(a))[:n]
-    train_indices=sample[:min(train_limit,max(1,n-holdout_limit))]
-    hold_indices=sample[len(train_indices):]
+    # For sparse tiles, an unconditional 150-source holdout previously left
+    # only one training reference. Preserve a meaningful train/holdout split.
+    hold_target=min(holdout_limit,max(min_holdout_matches,n//3))
+    n_train=min(train_limit,n-hold_target)
+    if n_train<min_train_matches:
+        return {'status':'INSUFFICIENT_TRAIN','reference_count':len(a),
+                'training_reference_count':n_train,'holdout_count':n-n_train,
+                'science_calibrated':False}
+    train_indices=sample[:n_train]
+    hold_indices=sample[n_train:]
     if len(hold_indices)<min_holdout_matches:
         return {'status':'INSUFFICIENT_HOLDOUT','reference_count':len(a),
                 'holdout_count':len(hold_indices),'science_calibrated':False}

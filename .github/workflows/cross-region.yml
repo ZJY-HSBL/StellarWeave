@@ -1,0 +1,77 @@
+name: Cross-region / Cross-cluster Astrometry
+on:
+  push:
+    branches: [main]
+    paths:
+      - stellarweave/survey_validation.py
+      - stellarweave/survey_cli.py
+      - stellarweave/robust_plate.py
+      - stellarweave/download_acsggct.py
+      - stellarweave/catalog.py
+      - .github/workflows/cross-region.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  heldout-mosaic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        cluster: [ngc6397, ngc6752, ngc0104]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install astronomy dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Download official ACSGGCT F606W + two-band catalog
+        run: |
+          python -m stellarweave.download_acsggct --cluster ${{ matrix.cluster }} \
+            --band f606w --out data/raw --max-mb 250
+      - name: Nine physically disjoint tiles, fixed central anchor
+        env:
+          TARGET_CLUSTER: ${{ matrix.cluster }}
+        run: |
+          python -m stellarweave.survey_cli \
+            --fits data/raw/${{ matrix.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ matrix.cluster }}_f606w_v2_img.fits \
+            --catalog data/raw/${{ matrix.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ matrix.cluster }}_r.rdviq.cal.adj.zpt \
+            --cluster ${{ matrix.cluster }} \
+            --tile-size 512 --grid 3 --seed 42 \
+            --out outputs/cross_region_${{ matrix.cluster }}
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          c=os.environ['TARGET_CLUSTER']
+          p=Path('outputs')/f'cross_region_{c}'/'cross_region.json'
+          report=json.loads(p.read_text())
+          assert report['tile_count']==9
+          assert report['transfer_tiles_total']==8
+          assert report['heldout_tiles_physically_nonoverlapping']
+          assert report['transform_frozen_on_heldout_regions']
+          assert report['science_calibrated'] is False
+          print('Independent spatial transfer statistics:')
+          print(json.dumps({
+              'cluster':c,'catalog_rows':report['catalog_rows'],
+              'anchor':report['anchor_status'],
+              'passed_tiles':report['transfer_tiles_pass'],
+              'tested_tiles':report['transfer_tiles_total'],
+              'failed_regions':report['failed_transfer_tiles']},
+              indent=2))
+          PY
+      - name: Upload machine-readable evaluation, no original FITS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spatial-transfer-${{ matrix.cluster }}
+          path: |
+            outputs/cross_region_${{ matrix.cluster }}/cross_region.json
+            outputs/cross_region_${{ matrix.cluster }}/cross_region.csv
+          if-no-files-found: ignore
+          retention-days: 30
