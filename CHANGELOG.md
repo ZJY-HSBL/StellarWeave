@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.7.0 — 2026-10-17
+
+**Real NGC 6397 spatial PSF diagnostics and falsifiable astrometric QC.**
+
+- Added per-crop WCS projection and one-to-one source matching, with conservative affine proposal validation and explicit rejection status.
+- Added grid-based native-pixel candidate PSF extraction and position-dependent PSF-shape residual diagnostics; produces JSON, PNG overlays and NPY PSF stamps.
+- Added CLI and synthetic/WCS end-to-end regression tests.
+- Extended the real HST GitHub workflow to produce spatial PSF grids, astrometry overlay and provenance-rich diagnostics.
+- Real NGC 6397 (512px crop): 16,100 catalog records, 533 projected into crop, 350 candidate reference stars, 679 image peaks, and just 36 raw WCS matches at <=3px.
+- Affine proposal **failed quality control**. The program correctly rejected the source mapping rather than exporting unverified training labels.
+- All four grid cells produced preliminary native-pixel PSF candidate stacks. These are not spatially varying calibrated ePSFs.
+
+**Outstanding:** validated plate solution, astrometric distortion model, instrument-calibrated ePSF, noise correlations, true real-HST photometric accuracy and artificial-star completeness.
 ## v0.6.0 — 2026-10-17
 
 **Real ACSGGCT FITS/catalog audit and a critical column-schema correction.**
