@@ -56,7 +56,7 @@ def test_real_hst_audit_constructed_fits(tmp_path):
     ra,dec=w.all_pix2world(truth[:,0],truth[:,1],0)
     rows=[]
     for i,((x,y,flux),r,d) in enumerate(zip(truth,ra,dec)):
-        line=np.zeros(21)
+        line=np.zeros(23)
         line[0]=i+1
         line[1:3]=x,y
         line[3]=30-2.5*np.log10(flux)
@@ -69,7 +69,8 @@ def test_real_hst_audit_constructed_fits(tmp_path):
         line[13:15]=[1,1]
         line[15:17]=[.1,.1]
         line[17:19]=[.1,.1]
-        line[19:21]=[r,d]
+        line[19:21]=[.1,.1]
+        line[21:23]=[r,d]
         rows.append(line)
     catalog=tmp_path/'stars.txt'
     np.savetxt(catalog,np.asarray(rows),fmt='%.12f')

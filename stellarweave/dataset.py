@@ -1,6 +1,6 @@
 """Convert a documented ACSGC FITS mosaic and star catalog into safe tiles.
 
-Only uses external FITS WCS and a verified rigid translation; never assumes
+Only uses external FITS WCS and a catalog-sky WCS plus affine validation; never assumes
 RDVIQ xref/yref equal image pixels. No trained model or PSF-fitting is claimed.
 """
 import csv
@@ -128,7 +128,7 @@ def prepare_dataset(fits_path, catalog_path, out_dir, band='f606w',
                           guard=guard, mode=split)
     summary = {'version': '0.3.0', 'reference_is_incomplete': True,
                'science_grade_photometry': False,
-               'catalog_schema': 'Anderson2008 Table4:21col; inspect .adj.zpt variant',
+               'catalog_schema': 'ACSGGCT public ASCII:23-column schema validated on NGC6397',
                'fits_path': str(fits_path), 'catalog_path': str(catalog_path),
                'band': band, 'quality_defaults': {'max_mag_error': max_mag_error,
                 'max_psf_quality': max_psf_quality, 'max_crowding': max_crowding},

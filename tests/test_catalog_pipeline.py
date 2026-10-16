@@ -9,7 +9,7 @@ from stellarweave.dataset import spatial_split, write_tiles
 def make_catalog(path, rows=4, *, bad_ra=False):
     result = []
     for i in range(rows):
-        a = np.zeros(21)
+        a = np.zeros(23)
         a[0] = i+1
         a[1:3] = [100 + 10*i, 130+7*i]
         a[3] = 22. + i * .2
@@ -22,7 +22,8 @@ def make_catalog(path, rows=4, *, bad_ra=False):
         a[13:15] = [1,1]
         a[15:17] = [.1,.2]
         a[17:19] = [.1,.1]
-        a[19:21] = [999. if bad_ra else 100. + i*.01, -30.]
+        a[19:21] = [.1, .1]
+        a[21:23] = [999. if bad_ra else 100. + i*.01, -30.]
         result.append(a)
     np.savetxt(path, result, fmt='%.10f')
     return np.array(result)
@@ -31,7 +32,7 @@ def test_read_schema_and_filter(tmp_path):
     sample = tmp_path/'catalog.txt'
     make_catalog(sample)
     cat = read_acsggct_catalog(sample)
-    assert len(FIELDS) == 21
+    assert len(FIELDS) == 23
     assert cat['ra_deg'][0] == 100
     assert cat['mag_f606w'][0] == 22
     assert quality_mask(cat, 'f606w').sum() == 4
@@ -47,7 +48,7 @@ def test_bad_catalog_rejected(tmp_path):
 def test_missing_columns_rejected(tmp_path):
     path = tmp_path/'invalid.txt'
     path.write_text('1 2 3 4\n')
-    with pytest.raises(ValueError, match='21'):
+    with pytest.raises(ValueError, match='23'):
         read_acsggct_catalog(path)
 
 def test_catalog_wcs_zero_based(tmp_path):
@@ -116,7 +117,7 @@ def test_astropy_fits_pipeline(tmp_path):
     ra,dec=w.all_pix2world(injected[:,0],injected[:,1],0)
     values=[]
     for i,(star,ar,decl) in enumerate(zip(injected,ra,dec)):
-        row = np.zeros(21)
+        row = np.zeros(23)
         row[0]=i+1
         row[1:3]=star[:2]
         row[3]=30-2.5*np.log10(star[2])
@@ -129,7 +130,8 @@ def test_astropy_fits_pipeline(tmp_path):
         row[13:15]=[1,1]
         row[15:17]=[.1,.1]
         row[17:19]=[.1,.1]
-        row[19:21]=[ar,decl]
+        row[19:21]=[.1,.1]
+        row[21:23]=[ar,decl]
         values.append(row)
     cat=tmp_path/'test_catalog.txt'
     np.savetxt(cat,np.array(values),fmt='%.12f')

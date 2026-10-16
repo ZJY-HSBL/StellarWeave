@@ -87,7 +87,7 @@ def test_two_band_synthetic_fits(tmp_path):
     ra,dec=w.all_pix2world(stars[:,0],stars[:,1],0)
     values=[]
     for i,(s,ar,d) in enumerate(zip(stars,ra,dec)):
-        row=np.zeros(21)
+        row=np.zeros(23)
         row[0]=i+1
         row[1:3]=s[:2]
         row[3]=30-2.5*np.log10(s[2])
@@ -100,7 +100,8 @@ def test_two_band_synthetic_fits(tmp_path):
         row[13:15]=[1,1]
         row[15:17]=[.1,.1]
         row[17:19]=[.1,.1]
-        row[19:21]=[ar,d]
+        row[19:21]=[.1,.1]
+        row[21:23]=[ar,d]
         values.append(row)
     cat=tmp_path/'cat.txt'
     np.savetxt(cat,np.asarray(values),fmt='%.12f')
