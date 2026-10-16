@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.5.0 — 2026-10-17
+
+**Common-sample PSF fitting baseline for artificial-star recovery.**
+
+- Added native Photutils 3.x PSFPhotometry and IterativePSFPhotometry methods with a pixel-integrated Gaussian PRF or externally supplied, unit-normalized ImagePSF.
+- Added DAOStarFinder and SciPy centroid baselines with a shared detection/measurement output schema.
+- Added a fair benchmark that uses identical injected artificial-star positions and instrumental fluxes for each method, each trial.
+- Added matched-new-source recovery, crowding strata, localization and *isolated-only* fitted-flux error records, Wilson completeness intervals, and plots.
+- Added FITS-mode hard checks for an empirical PRF stamp and BUNIT-consistent units; synthetic and science results are explicitly distinguished.
+- Added Photutils science integration tests and CI benchmark smoke execution.
+
+**Still not delivered:** real-HST completeness/flux-bias validation, spatially variable instrumental ePSF, physical variance maps or trustworthy uncertainty coverage, end-to-end DOLPHOT benchmark, trained neural model.
+
 ## v0.4.0 — 2026-10-17
 
 **Artificial-star injection/recovery baseline with reproducible experimental protocol.**

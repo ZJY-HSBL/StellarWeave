@@ -64,6 +64,17 @@ jobs:
           assert len(d['groups'])==8
           assert (p/'completeness.png').is_file()
           PY
+      - name: Verify PSF baseline CLI (full astronomy environment)
+        run: |
+          python -m stellarweave.benchmark_cli --size 112 --trials 1 --per-flux 1 --flux-levels 1800 --methods dao psf iterative --out outputs/psf-ci
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          o=Path('outputs/psf-ci')
+          r=json.loads((o/'benchmark.json').read_text())
+          assert len(r['groups']) == 12
+          assert (o/'method_comparison.png').is_file()
+          PY
       - name: Verify data preparation CLI
         run: |
           python -m stellarweave.prepare_hst --help

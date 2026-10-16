@@ -4,11 +4,47 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.4.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
+**v0.5.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
 
 ## Purpose / 研究目标
 
 StellarWeave is designed to investigate faint stellar source detection, deblending, and measurement reliability in crowded telescope imagery. We are developing physically informed baselines, not merely applying YOLO to astronomy.
+
+## v0.5.0 — PSF photometry benchmark / 精密测光基线
+
+This research baseline compares **DAOStarFinder centroids**, **PSFPhotometry**, and **IterativePSFPhotometry**, as implemented in Photutils 3.x, using the **same injected images, source positions, and input flux levels** in every trial. An optional SciPy centroid control is also available.
+
+Install dependencies, then run a small reproducible synthetic benchmark:
+
+```bash
+python -m pip install -r requirements.txt
+python -m stellarweave.benchmark_cli \
+  --size 160 --trials 2 --per-flux 4 \
+  --flux-levels 700 2000 5000 \
+  --methods dao psf iterative --seed 42 \
+  --out outputs/photometry_v05
+
+```
+
+Outputs: `source_results.csv` contains per-star detection/recovery, localization error, and fitted flux (where available); `benchmark.json` stores matched-sample recovery and Wilson intervals for all methods; `method_comparison.png` plots completeness-vs-instrumental-flux on identical injections.
+
+**Fair comparison protocol:** we create one set of non-overlapping artificial stars per trial, inject each set into the same untouched image, and run each method on precisely those pixels. Baseline source detections are removed before scoring newly detected sources. For recovered isolated injected stars, fitted flux is compared with known instrumental injected flux. Near an original star, flux attribution is ambiguous and is **not used** in the flux-error summary.
+
+**Science limitations:** all measurements here are *toy* or *exploratory*. A single analytic or image PRF can suffer PSF mismatch; reduced chi-square and reported formal flux errors cannot be interpreted as calibrated uncertainty without a physically justified per-pixel error array. Matched-source recovery does not by itself establish deblending completeness. Real-FITS flux and PSF are instrument/filter-specific, and this release does not model injected photon noise, drizzle correlations, detector gain/read noise, or spatial PSF variability. No quantitative HST results are claimed.
+
+Example *only* for a real image (do not run until PSF and FITS units are verified):
+
+```bash
+python -m stellarweave.benchmark_cli \
+  --fits data/raw/ngc6397/YOUR_VALID_F606W_IMAGE.fits \
+  --psf-stamp data/psf/YOUR_VERIFIED_SAME_BAND_PRF.npy \
+  --image-unit ELECTRONS/S --size 160 \
+  --flux-levels 0.05 0.2 0.8 \
+  --methods dao psf iterative --out outputs/hst_psf_benchmark
+
+```
+
+See [Photutils PSF photometry docs](https://photutils.readthedocs.io/en/3.1.0/user_guide/psf.html), [PSFPhotometry](https://photutils.readthedocs.io/en/3.1.0/api/photutils.psf.PSFPhotometry.html), and [IterativePSFPhotometry](https://photutils.readthedocs.io/en/3.1.0/api/photutils.psf.IterativePSFPhotometry.html).
 
 ## v0.4.0 — Artificial-star injection and recovery / 人工星注入恢复
 
@@ -154,7 +190,8 @@ Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, 
 
 - **v0.3**: affine/local astrometric residual maps and reference-catalog two-band association implemented on constructed data; **real archive verification remains outstanding**.
 - **v0.4**: synthetic and guarded FITS injection/recovery protocol implemented; real scientific calibration and noise modeling remain outstanding.
-- **v0.5**: PSF photometry baselines and uncertainty validation; then evaluate physically informed neural improvements.
+- **v0.5**: common-injection PSF and iterative-PSF baselines implemented; science-grade uncertainty validation remains future work.
+- **v0.6**: real-HST artifact ingestion, instrument PSF and noise models, spatially resolved completeness/flux-bias maps.
 
 Cite the [survey archive](https://archive.stsci.edu/prepds/acsggct/), [Sarajedini et al. (2007)](https://arxiv.org/abs/astro-ph/0612598), and [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) when using the data.
 
