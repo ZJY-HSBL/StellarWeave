@@ -15,8 +15,11 @@ BASE = 'https://archive.stsci.edu/pub/hlsp/acsggct'
 def filenames(target, band='f606w'):
     if target not in TARGETS:
         raise ValueError(f'Unsupported target: {target}. Allowed: {TARGETS}')
-    if band not in ('f606w', 'f814w'):
-        raise ValueError('Band must be f606w or f814w')
+    if band != 'f606w':
+        raise ValueError(
+            'ACSGGCT HLSP reference directories archive only F606W FITS mosaics; '
+            'F814W catalog magnitudes exist, but an F814W image must be obtained '
+            'and validated separately from another HST observation.')
     image = f'hlsp_acsggct_hst_acs-wfc_{target}_{band}_v2_img.fits'
     catalog = f'hlsp_acsggct_hst_acs-wfc_{target}_r.rdviq.cal.adj.zpt'
     return image, catalog
@@ -26,6 +29,10 @@ def download_one(url, path, max_mb=500):
     dest = Path(path)
     dest.parent.mkdir(parents=True, exist_ok=True)
     if dest.exists() and dest.stat().st_size > 512:
+        if dest.suffix.lower() == '.fits':
+            with dest.open('rb') as check:
+                if check.read(8) != b'SIMPLE  ':
+                    raise ValueError('Cached FITS file fails SIMPLE-header validation')
         return {'file': str(dest), 'bytes': dest.stat().st_size,
                 'sha256': checksum(dest), 'cached': True}
     partial = dest.with_name(dest.name + '.part')
@@ -33,7 +40,7 @@ def download_one(url, path, max_mb=500):
     sha = hashlib.sha256()
     count = 0
     try:
-        request = Request(url, headers={'User-Agent': 'StellarWeave/0.2 (academic data client)'})
+        request = Request(url, headers={'User-Agent': 'StellarWeave/0.6 (academic data client)'})
         with urlopen(request, timeout=60) as response, partial.open('wb') as out:
             length = response.headers.get('Content-Length')
             if length and int(length) > maximum:

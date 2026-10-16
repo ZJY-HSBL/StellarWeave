@@ -1,0 +1,61 @@
+name: Real HST Archive Audit
+on:
+  push:
+    branches: [main]
+    paths:
+      - stellarweave/real_hst.py
+      - stellarweave/real_hst_cli.py
+      - stellarweave/download_acsggct.py
+      - stellarweave/catalog.py
+      - .github/workflows/real-hst.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ngc6397-archive-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install astronomy dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Download genuine ACSGGCT NGC 6397 reference products
+        run: |
+          python -m stellarweave.download_acsggct --cluster ngc6397 \
+            --band f606w --out data/raw --max-mb 200
+      - name: Audit real HST FITS and catalog, measure local empirical stamp
+        run: |
+          python -m stellarweave.real_hst_cli \
+            --fits data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f606w_v2_img.fits \
+            --catalog data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_r.rdviq.cal.adj.zpt \
+            --size 512 --stamp-size 15 --fwhm 2.6 --min-stars 3 \
+            --out outputs/ngc6397_real_audit
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('outputs/ngc6397_real_audit/audit.json').read_text())
+          assert d['kind']=='PRELIMINARY_REAL_DATA_AUDIT'
+          assert d['catalog']['row_count']>0
+          assert d['input']['valid_fraction']>.5
+          assert d['crop_psf']['used_stars']>=3
+          assert 'F814W' not in d['input']['filters'] or 'F606W' in d['input']['filters']
+          print('Real archive read + candidate PSF audit passed. NO science-calibrated validation claimed.')
+          PY
+      - name: Upload only diagnostic QA artifacts (not large FITS/catalog data)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ngc6397-real-hst-audit
+          path: |
+            outputs/ngc6397_real_audit/audit.json
+            outputs/ngc6397_real_audit/selected_psf_stars.csv
+            outputs/ngc6397_real_audit/psf_preview.png
+          if-no-files-found: ignore
+          retention-days: 14
