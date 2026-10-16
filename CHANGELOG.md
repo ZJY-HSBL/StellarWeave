@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.4.0 — 2026-10-17
+
+**Artificial-star injection/recovery baseline with reproducible experimental protocol.**
+
+- Implemented a unit-normalized, pixel-integrated Gaussian PRF generator and external empirical \`.npy\` PSF validation.
+- Implemented flux-conserving subpixel stamp placement that fails closed near invalid pixels/edges.
+- Implemented deterministic independent trial placement, source separation, and nearest-original-detection crowding bins.
+- Reported recovery of *new* centroids only (existing baseline stars cannot be counted as injected-source hits), using one-to-one matches.
+- Added per-star CSV logs, trial-wise provenance/flux accounting, flux/crowding completeness, approximate Wilson 95% intervals, and PNG curves.
+- Guarded FITS mode with mandatory PSF stamp and explicit BUNIT-compatible instrumental flux units; included CLI and regression tests.
+- Results are exploratory, not validated HST photometric completeness. PSF spatial variation and extra shot noise are not yet modeled.
+
 ## v0.3.0 — 2026-10-15
 
 **Six-parameter astrometric registration and shared-ID two-filter catalog pairing.**
