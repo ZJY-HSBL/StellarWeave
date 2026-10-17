@@ -11,6 +11,8 @@ on:
       - .github/workflows/cross-region.yml
       - stellarweave/result_visualization.py
       - stellarweave/epoch_audit.py
+      - stellarweave/psf_spatial.py
+      - stellarweave/psf_results.py
   workflow_dispatch:
 
 permissions:
@@ -83,6 +85,26 @@ jobs:
           PY
         env:
           TARGET_CLUSTER: ${{ matrix.cluster }}
+      - name: Nine-tile real HST empirical PSF diagnostics
+        env:
+          TARGET_CLUSTER: ${{ matrix.cluster }}
+        run: |
+          python -m stellarweave.psf_spatial \
+            --fits data/raw/${{ matrix.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ matrix.cluster }}_f606w_v2_img.fits \
+            --plate-report outputs/cross_region_${{ matrix.cluster }}/cross_region.json \
+            --out outputs/cross_region_${{ matrix.cluster }} --min-stars 8
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          cluster=os.environ['TARGET_CLUSTER']
+          out=Path('outputs')/f'cross_region_{cluster}'
+          d=json.loads((out/'psf_spatial.json').read_text())
+          assert d['tile_count']==9 and len(d['tiles'])==9
+          assert d['native_pixel_psf_not_oversampled_ePSF'] is True
+          assert d['not_calibrated_photometry'] is True
+          assert d['usable_tiles']+d['failed_tiles']==9
+          assert (out/'psf_montage.png').stat().st_size>8000
+          PY
       - name: Upload machine-readable evaluation, no original FITS
         if: always()
         uses: actions/upload-artifact@v4
@@ -92,6 +114,10 @@ jobs:
             outputs/cross_region_${{ matrix.cluster }}/cross_region.json
             outputs/cross_region_${{ matrix.cluster }}/cross_region.csv
             outputs/cross_region_${{ matrix.cluster }}/epoch_audit.json
+            outputs/cross_region_${{ matrix.cluster }}/psf_spatial.json
+            outputs/cross_region_${{ matrix.cluster }}/psf_spatial.csv
+            outputs/cross_region_${{ matrix.cluster }}/psf_montage.png
+            outputs/cross_region_${{ matrix.cluster }}/tile_*_native_psf.npy
           if-no-files-found: ignore
           retention-days: 30
 
@@ -177,12 +203,31 @@ jobs:
               assert (Path('docs/results/real_hst_v09')/f).stat().st_size>8000
           print('Verified README plots generated from unfiltered real observations')
           PY
+      - name: Render real-HST spatial PSF figures and preserve raw tiles
+        run: |
+          python -m stellarweave.psf_results \
+            --psf-reports combined/spatial-transfer-*/psf_spatial.json \
+            --plate-reports combined/spatial-transfer-*/cross_region.json \
+            --out docs/results/real_hst_v12
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('docs/results/real_hst_v12')
+          d=json.loads((root/'summary.json').read_text())
+          assert d['total_tiles']==27 and len(d['per_tile'])==27
+          assert d['not_oversampled_ePSF'] is True
+          assert d['not_calibrated_photometry'] is True
+          for name in ('psf_spatial_r50.png','psf_spatial_mismatch.png'):
+              assert (root/name).stat().st_size>8000
+          for cluster in ('ngc6397','ngc6752','ngc0104'):
+              assert (root/f'{cluster}_psf_montage.png').stat().st_size>8000
+          PY
       - name: Publish immutable-input real-data evidence to main
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/results/real_hst_v09
+          git add docs/results/real_hst_v09 docs/results/real_hst_v12
           if git diff --cached --quiet; then
             echo "No experiment evidence changed"
           else
@@ -196,4 +241,5 @@ jobs:
           path: |
             cross_cluster_summary.json
             docs/results/real_hst_v09/
+            docs/results/real_hst_v12/
           retention-days: 30
