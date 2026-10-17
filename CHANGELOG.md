@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.17.0 — 2026-10-17
+
+**Expanded genuine HST crowding-controlled artificial-star source-recovery measurements.**
+
+- Added `stellarweave/crowding_injections.py` using a new, predeclared three-bin nearest-original-5sigma-detected-peak distance protocol: [4,8), [8,12), [12,16) px. Candidate positions are selected before measuring injection outcomes; require at least 12 px intersite spacing within each original 512px HST tile. Four pixel sites in each band × eight held-out tiles × three raw-image-unit flux levels provide 96 distinct sites and 288 attempts per cluster.
+- Added `stellarweave/crowding_results.py` to aggregate full three-cluster HST results, retain all positive/negative trials, archive source JSON, SHA-256 hashes, 27 group summaries, 24 tile source counts, 864 individual attempts and three actual publication-style PNG figures embedded directly in the README.
+- **Actual telescope experiment:** 288 distinct source positions across NGC6397, NGC6752 and NGC0104, 864 total one-at-a-time injections, **748 recovered**. Cluster recovery: 259/288 (89.93%), 247/288 (85.76%), 242/288 (84.03%) respectively. New NGC104 coverage: 96 distinct sites versus 20 in the older, non-comparable v0.14 selection scheme.
+- NGC0104 low-flux (80× observed pixel RMS) recovery by nearest detected peak: 4–8px 14/32 (43.75%), 8–12px 27/32 (84.38%), 12–16px 31/32 (96.88%). No false independent-site count from testing 3 fluxes per position.
+- Mixed NGC0104 forced PRF amplitude errors: local/center 35.20%/40.27% for 4–8px low-flux injections, but 18.69%/13.32% for 8–12px low-flux injections. All model losses are retained; known position is provided, physical photometry is uncalibrated.
+- Added structured FITS HDU lineage audit: each actual archive mosaic contains only one 6000×6000 PRIMARY ACS/WFC F606W image with BUNIT=ELECTRONS, CCDGAIN=1, EXPTIME=15/35/50 seconds, DATE-OBS=2006-05-29/2006-05-24/2006-03-13; no matching ERR/DQ plane or independently confirmed underlying input-exposure lineage. No source Poisson noise, measured detector covariance or verified effective mosaic epoch is claimed.
+- Tests cover deterministic site stratification and intersite separation, every flux/site source identity, fail-closed validation against outcome selection, synthetic reproduction of all plots and isolation of non-injected training-star PRFs.
+
+**Not yet achieved:** physically verified HST photoelectron rate/exposure lineage, drizzle output covariance, full catalog completeness, oversampled ePSF, Gaia external accuracy or instrument-calibrated stellar magnitudes.
 ## v0.16.0 — 2026-10-17
 
 **Multi-seed robustness instead of single-realization telescope-noise claims.**

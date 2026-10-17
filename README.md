@@ -4,12 +4,80 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.16.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include real ACSGGCT/HST internal astrometric consistency measurements and held-out native-pixel PSF shape comparisons across three globular clusters, with measured tables, source reports and reproducible plots below.
+**v0.17.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include real ACSGGCT/HST internal astrometric consistency measurements and held-out native-pixel PSF shape comparisons across three globular clusters, with measured tables, source reports and reproducible plots below.
 
 ## Purpose / 研究目标
 
 StellarWeave is designed to investigate faint stellar source detection, deblending, and measurement reliability in crowded telescope imagery. We are developing physically informed baselines, not merely applying YOLO to astronomy.
 
+## v0.17.0 — Expanded real HST crowding-distance artificial-star experiments / 拥挤场扩展验证
+
+**Actual three-cluster HST/ACS F606W experiments: 288 DISTINCT pixel injection sites; 864 one-at-a-time planted-source trials; 748 successfully redetected.** The original frozen center/local native-pixel PRFs are still trained only on non-injected bright HST training stars. Unlike v0.14's sparse ≥16 px isolated class for NGC 104 (only 4 isolated positions), this new protocol predeclares **three finite detected-nearest-peak distance bands: [4,8), [8,12), [12,16) pixels**, selects four sites per band per each of eight nonoverlapping HST tiles, requires at least 12 px between selected sites in the same tile, and tests three planted image-unit flux levels (80, 200 and 500 × local robust pixel RMS) at each physical site. All groups were decided **before looking at measured recovery**.
+
+### Real-data recovery and expanded sample sizes
+
+| Real HST field | Distinct physical injection sites | Total trials | Blind planted peaks recovered | Recovery fraction |
+|---|---:|---:|---:|---:|
+| NGC 6397 | **96** | 288 | 259 | **89.93%** |
+| NGC 6752 | **96** | 288 | 247 | **85.76%** |
+| **NGC 104 (47 Tuc)** | **96** | 288 | 242 | **84.03%** |
+| **Total** | **288** | **864** | **748** | **86.57%** |
+
+**Sampling clarification:** the same 96 site coordinates in each cluster are reused across the three injected flux levels; they are NOT 288 independent source locations per cluster. The three clusters are separately measured in their own observations. These fractions measure the specific planted-source/peak-detector protocol, not true stellar catalog completeness. Results from v0.14 and v0.17 are **not directly comparable improvement scores** because the site-selection rules and crowding strata differ.
+
+### NGC 104: increased crowding and source brightness both matter
+
+| NGC 104 nearest originally detected peak | 80 × tile RMS recovered | 200 × tile RMS recovered | 500 × tile RMS recovered |
+|---|---:|---:|---:|
+| **4–8 pixels** | **14/32 (43.75%)** | 19/32 (59.38%) | 29/32 (90.63%) |
+| **8–12 pixels** | **27/32 (84.38%)** | 30/32 (93.75%) | 31/32 (96.88%) |
+| **12–16 pixels** | **31/32 (96.88%)** | 31/32 (96.88%) | 30/32 (93.75%) |
+
+The predeclared lowest-flux stratum shows a large descriptive recovery gap between the near-original-peak and outer-original-peak groups. That is consistent with crowding complicating peak recovery, **not proof of a causal crowding law**: original HST source-selection conditions, overlapping stellar wings and local photometric background remain potential confounders. Not every individual high-flux recovery group improves monotonically; all failures are reported.
+
+![Observed HST crowding distance versus planted peak recovery at three flux levels](docs/results/real_crowding_v17/recovery_crowding_distance.png)
+
+### Known-position forced local versus frozen-center PRF amplitude diagnostics
+
+Both fitted PRF amplitudes are computed at the **known planted pixel coordinate**. These are unweighted raw-image-unit residuals, NOT validated HST calibrated photometry, ePSF performance or blind flux estimates.
+
+| NGC 104 condition | Local PRF median absolute relative error | Center PRF median absolute relative error |
+|---|---:|---:|
+| 4–8 px nearest peak; 80 × tile RMS | **35.20%** | 40.27% |
+| 4–8 px nearest peak; 200 × tile RMS | **16.18%** | 23.33% |
+| 8–12 px nearest peak; 80 × tile RMS | **18.69%** | 13.32% |
+| 12–16 px nearest peak; 200 × tile RMS | **15.58%** | 12.41% |
+
+These mixed outcomes are important. A local model can have lower errors on some near-peak groups while still losing against the frozen center model in other groups. Comparing pooled absolute-error medians is not the same as the median of per-star paired model errors; the [group report](docs/results/real_crowding_v17/groups.csv) includes **both** absolute-error summaries and paired local-minus-center differences.
+
+![Real HST paired PSF relative amplitude errors by detected-nearest-peak distance](docs/results/real_crowding_v17/paired_flux_crowding.png)
+
+![Actual number of distinct preselected HST injection sites across three clusters](docs/results/real_crowding_v17/injection_site_coverage.png)
+
+### Actual FITS observation lineage audit — a scientific blocker, not a solved calibration
+
+Examining all HDUs in each downloaded archived F606W mosaic finds exactly **one 6000×6000 PRIMARY image** per cluster and no same-size `ERR` or `DQ` extensions. The archive image headers carry the values below; these are **header labels, not independently verified full instrumental exposure histories**.
+
+| STScI ACSGGCT field | Instrument/filter | BUNIT header | EXPTIME header | DATE-OBS header |
+|---|---|---|---:|---|
+| NGC 6397 | ACS/WFC F606W | ELECTRONS | 15 s | 2006-05-29 |
+| NGC 6752 | ACS/WFC F606W | ELECTRONS | 35 s | 2006-05-24 |
+| NGC 104 | ACS/WFC F606W | ELECTRONS | 50 s | 2006-03-13 |
+
+**Do not infer physical Poisson independence or an effective stacked-image observation epoch from this table.** The original constituent exposure IDs, detector-to-output-pixel electron accounting, pixelwise exposure/weight map and output covariance remain unverified; science-grade shot-noise simulation was intentionally **not** enabled. See the original [three frozen source reports](docs/results/real_crowding_v17/source_reports/) and SHA-linked [summary](docs/results/real_crowding_v17/summary.json). The existing Gaia epoch-validation limitations remain.
+
+### Reproduce the published real-data results / 图表复现
+
+Complete, unfiltered evidence contains [864 individual attempts](docs/results/real_crowding_v17/per_trial.csv), [27 cluster × crowding × flux group summaries](docs/results/real_crowding_v17/groups.csv), [24 tile-level site counts](docs/results/real_crowding_v17/tile_sites.csv), three actual image-derived PNG figures and raw HST-linked JSON with input FITS/PRF SHA-256 and GitHub Actions run ID. Regenerate the three figures **without downloading FITS**:
+
+```bash
+python -m pip install -r requirements-smoke.txt
+python -m stellarweave.crowding_results \
+  docs/results/real_crowding_v17/source_reports/*.json \
+  --out outputs/reproduced_v17
+```
+
+The [real-HST three-cluster pipeline](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/cross-region.yml) repeats the full procedure against original STScI downloads, audits FITS headers, checks that each selected physical site has exactly three planted flux levels, preserves missing tiles/classes, draws real plots and publishes the complete evidence. Distances to 5-sigma image-detected peaks are **proxy distances**, not stellar-astrophysical crowding measurements; neither completeness, Gaia-validated absolute astrometry, detector-noise calibration, nor true PSF-based instrumental photometric accuracy is established.
 ## v0.16.0 — Five-seed noise robustness: real HST mosaic backgrounds / 多随机种子噪声验证
 
 **New actual observational benchmark: 2,520 additional noise-perturbed trials** from exactly **252 original v0.14 artificially planted star sites** in genuine STScI HST/ACS F606W mosaics. Each original site is held fixed and evaluated against *five predeclared independent random seeds* (11, 23, 37, 53, 71), using both (a) IID Gaussian and (b) spatially correlated Gaussian added noise. The two modes have identical per-pixel added RMS (half each original tile's robust pixel RMS). Source positions, fluxes, nontraining observed-star shape IDs, center/local templates and the original HST background are unchanged. **The 2,520 trials are not 2,520 independent astrophysical stars.**
@@ -719,7 +787,8 @@ Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, 
 - **v0.14**: 252 one-at-a-time held-out observed-star injections into actual HST backgrounds; 229 detected peaks recovered; known-position local/center PRF flux errors, real recovery plots, all injection attempts and failures with hashes in README. No physical photometry calibration.
 - **v0.15**: complete controlled added-noise robustness benchmark, 756 frozen artificial-star trials across three genuine HST mosaics, equal-variance IID vs spatially correlated Gaussian stress, all negative results retained with 3 genuine PNG figures. Physical Poisson noise is explicitly disabled on unverified mosaic electron units.
 - **v0.16**: five predeclared seeds for real-HST observed-star injection noise controls (2,520 trials), 30 per-seed groups, 240 noise-field audits, three real figures; source/exposure labels audited. Calibrated HST Poisson noise and Drizzle covariance explicitly not claimed.
-- **v0.17 (planned)**: inspect constituent exposures and weight-map provenance to establish physical electron and noise-covariance modeling; expand NGC 104 star-injection sample size and run genuinely independent Gaia astrometry with verified observation epochs.
+- **v0.17**: expanded real-HST artificial stars with fixed 4–8, 8–12, 12–16 px original-peak distance bands, 288 different pixel sites × three fluxes, 864 attempts (748 recovered); NGC 104 sampled at 96 different sites, with complete FIGURES/CSV/JSON and no fabricated detector-noise calibration. Single-HDU exposure lineage audit exposes unresolved instrument provenance.
+- **v0.18 (planned)**: acquire and verify actual ACS exposure-level/weight-map products and detector noise units, estimate injection recovery uncertainty using spatial bootstrap and more independent image regions, and pursue independent Gaia DR3 astrometry using verified exposure epochs.
 
 Cite the [survey archive](https://archive.stsci.edu/prepds/acsggct/), [Sarajedini et al. (2007)](https://arxiv.org/abs/astro-ph/0612598), and [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) when using the data.
 
