@@ -88,3 +88,5 @@ jobs:
           python -m stellarweave.psf_results --help
           python -m stellarweave.spatial_prf --help
           python -m stellarweave.prf_visualization --help
+          python -m stellarweave.prf_stratification --help
+          python -m stellarweave.prf_stratification_summary --help
