@@ -4,12 +4,69 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.15.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include real ACSGGCT/HST internal astrometric consistency measurements and held-out native-pixel PSF shape comparisons across three globular clusters, with measured tables, source reports and reproducible plots below.
+**v0.16.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include real ACSGGCT/HST internal astrometric consistency measurements and held-out native-pixel PSF shape comparisons across three globular clusters, with measured tables, source reports and reproducible plots below.
 
 ## Purpose / 研究目标
 
 StellarWeave is designed to investigate faint stellar source detection, deblending, and measurement reliability in crowded telescope imagery. We are developing physically informed baselines, not merely applying YOLO to astronomy.
 
+## v0.16.0 — Five-seed noise robustness: real HST mosaic backgrounds / 多随机种子噪声验证
+
+**New actual observational benchmark: 2,520 additional noise-perturbed trials** from exactly **252 original v0.14 artificially planted star sites** in genuine STScI HST/ACS F606W mosaics. Each original site is held fixed and evaluated against *five predeclared independent random seeds* (11, 23, 37, 53, 71), using both (a) IID Gaussian and (b) spatially correlated Gaussian added noise. The two modes have identical per-pixel added RMS (half each original tile's robust pixel RMS). Source positions, fluxes, nontraining observed-star shape IDs, center/local templates and the original HST background are unchanged. **The 2,520 trials are not 2,520 independent astrophysical stars.**
+
+### Five-seed real HST recovered planted-source fractions / 真实恢复率稳定性
+
+Results below show **means of five within-seed recovery fractions** and observed min–max ranges across those same five random perturbation seeds. These **are descriptive seed ranges, NOT 95% confidence intervals or source-population completeness.**
+
+| Actual HST cluster | Number of fixed injected sources | IID added Gaussian: mean (five-seed range) | Correlated added Gaussian: mean (five-seed range) |
+|---|---:|---:|---:|
+| NGC 6397 | 96 | **86.88%** (84.38–87.50%) | **84.79%** (82.29–88.54%) |
+| NGC 6752 | 96 | **93.75%** (91.67–95.83%) | **94.17%** (91.67–95.83%) |
+| **NGC 104 / 47 Tuc** | **60** | **89.33%** (88.33–91.67%) | **88.33%** (86.67–90.00%) |
+
+The differences between the modes are **not monotonic across clusters**: NGC 6752 has a slightly higher observed mean in the correlated-noise repetitions, unlike NGC 6397 and NGC 104. This is an empirical finite-replicate result, not evidence that correlation improves detection. The original 252 fixed sites are **the same** as v0.14/v0.15, including the smaller number of isolated NGC 104 sites.
+
+![Actual five-seed real HST planted-star recovery under two added Gaussian noise correlation conditions](docs/results/real_noise_v16/recovery_across_seeds.png)
+
+### Known-position forced local versus center PRF flux errors
+
+Metric: **median of each seed's star-pooled median absolute relative flux-amplitude error**, using each injected star's known true pixel coordinate, so lower values indicate better *forced* amplitude fitting. These are not physically calibrated photometric flux errors, blind stellar measurements or independent-star confidence intervals.
+
+| Observed cluster | IID: local / center | Correlated: local / center |
+|---|---:|---:|
+| NGC 6397 | 3.70% / 3.64% | 5.86% / 6.65% |
+| NGC 6752 | **5.95% / 8.47%** | **8.70% / 9.48%** |
+| **NGC 104** | **16.19% / 15.40%** | **16.51% / 15.90%** |
+
+**Negative result retained:** on NGC 104, local PRF errors continue to exceed frozen-center errors under both repeated added-noise modes, although individual seed medians and paired per-source differences vary. NGC 6752 tends to favor its local PRF in this metric, illustrating why a single universal claim is not justified.
+
+![Per-seed known-position forced local PSF errors on real HST backgrounds](docs/results/real_noise_v16/forced_flux_across_seeds.png)
+
+![Per-seed paired local minus center PRF absolute flux errors and variability](docs/results/real_noise_v16/paired_model_seed_spread.png)
+
+### Noise provenance and reproducibility / 数据完整性与噪声溯源
+
+The real FITS science headers identify ACS/WFC and include **`BUNIT=ELECTRONS`, `CCDGAIN=1`** with `EXPTIME` values 15 s (NGC 6397), 35 s (NGC 6752) and 50 s (NGC 104). The selected images have **no same-sized ERR or DQ extension** in this data product. A reported BUNIT or CCDGAIN is **not sufficient** to infer the resampled mosaic's valid per-pixel independent electron-count distribution or Drizzle weight/covariance. Therefore **this release does not inject physical Poisson noise into the real FITS mosaics or claim instrument-calibrated error bars**. Both additions remain deterministic Gaussian stress controls on top of the existing telescope background.
+
+The [committed v0.16 evidence folder](docs/results/real_noise_v16/) includes:
+
+- [2,520 complete trial records](docs/results/real_noise_v16/per_trial.csv), including missed detections and any pre-existing added-noise peaks;
+- [30 per-seed, per-cluster, per-mode summaries](docs/results/real_noise_v16/per_seed.csv), each computed over the same original planted sites;
+- [240 tile-mode-seed noise field audits](docs/results/real_noise_v16/noise_audits.csv), showing added pixel RMS, horizontal lag-one correlation and all random generation seeds;
+- [all three original HST-linked JSON reports](docs/results/real_noise_v16/source_reports/) and the [SHA-256 / GitHub Actions provenance summary](docs/results/real_noise_v16/summary.json).
+
+Reproduce **all three README figures without downloading the original large FITS**:
+
+```bash
+python -m pip install -r requirements-smoke.txt
+python -m stellarweave.noise_repeat_results \
+  docs/results/real_noise_v16/source_reports/*.json \
+  --out outputs/reproduced_v16_noise
+```
+
+To regenerate actual telescope experiments from official STScI downloads, see [Cross-region / Cross-cluster Astrometry CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/cross-region.yml): the full pipeline refits the original *non-injected* training-star PRFs, fixes all source identities and hashes, runs the complete 5×2×252 additional trials and republishes observed charts. Complete per-seed outcomes and failed injections are retained; a missing source, mutated source flux/shape, incorrect noise strength or inconsistent test-set membership triggers a hard validation error.
+
+**Scope:** Five seeds reveal numerical sensitivity conditional on these planted sites, original HST backgrounds and chosen perturbation amplitude. They do **not** estimate physical detector noise covariance, stellar-population completeness, causal crowding effects, source Poisson shot noise, externally calibrated Gaia astrometry or instrument ePSF performance. STScI's Drizzle documentation discusses [pixel covariance and correlated noise](https://hst-docs.stsci.edu/drizzpac/chapter-3-description-of-the-drizzle-algorithm/3-3-weight-maps-and-correlated-noise); the artificial Gaussian spatial filter here is **not** a calibrated implementation of that covariance.
 ## v0.15.0 — Controlled noise robustness on real HST observations / 真实 HST 噪声压力实验
 
 **This is a controlled sensitivity test on real HST/ACS F606W image backgrounds, NOT a physically calibrated noise or photometry model.** The original **252** v0.14 artificial-star positions, injection fluxes and *held-out observed HST star-shape templates* are frozen. Each original site is evaluated with (1) original background, (2) original + independent zero-mean Gaussian noise, or (3) original + spatially correlated zero-mean Gaussian noise. The two added-noise fields are normalized to the **same pixel RMS = 0.50 × original tile robust RMS**. Correlated noise is generated by Gaussian smoothing at 1.3 pixel sigma, not from inferred HST Drizzle covariance.
@@ -661,7 +718,8 @@ Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, 
 - **v0.13**: exploratory real-FITS brightness/neighbor/annulus stratification of all 838 unchanged held-out test stars; NGC 104 lower-contrast and higher-neighbor-count subgroups show worse local PRF shape gains, with raw evidence, three real figures and exact original PRF snapshots.
 - **v0.14**: 252 one-at-a-time held-out observed-star injections into actual HST backgrounds; 229 detected peaks recovered; known-position local/center PRF flux errors, real recovery plots, all injection attempts and failures with hashes in README. No physical photometry calibration.
 - **v0.15**: complete controlled added-noise robustness benchmark, 756 frozen artificial-star trials across three genuine HST mosaics, equal-variance IID vs spatially correlated Gaussian stress, all negative results retained with 3 genuine PNG figures. Physical Poisson noise is explicitly disabled on unverified mosaic electron units.
-- **v0.16 (planned)**: recover exposure-level electron/weight-map provenance and model Drizzle covariance + source Poisson noise with verified units; validate injection-site statistics under repeated independent noise realizations, expand deep NGC 104 crowding tests, and pursue independent Gaia DR3 astrometry.
+- **v0.16**: five predeclared seeds for real-HST observed-star injection noise controls (2,520 trials), 30 per-seed groups, 240 noise-field audits, three real figures; source/exposure labels audited. Calibrated HST Poisson noise and Drizzle covariance explicitly not claimed.
+- **v0.17 (planned)**: inspect constituent exposures and weight-map provenance to establish physical electron and noise-covariance modeling; expand NGC 104 star-injection sample size and run genuinely independent Gaia astrometry with verified observation epochs.
 
 Cite the [survey archive](https://archive.stsci.edu/prepds/acsggct/), [Sarajedini et al. (2007)](https://arxiv.org/abs/astro-ph/0612598), and [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) when using the data.
 

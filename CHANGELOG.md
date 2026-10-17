@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.16.0 — 2026-10-17
+
+**Multi-seed robustness instead of single-realization telescope-noise claims.**
+
+- Added `stellarweave/noise_repeats.py` for five predeclared independent noise seeds (11, 23, 37, 53, 71) and matched IID versus spatially correlated Gaussian perturbations on the identical original v0.14 artificial-star sites/fluxes/templates in actual three-cluster HST F606W mosaics. Original backgrounds and frozen non-injected PSF models are not retrained on injected stars.
+- Added `stellarweave/noise_repeat_results.py` with strict complete-source/mode/seed validation, per-seed recovered counts and known-location forced-flux errors, explicit negative results, complete per-star/seed JSON and CSV, and three genuine matplotlib figures in README.
+- Real experiment: original planted sources 96 NGC6397, 96 NGC6752, 60 NGC0104; **2,520 total newly noise-augmented trials, 240 full tile-mode-seed noise audits, 30 cluster-mode-seed aggregates**. All three actual HST mosaic workflows completed successfully.
+- Per-seed mean recovery rates for IID/correlated respectively: NGC6397 86.88%/84.79%, NGC6752 93.75%/94.17%, NGC0104 89.33%/88.33%. Actual five-seed min/max ranges and exact individual outcomes are available under `docs/results/real_noise_v16/`. Five-seed ranges are descriptive, NOT source-population confidence intervals.
+- Known-coordinate local/center star-pooled median absolute relative errors, expressed as median across seeds: NGC0104 IID 16.19%/15.40%, correlated 16.51%/15.90%; local PRF still underperforms for this field. Negative findings and nonmonotonic outcomes retained.
+- Audited actual header labels: ACS/WFC BUNIT=ELECTRONS, CCDGAIN=1, science header EXPTIME 15/35/50 s by cluster; no matching full-sized ERR/DQ image extensions found. **Labels are insufficient to validate effective mosaic electron counts, shot noise or Drizzle covariance**; intentionally kept HST physical Poisson and calibrated uncertainties disabled.
+- Tests verify strict no-loss of repeated baseline identities, original FITS/plate/model/injection hashes, equal Gaussian RMS but distinct spatial lag-one covariance, no injection-source training leakage, no misclassification of preexisting noise-only peaks and figure reproduction.
+
+**Outstanding scientific prerequisites:** per-exposure HST detector calibration and Drizzle weight/covariance provenance, validated noise unit conversions, real Poisson injected-source variance, more stars / independent data, science-calibrated flux error bars and externally independent Gaia astrometric precision.
 ## v0.15.0 — 2026-10-17
 
 **Real-HST controlled noise robustness and fail-closed instrument-calibration audit.**
