@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.14.0 — 2026-10-17
+
+**Real HST ACSGGCT F606W artificial-star injection-and-recovery controls.**
+
+- Added `stellarweave/real_injection.py`: inject normalized **held-out observed star stamps** one at a time into original non-synthetic HST mosaic images, with predeclared source flux relative to measured robust tile pixel RMS (80, 200, 500), and predetermined detection-neighbor distance classes. Rerun source detection blindly, count all successes/failures and calculate forced, known-coordinate local-vs-center native-pixel PRF flux amplitude errors.
+- Added `stellarweave/injection_results.py`: real three-cluster trial aggregation, Wilson 95% binomial intervals, comparison plots, all unsuccessful injections, original source JSON with SHA-256 provenance and CSV output. No star is injected into a model used to fit that star.
+- Actual experiments: NGC6397 84/96; NGC6752 91/96; NGC0104 54/60; **229/252 total**. NGC104 only has four sufficiently isolated positions per flux level under the fixed class definition; incomplete cells are recorded rather than silently filled.
+- Example NGC104 near-existing-peak, low-injection-flux known-position absolute relative amplitude errors: local 35.56%, frozen center 30.74% — a negative result for local PRF. Local PRF is **not uniformly superior**. These are not calibrated stellar photometric biases.
+- Published three genuine scientific figures, every attempted injection, per-group Wilson confidence intervals, complete raw reports and hash-linked summaries under `docs/results/real_injections_v14/` and embedded plots in README.
+- Added regression tests verifying source placement, no pre-existing peak accepted as recovery, known-flux forced fit, held-out source identities, deterministic selection and chart/source integrity. Real observational workflow plus Python 3.11/3.12 CI.
+
+**Scientific restrictions:** real HST background and real measured star-shape templates, but injected stars are artificial and have no additional simulated source photon shot noise, subpixel centroiding or instrument calibration. Flux fits use truth positions; results are *not* real catalog completeness, calibrated photometric error, Gaia astrometric precision or validated oversampled HST ePSF.
+
 ## v0.13.0 — 2026-10-17
 
 **Real HST PSF/PRF failure analysis without test-set refitting or cherry-picking.**

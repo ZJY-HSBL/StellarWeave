@@ -4,12 +4,68 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.13.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include real ACSGGCT/HST internal astrometric consistency measurements and held-out native-pixel PSF shape comparisons across three globular clusters, with measured tables, source reports and reproducible plots below.
+**v0.14.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include real ACSGGCT/HST internal astrometric consistency measurements and held-out native-pixel PSF shape comparisons across three globular clusters, with measured tables, source reports and reproducible plots below.
 
 ## Purpose / 研究目标
 
 StellarWeave is designed to investigate faint stellar source detection, deblending, and measurement reliability in crowded telescope imagery. We are developing physically informed baselines, not merely applying YOLO to astronomy.
 
+## v0.14.0 — Real HST planted stars and forced-flux recovery / 真实哈勃人工星注入实验
+
+**Actual STScI HST/ACS F606W science images were used as observational backgrounds.** Stars are planted one at a time using **held-out, observed, normalized HST star cutouts** which did not train either scored PRF. For each injected star, the unchanged SciPy source detector is rerun blindly; local and frozen-center PRF amplitudes are fitted separately at the **known planted coordinate**. All recovered AND missed sources are kept. This does **not** establish real stellar-population completeness, calibrated instrumental magnitude or blind photometry.
+
+### Real HST recovery results / 三星团真实背景实验
+
+| Cluster | Attempted planted-star trials | Blind peak recovered | Planted recovery fraction |
+|---|---:|---:|---:|
+| NGC 6397 | 96 | 84 | **87.50%** |
+| NGC 6752 | 96 | 91 | **94.79%** |
+| NGC 104 (47 Tuc) | 60 | 54 | **90.00%** |
+| **Total** | **252** | **229** | **90.87%** |
+
+Preset injection levels were **80×, 200× and 500× each tile's robust pixel RMS**, with two environmental strata: **near a pre-existing 5-sigma detection peak** (nearest peak distance 5–11 pixels), and **relatively isolated** (nearest detected peak at least 16 pixels). These are **not astronomical source SNR bins or calibrated stellar fluxes**. The one-at-a-time injected-source recovery criterion is a new detected peak within 2.5 native pixels that did not already exist in the original image.
+
+**Sampling limitation:** NGC 104 supplies only **four relatively isolated positions per flux level** under the frozen grid/threshold rule, versus 16 per level in NGC 6397 and NGC 6752. Its total number of attempts is thus 60, not 96; the script **does not relax the separation requirement after looking at outcomes or silently discard undersampled cells**. Fractions in small-N groups have broad Wilson intervals.
+
+| Real HST cluster | 80× RMS near peaks | 80× RMS isolated | 500× RMS near peaks | 500× RMS isolated |
+|---|---:|---:|---:|---:|
+| NGC 6397 | 11/16 (68.8%) | 15/16 (93.8%) | 15/16 (93.8%) | 15/16 (93.8%) |
+| NGC 6752 | 13/16 (81.3%) | 16/16 (100%) | 15/16 (93.8%) | 16/16 (100%) |
+| NGC 104 | 13/16 (81.3%) | 4/4 (100%, n=4) | 15/16 (93.8%) | 4/4 (100%, n=4) |
+
+![Measured artificial-star recovery curves across three real HST backgrounds](docs/results/real_injections_v14/recovery_by_flux_crowding.png)
+
+### Forced PRF flux diagnostic / 已知位置的 PSF 通量估计
+
+Each fit uses the **true injection position** and annular-background-subtracted, unweighted native-pixel PRF amplitude. Below is the median absolute relative error in the known planted image-unit flux. The injected stars are not subjected to an added Poisson shot-noise realization, and no independent physical flux/zeropoint calibration is available. **Do not cite these numbers as calibrated HST photometric accuracy.**
+
+| Cluster and injection condition | Local PRF median absolute error | Frozen center PRF median absolute error |
+|---|---:|---:|
+| NGC 6397, near peak, 80× RMS | 10.40% | 10.49% |
+| NGC 6752, near peak, 80× RMS | 7.61% | 16.17% |
+| **NGC 104, near peak, 80× RMS** | **35.56%** | **30.74%** |
+| NGC 104, near peak, 500× RMS | 8.55% | 12.51% |
+
+These are selected conditions for readability; **all 18 predeclared cluster × crowding × injection-flux cells**, including losses and model reversals, are in [groups.csv](docs/results/real_injections_v14/groups.csv). The full [252-trial CSV](docs/results/real_injections_v14/per_trial.csv) includes every attempted planted source, detection outcome, detected-peak position error, source-shape index, forced-local amplitude, forced-center amplitude and known injected flux.
+
+![Real HST planted-source forced local versus center PSF flux errors](docs/results/real_injections_v14/forced_flux_error.png)
+
+![Paired actual local-minus-center forced PRF absolute relative flux errors](docs/results/real_injections_v14/paired_forced_flux_difference.png)
+
+### Reproduce / 复现实验
+
+To regenerate **all three README figures** from already committed genuine measured JSON (without re-downloading FITS):
+
+```bash
+python -m pip install -r requirements-smoke.txt
+python -m stellarweave.injection_results \
+  docs/results/real_injections_v14/source_reports/*.json \
+  --out outputs/reproduced_injections_v14
+```
+
+The [real-HST benchmark workflow](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/cross-region.yml) independently downloads three original ACSGGCT image/catalog pairs, rebuilds the fixed-geometry PRFs, executes blind detection on each injected image and publishes reports. The [provenance summary](docs/results/real_injections_v14/summary.json) includes each FITS hash, prior PRF source hash, original GitHub Actions run ID, every loss, and explicit scientific limitations. No experimental results were fabricated or hand-drawn.
+
+**Important methodological distinction:** blind artificial-source detection is evaluated with a known-position matching criterion; the PSF amplitude estimators are **forced at the known location**, not blind centroid/flux inference. Native detector returns integer-peak coordinates and is not a subpixel astrometric estimator. The injected PRF is an observed held-out bright star stamp; the original image noise is real, but new source photon shot noise and detector covariance are not simulated. These remain preliminary **injection recovery diagnostics**, not complete instrument-calibrated artificial-star completeness studies.
 ## v0.13.0 — Why does NGC 104's local PSF fail? / 真实拥挤场的分层诊断
 
 **Actual archival HST/ACS F606W observations; same 838 previously frozen test stars across 24 outer tiles and three globular clusters.** This update does not retrain the PSF/PRF models, replace test stars, or optimize against the held-out results. Instead, it reopens the original FITS pixels to measure four image-derived **descriptive proxies** for the same v0.12 test sources: peak contrast relative to robust tile pixel RMS, nearest other detected 6-sigma peak, number of other detected peaks within 25 pixels, and 5–10-pixel annular image texture. The threshold for each high/low group is the median of the frozen **test** sources within that cluster, determined **post hoc**; these are exploratory associations, not confirmatory hypothesis tests.
@@ -550,7 +606,8 @@ Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, 
 - **v0.11**: reproducible real-HST experimental dashboard (24 individual tile records and three figures), immutable-source hashes, GitHub Actions evidence snapshots, and real FITS observation-date audits (effective epochs NOT verified).
 - **v0.12**: measured native-pixel PRF spatial variation on 27 real HST tiles; training/held-out star shape comparisons across 24 outer tiles (838 stars), honest positive/negative results, 5+ real experiment plots, archived raw reports and automatic GitHub Actions reproduction.
 - **v0.13**: exploratory real-FITS brightness/neighbor/annulus stratification of all 838 unchanged held-out test stars; NGC 104 lower-contrast and higher-neighbor-count subgroups show worse local PRF shape gains, with raw evidence, three real figures and exact original PRF snapshots.
-- **v0.14 (planned)**: validate physical flux-bias/noise behavior with injection-and-recovery controls, improve spatial PRF robustness in crowded fields, verify effective observation epochs and pursue independent Gaia DR3 checks.
+- **v0.14**: 252 one-at-a-time held-out observed-star injections into actual HST backgrounds; 229 detected peaks recovered; known-position local/center PRF flux errors, real recovery plots, all injection attempts and failures with hashes in README. No physical photometry calibration.
+- **v0.15 (planned)**: add physically justified photon-shot-noise and correlated-noise realizations, calibrated PSF/flux baselines and crowded-field systematic checks; pursue verified HST epochs and independent Gaia DR3 astrometry.
 
 Cite the [survey archive](https://archive.stsci.edu/prepds/acsggct/), [Sarajedini et al. (2007)](https://arxiv.org/abs/astro-ph/0612598), and [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) when using the data.
 
