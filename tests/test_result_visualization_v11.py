@@ -72,3 +72,26 @@ def test_bad_science_claims_rejected(tmp_path):
     p.write_text(json.dumps(d))
     with pytest.raises(ValueError,match='science-grade'):
         summarize([p])
+
+
+def test_header_epoch_audit_retained_without_claiming_verified(tmp_path):
+    paths=[]
+    for i,name in enumerate(CLUSTERS):
+        directory=tmp_path/name
+        directory.mkdir()
+        p=directory/'cross_region.json'
+        _fixture(p,name)
+        (directory/'epoch_audit.json').write_text(json.dumps({
+            'effective_mosaic_epoch_verified':False,
+            'min_header_mjd':53800.+i,
+            'max_header_mjd':53800.+i,
+            'gaia_epoch_can_be_inferred_automatically':False}))
+        paths.append(p)
+    out=tmp_path/'result'
+    d=render_report(paths,out)
+    assert len(d['header_epoch_hints'])==3
+    assert all(not x['effective_mosaic_epoch_verified']
+               for x in d['header_epoch_hints'].values())
+    assert len(list((out/'epoch_audits').glob('*.json')))==3
+    saved=json.loads((out/'summary.json').read_text())
+    assert saved['header_epoch_hints']==d['header_epoch_hints']

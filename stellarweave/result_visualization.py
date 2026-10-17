@@ -134,9 +134,27 @@ def render_report(paths,out,*,source_run_id=None,source_commit=None):
         w.writeheader();w.writerows(result['per_tile'])
     raw=out/'source_reports'
     raw.mkdir(exist_ok=True)
+    epochs=out/'epoch_audits'
+    epochs.mkdir(exist_ok=True)
+    header_epoch_hints={}
     for path in paths:
         d=_read_report(path)
         shutil.copyfile(path,raw/f"{d['cluster']}.json")
+        # Epoch provenance is an independent FITS-header audit, NOT a
+        # verified effective mosaic observation epoch for Gaia matching.
+        candidate=Path(path).with_name('epoch_audit.json')
+        if candidate.is_file():
+            ep=json.loads(candidate.read_text(encoding='utf-8'))
+            if ep.get('effective_mosaic_epoch_verified') is not False:
+                raise ValueError('Unverified FITS date cannot be marked verified')
+            shutil.copyfile(candidate,epochs/f"{d['cluster']}.json")
+            header_epoch_hints[d['cluster']]={
+                'min_header_mjd':ep.get('min_header_mjd'),
+                'max_header_mjd':ep.get('max_header_mjd'),
+                'effective_mosaic_epoch_verified':False}
+    result['header_epoch_hints']=header_epoch_hints
+    (out/'summary.json').write_text(json.dumps(result,indent=2,allow_nan=False),
+                                    encoding='utf-8')
     labels=[NAMES[c] for c in CLUSTERS]
     colors=plt.rcParams['axes.prop_cycle'].by_key()['color']
     x=np.arange(8)
