@@ -196,5 +196,5 @@
   "not_independent_astrometry": true,
   "limitations": "Peak-selected isolated bright sources; background and centroid approximations, unknown sampling/CTE/drizzle correlation. Spatial differences are descriptive, not calibrated PSF error.",
   "input_fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096",
-  "plate_report_sha256": "d97458440a3a6bc556ef1d64986e830542d30b1af51a109e2378086f7bea1db2"
+  "plate_report_sha256": "414f9d33768476be5bf41398307b2f88f75d8ea3f7abaf236bbb8d98517092d9"
 }

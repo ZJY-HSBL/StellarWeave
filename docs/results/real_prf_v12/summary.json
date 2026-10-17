@@ -1,8 +1,8 @@
 {
   "version": "0.12.0",
   "kind": "REAL_HST_NATIVE_PIXEL_PRF_CROSSVALIDATION",
-  "source_github_actions_run_id": "39018234725",
-  "source_commit": "20075f872d3b61a3021e088b97ee37c6024bf471",
+  "source_github_actions_run_id": "39021286490",
+  "source_commit": "e2c182b171cc52df32d6200a3afc197030ea96f1",
   "clusters": [
     {
       "cluster": "ngc6397",
@@ -18,9 +18,9 @@
       "median_star_local_l1": 0.08386593933957498,
       "median_star_anchor_l1": 0.10874727545430232,
       "median_star_gaussian_l1": 0.2578558567519688,
-      "report_sha256": "747d446c0adc2a0317fbd7ea8a3c7abff84398846e4bf5c59b6acf36bbce90c9",
+      "report_sha256": "d99352f309be809bf37f39436e0f226afcfd8e6d67d44f4e8bfb4e8f89c5d0e3",
       "fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096",
-      "plate_sha256": "d97458440a3a6bc556ef1d64986e830542d30b1af51a109e2378086f7bea1db2"
+      "plate_sha256": "414f9d33768476be5bf41398307b2f88f75d8ea3f7abaf236bbb8d98517092d9"
     },
     {
       "cluster": "ngc6752",
@@ -54,9 +54,9 @@
       "median_star_local_l1": 0.40002866047921304,
       "median_star_anchor_l1": 0.38614417286105546,
       "median_star_gaussian_l1": 0.45932188754450215,
-      "report_sha256": "1a73bf2d22d5d59b7524d00c8b51ff1af3fe620a62947a0b5fb0b8a3e3bdf824",
+      "report_sha256": "8f4d225b20ea0a6c5ba345459dbfb2c97c4293bdc7e215c0adacbc8c93c73771",
       "fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765",
-      "plate_sha256": "8d7d0630fb62e12511e998d0db2d54c639f834417595e03426bf68fcdadda6e7"
+      "plate_sha256": "3291bdd8bc940a1e123c722b0fa130782a3e9277a493e28088975a7956841d15"
     }
   ],
   "heldout_tile_slots": 24,
