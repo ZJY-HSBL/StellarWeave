@@ -80,3 +80,5 @@ jobs:
           python -m stellarweave.prepare_hst --help
           python -m stellarweave.dualband --help
           python -m stellarweave.spatial_cli --help
+          python -m stellarweave.gaia_fetch --help
+          python -m stellarweave.gaia_eval_cli --help

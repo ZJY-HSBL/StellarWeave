@@ -4,12 +4,61 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.9.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
+**v0.10.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
 
 ## Purpose / 研究目标
 
 StellarWeave is designed to investigate faint stellar source detection, deblending, and measurement reliability in crowded telescope imagery. We are developing physically informed baselines, not merely applying YOLO to astronomy.
 
+## v0.10.0 — Gaia DR3 epoch-aware external astrometry / 外部天体测量验证接口
+
+**Implementation available; actual Gaia/HST independent astrometry has NOT been measured yet.** The standard CI currently verifies this code using generated FITS and Gaia-shaped reference data. A genuine external comparison additionally needs authentic ESA Gaia DR3 records and a defensible HST reference epoch for the mosaic. A manually chosen, unverified epoch cannot support a published precision claim.
+
+### 1. Fetch actual Gaia DR3 source data (optional network dependency)
+
+Install optional dependency `python -m pip install 'astroquery>=0.4.9,<0.5'` (not required for ordinary synthetic CI). For a real official F606W FITS downloaded previously:
+
+```bash
+python -m stellarweave.gaia_fetch \
+  --fits data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f606w_v2_img.fits \
+  --max-rows 3000 --gmag-max 19.5 \
+  --out outputs/gaia/ngc6397_gaia_dr3.csv
+```
+
+This obtains source ID, RA, Dec, two proper-motion components, the Gaia reference epoch, G magnitude, RUWE and visibility periods from the **official `gaiadr3.gaia_source` table**. A bright-star/quality filter is used, the request is size-bounded, and the code **fails on truncated TOP results** instead of claiming completeness. The adjacent `_provenance.json` stores the actual ADQL query, sky cone, SHA-256 files and source counts.
+
+### 2. Build a frozen HST solution, independently of Gaia
+
+```bash
+python -m stellarweave.survey_cli \
+  --fits data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f606w_v2_img.fits \
+  --catalog data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_r.rdviq.cal.adj.zpt \
+  --cluster ngc6397 --grid 3 --tile-size 512 \
+  --out outputs/ngc6397_plate
+```
+
+The frozen affine solution comes **only from the ACSGGCT HST survey catalog**, not Gaia. The `cross_region.json` output records accepted held-out regions.
+
+### 3. Compare the existing solution against Gaia on a withheld region
+
+Read the actual HST observation epoch (or determine a scientifically defensible effective mosaic epoch from its constituent exposures). No default date is supplied. Substitute `VERIFIED_HST_MJD` with a real Modified Julian Date:
+
+```bash
+python -m stellarweave.gaia_eval_cli \
+  --fits data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f606w_v2_img.fits \
+  --gaia-csv outputs/gaia/ngc6397_gaia_dr3.csv \
+  --plate-report outputs/ngc6397_plate/cross_region.json \
+  --hst-mjd VERIFIED_HST_MJD --eval-tile 0 \
+  --out outputs/gaia/ngc6397_external_check.json
+```
+
+Only a **pre-existing, QC-passing, non-anchor tile** can be tested. The affine parameters are never adjusted using Gaia stars. Astropy propagates DR3 sky positions from `ref_epoch` to the supplied HST MJD using proper motions (`pmra` already includes cos Dec). The report stores matched-source fractions, pixel-coordinate residuals, six displaced-catalog null controls and file SHA-256.
+
+A `GAIA_DIAGNOSTIC_PASS` requires five matches, at least 20% eligible-star matching, a match/null ratio of at least 3, median residual ≤1.2 pixels and p95 residual ≤1.8 pixels. These are **exploratory guardrails**, not externally certified absolute astrometric uncertainties. Gaia angular propagation currently omits parallax and radial velocity where the input subset does not provide them; perspective effects, crowded-field selection, mosaic epoch/optical distortion and correlated systematics require further modeling.
+
+The manually triggered [Gaia DR3 External Check workflow](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/gaia-external.yml) performs the entire external-query experiment only when an operator provides a verified HST MJD and withheld tile index. The live ESA TAP query is **not** part of the automated release quality gate. No actual Gaia-to-HST success ratio is claimed for this release.
+
+Reference: [ESA Gaia DR3 ADQL examples](https://www.cosmos.esa.int/web/gaia-users/archive/writing-queries), [Astropy space motion](https://docs.astropy.org/en/stable/coordinates/apply_space_motion.html).
 ## v0.9.0 — Three-cluster, eight-region frozen-transfer validation / 三星团跨区域验证
 
 **Actual telescope images and public photometric catalogs. No manual star labeling.**
@@ -321,7 +370,8 @@ Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, 
 - **v0.7**: actual NGC 6397 raw WCS/catalog matching and spatial native-pixel PSF diagnostics, with rejected affine QC explicitly recorded.
 - **v0.8**: wide-shift WCS-guided candidate plate solution; 98.1% train / 98.0% held-out matches on NGC 6397, not yet absolute astrometry.
 - **v0.9**: independent 3-cluster, 3×3 nonoverlapping crop benchmark. Fixed center transform passes 24/24 same-cluster test regions, with full per-tile reports; no external astrometric certification.
-- **v0.10 (planned)**: independently held-out telescope observations or external astrometry, location-aware instrument ePSF, correlated-noise accounting, and calibrated artificial-star completeness.
+- **v0.10**: optional ESA Gaia DR3 TAP retrieval, per-source epoch propagation, frozen-HST-solution comparison on withheld tiles, strict provenance and diagnostic QC. Actual Gaia-on-HST external precision remains unmeasured.
+- **v0.11 (planned)**: run Gaia external checks with verified HST observation epochs and validate across clusters; model local instrumental ePSF and correlated noise before reporting calibrated completeness.
 
 Cite the [survey archive](https://archive.stsci.edu/prepds/acsggct/), [Sarajedini et al. (2007)](https://arxiv.org/abs/astro-ph/0612598), and [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) when using the data.
 

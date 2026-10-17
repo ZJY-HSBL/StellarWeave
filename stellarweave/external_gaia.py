@@ -147,8 +147,14 @@ def evaluate_frozen_plate(fits_path,gaia_csv,plate_report,out_path, *,
              &(shifted[:,1]>=0)&(shifted[:,1]<size))
         offsets.append(int(len(unique_links(shifted[ok],peaks,matching_px))))
     ratio=len(matched)/max(1.,float(np.median(offsets)))
+    matched_fraction=len(matched)/len(local)
+    med=float(np.median(matched[:,2])) if len(matched) else None
+    p95=float(np.percentile(matched[:,2],95)) if len(matched) else None
+    passed=(len(matched)>=min_sources and matched_fraction>=.2
+            and ratio>=3. and med is not None and med<=1.2
+            and p95 is not None and p95<=1.8)
     report={'version':'0.10.0','kind':'FROZEN_PLATE_GAIA_DR3_EXTERNAL_AUDIT',
-            'status':'MATCHED' if len(matched)>=min_sources else 'INCONCLUSIVE',
+            'status':'GAIA_DIAGNOSTIC_PASS' if passed else 'INCONCLUSIVE',
             'gaia_source':'ESA Gaia DR3 (file provenance must be independently verified)',
             'gaia_provenance_label':provenance,
             'gaia_file_sha256':_checksum(gaia_csv),
@@ -156,16 +162,19 @@ def evaluate_frozen_plate(fits_path,gaia_csv,plate_report,out_path, *,
             'fits_file_sha256':_checksum(fits_path),
             'observation_mjd':float(hst_mjd),
             'gaia_epoch_propagation':'Astropy SkyCoord.apply_space_motion',
+            'propagation_missing_parallax_and_radial_velocity':True,
+            'gaia_quality_selection':'RUWE<=1.4; G<=19.5; >=8 visibility periods',
             'fitting_uses_gaia':False,
             'evaluated_tile_index':int(eval_tile_index),
             'anchor_tile_index':int(anchor),'gaia_eligible':int(len(local)),
             'gaia_matched':int(len(matched)),
-            'gaia_matched_fraction':float(len(matched)/len(local)),
-            'median_position_residual_px':float(np.median(matched[:,2])) if len(matched) else None,
-            'p95_position_residual_px':float(np.percentile(matched[:,2],95)) if len(matched) else None,
+            'gaia_matched_fraction':float(matched_fraction),
+            'median_position_residual_px':med,
+            'p95_position_residual_px':p95,
             'null_shift_counts':offsets,
             'match_over_null_ratio':float(ratio),
             'external_observations_verified_by_runtime':False,
+            'claimed_precision_sub_milliarcsecond':False,
             'absolute_astrometry_certified':False,
             'warning':'Valid Gaia source provenance, mosaic observation epoch, '
                       'proper motion and correlated systematics must be checked before any science claim.'}

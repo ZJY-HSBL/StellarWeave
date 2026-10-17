@@ -79,7 +79,7 @@ def test_external_validation_on_constructed_fits(tmp_path):
     report=evaluate_frozen_plate(science,gaia,plate,tmp_path/'out.json',
         hst_mjd=Time(2016.,format='jyear').mjd,eval_tile_index=0,
         min_sources=5)
-    assert report['status']=='MATCHED'
+    assert report['status']=='GAIA_DIAGNOSTIC_PASS'
     assert report['gaia_matched']>=10
     assert report['gaia_matched_fraction']>.5
     assert report['fitting_uses_gaia'] is False

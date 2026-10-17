@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.0 — 2026-10-17
+
+**Opt-in Gaia DR3 cross-survey validation, epoch propagation and fail-closed scientific QC.**
+
+- Added an optional Gaia DR3 ESA TAP query client that derives a bounded cone from the target FITS celestial WCS, selects bright/astrometrically quality-filtered sources and logs exact query/provenance hashes.
+- Added strict DR3 CSV parsing, source-ID checks, RUWE/magnitude/visibility-period filters, and Astropy proper-motion propagation from Gaia reference epoch to explicitly supplied HST observation MJD.
+- Added per-withheld-tile comparison to a previously fitted frozen HST plate solution; Gaia never participates in model training or candidate selection.
+- Added one-to-one candidate matches, position residual percentiles, displaced-catalog null controls and conservative non-calibration flags.
+- Added a manually dispatched GitHub Gaia workflow requiring cluster name, independently verified HST observation MJD and held-out tile index.
+- Added regression tests for Gaia filtering, proper-motion sign and scale, FITS WCS projection, excluded anchor tile and bounded ADQL query generation.
+
+**Scope restriction:** live Gaia-to-real-HST measurements have NOT been run or validated as part of this release; CI results are from constructed Gaia-shaped data and existing real HST ACSGGCT-only tests. Without a justified mosaic reference epoch, external astrometric accuracy must not be claimed. Two-dimensional proper-motion propagation omits parallax and radial velocity contributions.
 ## v0.9.0 — 2026-10-17
 
 **Real HST cross-region and independent three-cluster validation.**
