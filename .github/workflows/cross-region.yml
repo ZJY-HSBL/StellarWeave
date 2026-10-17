@@ -11,6 +11,8 @@ on:
       - .github/workflows/cross-region.yml
       - stellarweave/result_visualization.py
       - stellarweave/epoch_audit.py
+      - stellarweave/spatial_prf.py
+      - stellarweave/prf_visualization.py
       - stellarweave/psf_spatial.py
       - stellarweave/psf_results.py
   workflow_dispatch:
@@ -104,6 +106,29 @@ jobs:
           assert d['not_calibrated_photometry'] is True
           assert d['usable_tiles']+d['failed_tiles']==9
           assert (out/'psf_montage.png').stat().st_size>8000
+          PY
+      - name: Cross-validate spatial native-pixel PRF on real HST stars
+        env:
+          TARGET_CLUSTER: ${{ matrix.cluster }}
+        run: |
+          python -m stellarweave.spatial_prf \
+            --fits data/raw/${{ matrix.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ matrix.cluster }}_f606w_v2_img.fits \
+            --plate-report outputs/cross_region_${{ matrix.cluster }}/cross_region.json \
+            --cluster ${{ matrix.cluster }} --seed 42 \
+            --out outputs/cross_region_${{ matrix.cluster }}
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          c=os.environ['TARGET_CLUSTER']
+          root=Path('outputs')/f'cross_region_{c}'
+          d=json.loads((root/'spatial_prf.json').read_text())
+          assert len(d['tiles'])==9
+          assert d['science_calibrated'] is False
+          assert d['oversampled_instrument_epsf'] is False
+          assert d['no_heldout_star_used_to_fit_a_scored_template'] is True
+          assert (root/'spatial_prf_templates.png').stat().st_size>1000
+          assert (root/'heldout_stars.csv').stat().st_size>20
+          print('All evaluated/failed tiles retained; shape error is NOT photometric accuracy')
           PY
       - name: Upload machine-readable evaluation, no original FITS
         if: always()
@@ -221,6 +246,27 @@ jobs:
               assert (root/name).stat().st_size>8000
           for cluster in ('ngc6397','ngc6752','ngc0104'):
               assert (root/f'{cluster}_psf_montage.png').stat().st_size>8000
+          PY
+      - name: Aggregate all three real PRF cross-validations and draw README plots
+        env:
+          SOURCE_RUN_ID: ${{ github.run_id }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          python -m stellarweave.prf_visualization \
+            combined/spatial-transfer-*/spatial_prf.json \
+            --out docs/results/real_prf_v12 \
+            --run-id "$SOURCE_RUN_ID" --source-commit "$SOURCE_SHA"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('docs/results/real_prf_v12')
+          d=json.loads((root/'summary.json').read_text())
+          assert d['heldout_tile_slots']==24
+          assert len(d['clusters'])==3
+          assert d['calibrated_photometry'] is False
+          assert d['all_failed_tiles_retained'] is True
+          for f in ('prf_tile_gains.png','prf_heldout_comparison.png'):
+              assert (root/f).stat().st_size>8000
           PY
       - name: Publish immutable-input real-data evidence to main
         if: github.ref == 'refs/heads/main'
