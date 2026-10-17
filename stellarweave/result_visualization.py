@@ -155,7 +155,8 @@ def render_report(paths,out,*,source_run_id=None,source_commit=None):
                 color=colors[j])
     common(ax,'HST/ACSGGCT frozen-transform transfer (internal)',
            'Median positional residual (pixels)')
-    ax.set_ylim(bottom=0)
+    ax.set_ylim(.35,.45)  # Explicit zoom: emphasize real 0.38-0.43 px differences.
+    ax.set_title('HST/ACSGGCT frozen-transform transfer (zoomed y-axis)')
     fig.tight_layout()
     fig.savefig(out/'spatial_residuals.png',dpi=165)
     plt.close(fig)
@@ -170,7 +171,8 @@ def render_report(paths,out,*,source_run_id=None,source_commit=None):
     common(ax,'One-to-one matching in eight held-out HST regions',
            'Matched selected reference fraction')
     ax.yaxis.set_major_formatter(PercentFormatter(1))
-    ax.set_ylim(0,1.035)
+    ax.set_ylim(.965,1.005)  # Explicit zoom: all observed rates are >=97%.
+    ax.set_title('One-to-one HST reference matching (zoomed y-axis)')
     fig.tight_layout()
     fig.savefig(out/'spatial_match_fraction.png',dpi=165)
     plt.close(fig)

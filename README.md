@@ -4,12 +4,53 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.10.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or validated real-HST quantitative results. The catalog/image pipeline is tested against synthetic FITS/WCS fixtures, and any real ACS image/catalog pairing requires manual QC.
+**v0.10.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include measured internal ACSGGCT/HST image-to-survey-catalog results from three real globular clusters, with raw reports and reproducible plots below.
 
 ## Purpose / 研究目标
 
 StellarWeave is designed to investigate faint stellar source detection, deblending, and measurement reliability in crowded telescope imagery. We are developing physically informed baselines, not merely applying YOLO to astronomy.
 
+## Real HST experimental results / 真实哈勃实验数据与可复现图表
+
+**Observed data, not a simulated performance claim.** The following numbers come from actual STScI ACSGGCT F606W FITS mosaics and matching public survey catalogs, processed by [Cross-region / Cross-cluster Astrometry](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/cross-region.yml). Each cluster is fitted on its central 512×512-pixel tile and evaluated using the **same frozen transform** on eight disjoint 512×512 held-out tiles. A separate plate solution is trained for each cluster.
+
+| Real HST target | Survey catalog rows | Quality-selected catalog | Matches / evaluated bright references | Pooled selected-reference match rate | Median of 8 tile median residuals |
+|---|---:|---:|---:|---:|---:|
+| NGC 6397 | 16,100 | 12,947 | 2,239 / 2,266 | **98.81%** | **0.399 px** |
+| NGC 6752 | 52,817 | 38,804 | 2,374 / 2,400 | **98.92%** | **0.407 px** |
+| NGC 104 | 158,154 | 106,281 | 2,366 / 2,400 | **98.58%** | **0.405 px** |
+| **Total** | **227,071** | **158,032** | **6,979 / 7,066** | **98.77%** | — |
+
+**Internal held-out QC: 24/24 regions passed.** These fractions are **NOT all-star detection recall**, and the residuals are **NOT independently validated absolute astrometry**. The selected bright-reference subset, the HST image and its survey catalog are related products. Gaia-to-HST external precision, science-grade flux accuracy and faint-star completeness remain unmeasured.
+
+### Actual measured plots / 真实实验曲线
+
+**Figure 1.** Per-tile median matching residual after transferring the center-tile affine solution without refitting. The vertical axis is deliberately zoomed to reveal differences within the measured 0.38–0.43 pixel range.
+
+![Real HST three-cluster frozen-transfer positional residuals](docs/results/real_hst_v09/spatial_residuals.png)
+
+**Figure 2.** One-to-one matched fraction for the eight nonoverlapping evaluation tiles in each real cluster. The vertical axis is deliberately zoomed; these percentages refer only to preselected bright survey reference candidates.
+
+![Real HST held-out region matching fractions](docs/results/real_hst_v09/spatial_match_fraction.png)
+
+**Figure 3.** Counts of original catalog records and quality-selected catalog stars in the three real observed fields. These are archive catalog counts, not model detections.
+
+![Real ACSGGCT star catalog and quality-selected source counts](docs/results/real_hst_v09/catalog_source_counts.png)
+
+### Reproduce every figure / 图表复现
+
+The original **three unfiltered per-tile JSON reports**, the 24-row [per-tile CSV](docs/results/real_hst_v09/per_tile.csv), and the machine-readable [summary with source SHA-256 and GitHub Actions run ID](docs/results/real_hst_v09/summary.json) are committed under [docs/results/real_hst_v09/](docs/results/real_hst_v09/). The images are rendered from those reports, not redrawn by hand.
+
+```bash
+python -m pip install -r requirements-smoke.txt
+python -m stellarweave.result_visualization \
+  docs/results/real_hst_v09/source_reports/*.json \
+  --out outputs/reproduced_hst_figures
+```
+
+The three-cluster GitHub Actions matrix downloads official FITS/catalog files, runs all spatial evaluations, creates the JSON/CSV and PNG figures, and publishes the evidence snapshot. Every region, including any future rejected tile, is retained; missing or duplicated cluster reports fail the visualization build.
+
+**Experiment reporting rule / 实验报告原则：** future versions should put genuine measured metrics and figures in README, retain their source data and provenance, clearly distinguish simulations from telescope observations, and explicitly state negative results. No claimed algorithmic improvement without a reproducible controlled comparison.
 ## v0.10.0 — Gaia DR3 epoch-aware external astrometry / 外部天体测量验证接口
 
 **Implementation available; actual Gaia/HST independent astrometry has NOT been measured yet.** The standard CI currently verifies this code using generated FITS and Gaia-shaped reference data. A genuine external comparison additionally needs authentic ESA Gaia DR3 records and a defensible HST reference epoch for the mosaic. A manually chosen, unverified epoch cannot support a published precision claim.
