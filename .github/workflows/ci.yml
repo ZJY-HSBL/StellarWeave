@@ -92,3 +92,5 @@ jobs:
           python -m stellarweave.prf_stratification_summary --help
           python -m stellarweave.real_injection --help
           python -m stellarweave.injection_results --help
+          python -m stellarweave.noise_stress --help
+          python -m stellarweave.noise_results --help

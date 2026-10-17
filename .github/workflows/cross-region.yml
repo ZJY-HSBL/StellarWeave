@@ -17,6 +17,8 @@ on:
       - stellarweave/prf_stratification_summary.py
       - stellarweave/real_injection.py
       - stellarweave/injection_results.py
+      - stellarweave/noise_stress.py
+      - stellarweave/noise_results.py
       - stellarweave/psf_spatial.py
       - stellarweave/psf_results.py
   workflow_dispatch:
@@ -184,6 +186,32 @@ jobs:
           assert len(d['groups'])==6
           print('Actual HST injected-star trials checked without selection bias')
           PY
+      - name: Compare matched IID versus correlated noise on frozen artificial stars
+        env:
+          TARGET_CLUSTER: ${{ matrix.cluster }}
+        run: |
+          python -m stellarweave.noise_stress \
+            --fits data/raw/${{ matrix.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ matrix.cluster }}_f606w_v2_img.fits \
+            --plate-report outputs/cross_region_${{ matrix.cluster }}/cross_region.json \
+            --prf-report outputs/cross_region_${{ matrix.cluster }}/spatial_prf.json \
+            --base-report outputs/cross_region_${{ matrix.cluster }}/artificial_stars.json \
+            --cluster ${{ matrix.cluster }} \
+            --out outputs/cross_region_${{ matrix.cluster }}
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          c=os.environ['TARGET_CLUSTER']
+          root=Path('outputs')/f'cross_region_{c}'
+          base=json.loads((root/'artificial_stars.json').read_text())
+          d=json.loads((root/'noise_stress.json').read_text())
+          assert d['attempts']==base['total_attempted']*3
+          assert d['expected_original_trials']==base['total_attempted']
+          assert d['photon_shot_noise_applied_to_real_HST'] is False
+          assert d['true_HST_detector_noise_model'] is False
+          assert len(d['noise_audits'])==24
+          assert (root/'noise_stress.csv').stat().st_size>100
+          print('Checked all paired noise modes without missing original sites')
+          PY
       - name: Upload machine-readable evaluation, no original FITS
         if: always()
         uses: actions/upload-artifact@v4
@@ -204,6 +232,8 @@ jobs:
             outputs/cross_region_${{ matrix.cluster }}/prf_stratification.csv
             outputs/cross_region_${{ matrix.cluster }}/artificial_stars.json
             outputs/cross_region_${{ matrix.cluster }}/artificial_stars.csv
+            outputs/cross_region_${{ matrix.cluster }}/noise_stress.json
+            outputs/cross_region_${{ matrix.cluster }}/noise_stress.csv
           if-no-files-found: ignore
           retention-days: 30
 
@@ -373,12 +403,34 @@ jobs:
           for name in ('recovery_by_flux_crowding.png','forced_flux_error.png','paired_forced_flux_difference.png'):
               assert (root/name).stat().st_size>8000
           PY
+      - name: Aggregate genuine HST added-noise robustness experiments
+        env:
+          SOURCE_RUN_ID: ${{ github.run_id }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          python -m stellarweave.noise_results \
+            combined/spatial-transfer-*/noise_stress.json \
+            --out docs/results/real_noise_v15 \
+            --run-id "$SOURCE_RUN_ID" --source-commit "$SOURCE_SHA"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('docs/results/real_noise_v15')
+          d=json.loads((root/'summary.json').read_text())
+          assert d['total_original_sites']>0
+          assert d['total_mode_trials']==d['total_original_sites']*3
+          assert len(d['groups'])==9
+          assert d['calibrated_HST_detector_noise'] is False
+          assert d['no_original_frozen_sites_removed'] is True
+          for f in ('recovery_noise_sensitivity.png','local_forced_flux_noise.png','paired_prf_noise_robustness.png'):
+              assert (root/f).stat().st_size>8000
+          PY
       - name: Publish immutable-input real-data evidence to main
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/results/real_hst_v09 docs/results/real_hst_v12 docs/results/real_prf_v12 docs/results/real_prf_v13 docs/results/real_injections_v14
+          git add docs/results/real_hst_v09 docs/results/real_hst_v12 docs/results/real_prf_v12 docs/results/real_prf_v13 docs/results/real_injections_v14 docs/results/real_noise_v15
           if git diff --cached --quiet; then
             echo "No experiment evidence changed"
           else
@@ -396,4 +448,5 @@ jobs:
             docs/results/real_prf_v12/
             docs/results/real_prf_v13/
             docs/results/real_injections_v14/
+            docs/results/real_noise_v15/
           retention-days: 30
