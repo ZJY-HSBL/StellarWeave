@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.11.0 — 2026-10-17
+
+**Real HST evidence published as data, charts and provenance rather than claims.**
+
+- Added `stellarweave/result_visualization.py`, rendering three publication-style README figures directly from the three real ACSGGCT cross-region JSON reports. Includes per-tile median residuals, matched bright-reference fractions and catalog source-count comparisons.
+- Added `docs/results/real_hst_v09/` with all three unfiltered raw reports, 24-row per-tile CSV, derived summary JSON, three PNG charts, SHA-256 provenance, and source GitHub Actions run ID.
+- Actual data: NGC6397 2239/2266 matches, 0.399 px median-of-tile-medians; NGC6752 2374/2400, 0.407 px; NGC0104 2366/2400, 0.405 px. All 24 held-out tiles pass predeclared internal QC. Same-survey references: NOT independent absolute astrometry or detection completeness.
+- Extended GitHub Actions to reproduce all figures and commit the results snapshot to main automatically, with rejection/failure retention and schema checks. Added tests that fail on missing/duplicated cluster reports, science-accuracy mislabeling and missing plot output.
+- Added `stellarweave/epoch_audit.py` to inventory FITS header timing metadata without guessing an effective stacked-image epoch. Actual HST archive mosaics contain day-level header hints: NGC6397 MJD 53884, NGC6752 MJD 53879, NGC0104 MJD 53807. These are NOT independently validated weighted mosaic epochs.
+- Included all epoch-audit JSON records alongside the figures and tests that enforce `effective_mosaic_epoch_verified=false`.
+
+**Outstanding:** independent Gaia-vs-HST external astrometric accuracy, trained stellar source detection, local ePSF calibration, correlated-noise model, calibrated faint-star completeness, and measured science-grade photometric uncertainty.
 ## v0.10.0 — 2026-10-17
 
 **Opt-in Gaia DR3 cross-survey validation, epoch propagation and fail-closed scientific QC.**

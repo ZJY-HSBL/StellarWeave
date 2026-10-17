@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.10.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include measured internal ACSGGCT/HST image-to-survey-catalog results from three real globular clusters, with raw reports and reproducible plots below.
+**v0.11.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include measured internal ACSGGCT/HST image-to-survey-catalog results from three real globular clusters, with raw reports and reproducible plots below.
 
 ## Purpose / 研究目标
 
@@ -51,6 +51,29 @@ python -m stellarweave.result_visualization \
 The three-cluster GitHub Actions matrix downloads official FITS/catalog files, runs all spatial evaluations, creates the JSON/CSV and PNG figures, and publishes the evidence snapshot. Every region, including any future rejected tile, is retained; missing or duplicated cluster reports fail the visualization build.
 
 **Experiment reporting rule / 实验报告原则：** future versions should put genuine measured metrics and figures in README, retain their source data and provenance, clearly distinguish simulations from telescope observations, and explicitly state negative results. No claimed algorithmic improvement without a reproducible controlled comparison.
+## v0.11.0 — Real-data evidence and FITS epoch provenance / 真实实验与观测历元审计
+
+**Reproducible results, not just screenshots.** The three real ACSGGCT clusters now have committed per-tile CSV/JSON, verified source hashes, three auto-generated README figures, and an automatic GitHub Actions evidence-publication step. All figures come directly from actual telescope data processing and are regenerated on future benchmark runs; the synthetic test suite is separately identified.
+
+### HST FITS header timing audit / 图像观测时间元数据
+
+| Observed field | FITS header date hint (MJD) | Corresponding calendar date | Effective mosaic epoch verified? |
+|---|---:|---|---|
+| NGC 6397 | 53884 | 2006-05-29 | **No** |
+| NGC 6752 | 53879 | 2006-05-24 | **No** |
+| NGC 104 | 53807 | 2006-03-13 | **No** |
+
+The dates above are **only explicit day-level FITS header hints**, extracted from real archived mosaics by `stellarweave.epoch_audit`. They are not established weighted mean observation epochs. A stacked image may contain multiple exposures taken at different times; no Gaia external accuracy is claimed on the basis of these dates.
+
+Run the conservative audit on an already downloaded FITS file:
+
+```bash
+python -m stellarweave.epoch_audit \
+  --fits data/raw/ngc6397/hlsp_acsggct_hst_acs-wfc_ngc6397_f606w_v2_img.fits \
+  --out outputs/ngc6397_epoch_audit.json
+```
+
+Raw audit records are retained in [docs/results/real_hst_v09/epoch_audits/](docs/results/real_hst_v09/epoch_audits/). The tool deliberately marks `effective_mosaic_epoch_verified=false`; independent exposure-provenance research remains necessary before running a publishable Gaia DR3 comparison.
 ## v0.10.0 — Gaia DR3 epoch-aware external astrometry / 外部天体测量验证接口
 
 **Implementation available; actual Gaia/HST independent astrometry has NOT been measured yet.** The standard CI currently verifies this code using generated FITS and Gaia-shaped reference data. A genuine external comparison additionally needs authentic ESA Gaia DR3 records and a defensible HST reference epoch for the mosaic. A manually chosen, unverified epoch cannot support a published precision claim.
@@ -412,7 +435,8 @@ Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, 
 - **v0.8**: wide-shift WCS-guided candidate plate solution; 98.1% train / 98.0% held-out matches on NGC 6397, not yet absolute astrometry.
 - **v0.9**: independent 3-cluster, 3×3 nonoverlapping crop benchmark. Fixed center transform passes 24/24 same-cluster test regions, with full per-tile reports; no external astrometric certification.
 - **v0.10**: optional ESA Gaia DR3 TAP retrieval, per-source epoch propagation, frozen-HST-solution comparison on withheld tiles, strict provenance and diagnostic QC. Actual Gaia-on-HST external precision remains unmeasured.
-- **v0.11 (planned)**: run Gaia external checks with verified HST observation epochs and validate across clusters; model local instrumental ePSF and correlated noise before reporting calibrated completeness.
+- **v0.11**: reproducible real-HST experimental dashboard (24 individual tile records and three figures), immutable-source hashes, GitHub Actions evidence snapshots, and real FITS observation-date audits (effective epochs NOT verified).
+- **v0.12 (planned)**: verify constituent-exposure observation epochs, perform actual independent Gaia DR3 comparisons, then study position-dependent instrument ePSF and correlated noise.
 
 Cite the [survey archive](https://archive.stsci.edu/prepds/acsggct/), [Sarajedini et al. (2007)](https://arxiv.org/abs/astro-ph/0612598), and [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) when using the data.
 

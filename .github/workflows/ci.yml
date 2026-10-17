@@ -82,3 +82,5 @@ jobs:
           python -m stellarweave.spatial_cli --help
           python -m stellarweave.gaia_fetch --help
           python -m stellarweave.gaia_eval_cli --help
+          python -m stellarweave.epoch_audit --help
+          python -m stellarweave.result_visualization --help
