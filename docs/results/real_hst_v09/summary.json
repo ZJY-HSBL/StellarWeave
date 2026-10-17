@@ -2,8 +2,8 @@
   "version": "0.11.0",
   "dataset": "STScI ACSGGCT F606W mosaics",
   "kind": "INTERNAL_HST_CATALOG_SPATIAL_TRANSFER",
-  "source_github_actions_run_id": "39006379815",
-  "source_commit": "d3086d6636ccb620d1b35cbc894db6356e9c7908",
+  "source_github_actions_run_id": "39006618696",
+  "source_commit": "94a9a6316c9424366dc2fdc690479cded2b619a6",
   "clusters": [
     {
       "cluster": "ngc6397",
