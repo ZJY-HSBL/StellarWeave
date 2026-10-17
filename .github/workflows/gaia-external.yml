@@ -1,0 +1,72 @@
+name: Gaia DR3 External Check (Opt-In)
+on:
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: 'Public HST target'
+        required: true
+        type: choice
+        options: [ngc6397, ngc6752, ngc0104]
+      hst_mjd:
+        description: 'Verified mosaic reference observation MJD (not Gaia epoch)'
+        required: true
+        type: string
+      eval_tile:
+        description: 'Held-out mosaic tile index, not the central anchor (4)'
+        required: true
+        type: choice
+        options: ['0','1','2','3','5','6','7','8']
+
+permissions:
+  contents: read
+
+jobs:
+  external-gaia-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install ESA TAP client
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install 'astroquery>=0.4.9,<0.5'
+      - name: Fetch original FITS and catalog
+        run: |
+          python -m stellarweave.download_acsggct \
+            --cluster "${{ inputs.cluster }}" --band f606w --out data/raw --max-mb 250
+      - name: Build fixed-center plate without Gaia
+        run: |
+          python -m stellarweave.survey_cli \
+            --fits "data/raw/${{ inputs.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ inputs.cluster }}_f606w_v2_img.fits" \
+            --catalog "data/raw/${{ inputs.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ inputs.cluster }}_r.rdviq.cal.adj.zpt" \
+            --cluster "${{ inputs.cluster }}" --out output/plate --grid 3 --tile-size 512
+      - name: Fetch Gaia DR3 rows from ESA TAP
+        run: |
+          python -m stellarweave.gaia_fetch \
+            --fits "data/raw/${{ inputs.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ inputs.cluster }}_f606w_v2_img.fits" \
+            --max-rows 3000 --gmag-max 19.5 --out output/gaia_dr3.csv
+      - name: Evaluate held-out tile, without Gaia re-fitting
+        run: |
+          python -m stellarweave.gaia_eval_cli \
+            --fits "data/raw/${{ inputs.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ inputs.cluster }}_f606w_v2_img.fits" \
+            --gaia-csv output/gaia_dr3.csv \
+            --plate-report output/plate/cross_region.json \
+            --hst-mjd "${{ inputs.hst_mjd }}" --eval-tile "${{ inputs.eval_tile }}" \
+            --out output/gaia_check.json
+      - name: Preserve provenance and measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gaia-dr3-external-check
+          path: |
+            output/gaia_dr3.csv
+            output/gaia_dr3_provenance.json
+            output/gaia_check.json
+            output/plate/cross_region.json
+          if-no-files-found: ignore
+          retention-days: 14
