@@ -10,6 +10,7 @@ on:
       - stellarweave/catalog.py
       - .github/workflows/cross-region.yml
       - stellarweave/result_visualization.py
+      - stellarweave/epoch_audit.py
   workflow_dispatch:
 
 permissions:
@@ -68,6 +69,20 @@ jobs:
               'failed_regions':report['failed_transfer_tiles']},
               indent=2))
           PY
+      - name: Inventory real HST mosaic observation-time metadata
+        run: |
+          python -m stellarweave.epoch_audit             --fits data/raw/${{ matrix.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ matrix.cluster }}_f606w_v2_img.fits             --out outputs/cross_region_${{ matrix.cluster }}/epoch_audit.json
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          cluster=os.environ['TARGET_CLUSTER']
+          p=Path('outputs')/f'cross_region_{cluster}'/'epoch_audit.json'
+          result=json.loads(p.read_text())
+          assert result['effective_mosaic_epoch_verified'] is False
+          assert result['gaia_epoch_can_be_inferred_automatically'] is False
+          PY
+        env:
+          TARGET_CLUSTER: ${{ matrix.cluster }}
       - name: Upload machine-readable evaluation, no original FITS
         if: always()
         uses: actions/upload-artifact@v4
@@ -76,6 +91,7 @@ jobs:
           path: |
             outputs/cross_region_${{ matrix.cluster }}/cross_region.json
             outputs/cross_region_${{ matrix.cluster }}/cross_region.csv
+            outputs/cross_region_${{ matrix.cluster }}/epoch_audit.json
           if-no-files-found: ignore
           retention-days: 30
 
