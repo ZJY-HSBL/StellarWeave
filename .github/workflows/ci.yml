@@ -96,3 +96,5 @@ jobs:
           python -m stellarweave.noise_results --help
           python -m stellarweave.noise_repeats --help
           python -m stellarweave.noise_repeat_results --help
+          python -m stellarweave.crowding_injections --help
+          python -m stellarweave.crowding_results --help

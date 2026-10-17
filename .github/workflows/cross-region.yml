@@ -21,6 +21,8 @@ on:
       - stellarweave/noise_results.py
       - stellarweave/noise_repeats.py
       - stellarweave/noise_repeat_results.py
+      - stellarweave/crowding_injections.py
+      - stellarweave/crowding_results.py
       - stellarweave/psf_spatial.py
       - stellarweave/psf_results.py
   workflow_dispatch:
@@ -241,6 +243,31 @@ jobs:
           assert rep['physical_poisson_source_noise_added'] is False
           assert (root/'noise_repeats.csv').stat().st_size>200
           PY
+      - name: Real HST expanded injection locations with three fixed peak-distance bands
+        env:
+          TARGET_CLUSTER: ${{ matrix.cluster }}
+        run: |
+          python -m stellarweave.crowding_injections \
+            --fits data/raw/${{ matrix.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ matrix.cluster }}_f606w_v2_img.fits \
+            --plate-report outputs/cross_region_${{ matrix.cluster }}/cross_region.json \
+            --prf-report outputs/cross_region_${{ matrix.cluster }}/spatial_prf.json \
+            --cluster ${{ matrix.cluster }} \
+            --out outputs/cross_region_${{ matrix.cluster }}
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          c=os.environ['TARGET_CLUSTER']
+          folder=Path('outputs')/f'cross_region_{c}'
+          d=json.loads((folder/'expanded_injections.json').read_text())
+          assert d['injection_attempts']==len(d['trials'])
+          assert d['injection_attempts']==3*d['distinct_selected_injection_positions']
+          assert len(d['tiles'])==8 and len(d['groups'])==9
+          assert d['all_injection_sites_chosen_before_outcomes'] is True
+          assert d['mosaic_noise_physically_calibrated'] is False
+          assert d['lineage_audit']['underlying_exposure_ids_verified'] is False
+          assert d['distinct_selected_injection_positions']>=50
+          assert (folder/'expanded_injections.csv').stat().st_size>200
+          PY
       - name: Upload machine-readable evaluation, no original FITS
         if: always()
         uses: actions/upload-artifact@v4
@@ -265,6 +292,9 @@ jobs:
             outputs/cross_region_${{ matrix.cluster }}/noise_stress.csv
             outputs/cross_region_${{ matrix.cluster }}/noise_repeats.json
             outputs/cross_region_${{ matrix.cluster }}/noise_repeats.csv
+            outputs/cross_region_${{ matrix.cluster }}/expanded_injections.json
+            outputs/cross_region_${{ matrix.cluster }}/expanded_injections.csv
+            outputs/cross_region_${{ matrix.cluster }}/mosaic_lineage.json
           if-no-files-found: ignore
           retention-days: 30
 
@@ -477,12 +507,34 @@ jobs:
           for name in ('recovery_across_seeds.png','forced_flux_across_seeds.png','paired_model_seed_spread.png'):
               assert (root/name).stat().st_size>8000
           PY
+      - name: Plot all three genuine HST crowding-distance injection benchmarks
+        env:
+          SOURCE_RUN_ID: ${{ github.run_id }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          python -m stellarweave.crowding_results \
+            combined/spatial-transfer-*/expanded_injections.json \
+            --out docs/results/real_crowding_v17 \
+            --run-id "$SOURCE_RUN_ID" --source-commit "$SOURCE_SHA"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('docs/results/real_crowding_v17')
+          d=json.loads((root/'summary.json').read_text())
+          assert len(d['clusters'])==3
+          assert d['total_trials']==3*d['total_unique_pixel_sites']
+          assert d['total_unique_pixel_sites']>=150
+          assert len(d['groups'])==27
+          assert d['instrument_noise_calibrated'] is False
+          for f in ('recovery_crowding_distance.png','paired_flux_crowding.png','injection_site_coverage.png'):
+              assert (root/f).stat().st_size>8000
+          PY
       - name: Publish immutable-input real-data evidence to main
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/results/real_hst_v09 docs/results/real_hst_v12 docs/results/real_prf_v12 docs/results/real_prf_v13 docs/results/real_injections_v14 docs/results/real_noise_v15 docs/results/real_noise_v16
+          git add docs/results/real_hst_v09 docs/results/real_hst_v12 docs/results/real_prf_v12 docs/results/real_prf_v13 docs/results/real_injections_v14 docs/results/real_noise_v15 docs/results/real_noise_v16 docs/results/real_crowding_v17
           if git diff --cached --quiet; then
             echo "No experiment evidence changed"
           else
@@ -502,4 +554,5 @@ jobs:
             docs/results/real_injections_v14/
             docs/results/real_noise_v15/
             docs/results/real_noise_v16/
+            docs/results/real_crowding_v17/
           retention-days: 30
