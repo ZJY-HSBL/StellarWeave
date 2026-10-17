@@ -14,7 +14,7 @@
       ],
       "median_heldout_total_variation": 0.025157398899962203,
       "input_fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096",
-      "psf_report_sha256": "771ecb1e9517ba1430f1f7075e45caf85fe5bb650a02bd14c6f9885a42c506e1"
+      "psf_report_sha256": "48521f031fef5814a629804f5586c97b424267d9dd740a0ebeccbd15783fa982"
     },
     {
       "cluster": "ngc6752",
@@ -28,7 +28,7 @@
       ],
       "median_heldout_total_variation": 0.03099120170037775,
       "input_fits_sha256": "a89a2b91a9c15baeeccc60c8f78a0449cbf2ee444d378def7933d892ac29d860",
-      "psf_report_sha256": "89451adcbc5f5b96408af9a502921214365ad9193758c9405322b77769230636"
+      "psf_report_sha256": "327d1ca2317672122772b3679e28ae204254662d9d40e77dc8e0f63736b4177c"
     },
     {
       "cluster": "ngc0104",
@@ -42,7 +42,7 @@
       ],
       "median_heldout_total_variation": 0.1329925452915668,
       "input_fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765",
-      "psf_report_sha256": "6c29fac2cdb3db64a551e41d898546d6056b67929995fbc0d8715dad2d438323"
+      "psf_report_sha256": "44487498df33d407816c4786a0e65b01ca014509446126544c0acfeeefa33ce3"
     }
   ],
   "per_tile": [

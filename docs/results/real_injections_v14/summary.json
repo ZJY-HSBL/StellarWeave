@@ -1,0 +1,343 @@
+{
+  "version": "0.14.0",
+  "kind": "REAL_HST_ARTIFICIAL_STAR_RECOVERY_THREE_CLUSTERS",
+  "source_run_id": "39017094732",
+  "source_commit": "7ff5cb9d11b8bb792d1310c8b329f975d320da0e",
+  "clusters": [
+    {
+      "cluster": "ngc6397",
+      "attempted": 96,
+      "recovered": 84,
+      "recovery_fraction": 0.875,
+      "source_report_sha256": "4eba6c5681fde5d5bb9acca4de5b4e8ca504774c23b51339dc07c1141fdc0115",
+      "fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096",
+      "original_prf_sha256": "d99352f309be809bf37f39436e0f226afcfd8e6d67d44f4e8bfb4e8f89c5d0e3"
+    },
+    {
+      "cluster": "ngc6752",
+      "attempted": 96,
+      "recovered": 91,
+      "recovery_fraction": 0.9479166666666666,
+      "source_report_sha256": "866699ef183b1033da3e31212c1a673889c9d189448e16f404cee8f0d60317a5",
+      "fits_sha256": "a89a2b91a9c15baeeccc60c8f78a0449cbf2ee444d378def7933d892ac29d860",
+      "original_prf_sha256": "23d121f57cf4c4d004c229ed1adbf349fef23c463e483cc077687669615c5196"
+    },
+    {
+      "cluster": "ngc0104",
+      "attempted": 60,
+      "recovered": 54,
+      "recovery_fraction": 0.9,
+      "source_report_sha256": "baafe47082832d217d164a6343aaa39dd44bbb814097cdd7abfa41e36f772057",
+      "fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765",
+      "original_prf_sha256": "8f4d225b20ea0a6c5ba345459dbfb2c97c4293bdc7e215c0adacbc8c93c73771"
+    }
+  ],
+  "groups": [
+    {
+      "cluster": "ngc6397",
+      "class": "near_detected_peak",
+      "flux_over_tile_rms": 80.0,
+      "attempted": 16,
+      "recovered": 11,
+      "recovery_fraction": 0.6875,
+      "recovery_wilson95": [
+        0.44404355834740666,
+        0.8583535614521796
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.1039821640299962,
+      "median_forced_center_abs_rel_error": 0.10494800639886137,
+      "median_local_minus_center_abs_rel_error": -0.01265681020911837
+    },
+    {
+      "cluster": "ngc6397",
+      "class": "near_detected_peak",
+      "flux_over_tile_rms": 200.0,
+      "attempted": 16,
+      "recovered": 13,
+      "recovery_fraction": 0.8125,
+      "recovery_wilson95": [
+        0.5699111903802586,
+        0.9340840092857187
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.08278908414289896,
+      "median_forced_center_abs_rel_error": 0.0870785945650458,
+      "median_local_minus_center_abs_rel_error": -0.0015713229034080567
+    },
+    {
+      "cluster": "ngc6397",
+      "class": "near_detected_peak",
+      "flux_over_tile_rms": 500.0,
+      "attempted": 16,
+      "recovered": 15,
+      "recovery_fraction": 0.9375,
+      "recovery_wilson95": [
+        0.7167126242970107,
+        0.9888806552353576
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.04188544352918256,
+      "median_forced_center_abs_rel_error": 0.052115635192567435,
+      "median_local_minus_center_abs_rel_error": -0.012633737738685428
+    },
+    {
+      "cluster": "ngc6397",
+      "class": "relatively_isolated",
+      "flux_over_tile_rms": 80.0,
+      "attempted": 16,
+      "recovered": 15,
+      "recovery_fraction": 0.9375,
+      "recovery_wilson95": [
+        0.7167126242970107,
+        0.9888806552353576
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.0344388694211607,
+      "median_forced_center_abs_rel_error": 0.0247658748393833,
+      "median_local_minus_center_abs_rel_error": 0.005542701512822819
+    },
+    {
+      "cluster": "ngc6397",
+      "class": "relatively_isolated",
+      "flux_over_tile_rms": 200.0,
+      "attempted": 16,
+      "recovered": 15,
+      "recovery_fraction": 0.9375,
+      "recovery_wilson95": [
+        0.7167126242970107,
+        0.9888806552353576
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.022242402809387097,
+      "median_forced_center_abs_rel_error": 0.014664883970962715,
+      "median_local_minus_center_abs_rel_error": 0.007465927721884803
+    },
+    {
+      "cluster": "ngc6397",
+      "class": "relatively_isolated",
+      "flux_over_tile_rms": 500.0,
+      "attempted": 16,
+      "recovered": 15,
+      "recovery_fraction": 0.9375,
+      "recovery_wilson95": [
+        0.7167126242970107,
+        0.9888806552353576
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.014888852259218759,
+      "median_forced_center_abs_rel_error": 0.023287767347282322,
+      "median_local_minus_center_abs_rel_error": -0.010532493673258168
+    },
+    {
+      "cluster": "ngc6752",
+      "class": "near_detected_peak",
+      "flux_over_tile_rms": 80.0,
+      "attempted": 16,
+      "recovered": 13,
+      "recovery_fraction": 0.8125,
+      "recovery_wilson95": [
+        0.5699111903802586,
+        0.9340840092857187
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.07612546930778319,
+      "median_forced_center_abs_rel_error": 0.16172639386843468,
+      "median_local_minus_center_abs_rel_error": -0.017485683897388755
+    },
+    {
+      "cluster": "ngc6752",
+      "class": "near_detected_peak",
+      "flux_over_tile_rms": 200.0,
+      "attempted": 16,
+      "recovered": 15,
+      "recovery_fraction": 0.9375,
+      "recovery_wilson95": [
+        0.7167126242970107,
+        0.9888806552353576
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.12365294662174137,
+      "median_forced_center_abs_rel_error": 0.11748181767948146,
+      "median_local_minus_center_abs_rel_error": 0.05019715074457568
+    },
+    {
+      "cluster": "ngc6752",
+      "class": "near_detected_peak",
+      "flux_over_tile_rms": 500.0,
+      "attempted": 16,
+      "recovered": 15,
+      "recovery_fraction": 0.9375,
+      "recovery_wilson95": [
+        0.7167126242970107,
+        0.9888806552353576
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.027397320107480506,
+      "median_forced_center_abs_rel_error": 0.08074319425169514,
+      "median_local_minus_center_abs_rel_error": -0.04929971097629722
+    },
+    {
+      "cluster": "ngc6752",
+      "class": "relatively_isolated",
+      "flux_over_tile_rms": 80.0,
+      "attempted": 16,
+      "recovered": 16,
+      "recovery_fraction": 1.0,
+      "recovery_wilson95": [
+        0.8063923194655637,
+        1.0
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.02799832352235857,
+      "median_forced_center_abs_rel_error": 0.09086642729927585,
+      "median_local_minus_center_abs_rel_error": -0.015797883874949986
+    },
+    {
+      "cluster": "ngc6752",
+      "class": "relatively_isolated",
+      "flux_over_tile_rms": 200.0,
+      "attempted": 16,
+      "recovered": 16,
+      "recovery_fraction": 1.0,
+      "recovery_wilson95": [
+        0.8063923194655637,
+        1.0
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.08979622557225919,
+      "median_forced_center_abs_rel_error": 0.08172865341796173,
+      "median_local_minus_center_abs_rel_error": 0.052594553177436866
+    },
+    {
+      "cluster": "ngc6752",
+      "class": "relatively_isolated",
+      "flux_over_tile_rms": 500.0,
+      "attempted": 16,
+      "recovered": 16,
+      "recovery_fraction": 1.0,
+      "recovery_wilson95": [
+        0.8063923194655637,
+        1.0
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.03428812888538961,
+      "median_forced_center_abs_rel_error": 0.07988983965166598,
+      "median_local_minus_center_abs_rel_error": -0.02986551012333305
+    },
+    {
+      "cluster": "ngc0104",
+      "class": "near_detected_peak",
+      "flux_over_tile_rms": 80.0,
+      "attempted": 16,
+      "recovered": 13,
+      "recovery_fraction": 0.8125,
+      "recovery_wilson95": [
+        0.5699111903802586,
+        0.9340840092857187
+      ],
+      "median_detector_position_error_px": 1.0,
+      "median_forced_local_abs_rel_error": 0.3555762883744169,
+      "median_forced_center_abs_rel_error": 0.30736948782518647,
+      "median_local_minus_center_abs_rel_error": 0.019146209728209546
+    },
+    {
+      "cluster": "ngc0104",
+      "class": "near_detected_peak",
+      "flux_over_tile_rms": 200.0,
+      "attempted": 16,
+      "recovered": 14,
+      "recovery_fraction": 0.875,
+      "recovery_wilson95": [
+        0.639771727342413,
+        0.9650225122567595
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.18196797536457227,
+      "median_forced_center_abs_rel_error": 0.16723887277478053,
+      "median_local_minus_center_abs_rel_error": 0.02760399694542577
+    },
+    {
+      "cluster": "ngc0104",
+      "class": "near_detected_peak",
+      "flux_over_tile_rms": 500.0,
+      "attempted": 16,
+      "recovered": 15,
+      "recovery_fraction": 0.9375,
+      "recovery_wilson95": [
+        0.7167126242970107,
+        0.9888806552353576
+      ],
+      "median_detector_position_error_px": 0.0,
+      "median_forced_local_abs_rel_error": 0.08550814741267307,
+      "median_forced_center_abs_rel_error": 0.12511517945984446,
+      "median_local_minus_center_abs_rel_error": -0.008015190684099616
+    },
+    {
+      "cluster": "ngc0104",
+      "class": "relatively_isolated",
+      "flux_over_tile_rms": 80.0,
+      "attempted": 4,
+      "recovered": 4,
+      "recovery_fraction": 1.0,
+      "recovery_wilson95": [
+        0.5101091635454027,
+        1.0
+      ],
+      "median_detector_position_error_px": 1.0,
+      "median_forced_local_abs_rel_error": 0.157318635617337,
+      "median_forced_center_abs_rel_error": 0.11137693089770262,
+      "median_local_minus_center_abs_rel_error": 0.03761197102306439
+    },
+    {
+      "cluster": "ngc0104",
+      "class": "relatively_isolated",
+      "flux_over_tile_rms": 200.0,
+      "attempted": 4,
+      "recovered": 4,
+      "recovery_fraction": 1.0,
+      "recovery_wilson95": [
+        0.5101091635454027,
+        1.0
+      ],
+      "median_detector_position_error_px": 0.5,
+      "median_forced_local_abs_rel_error": 0.10436190787306873,
+      "median_forced_center_abs_rel_error": 0.11133001999191375,
+      "median_local_minus_center_abs_rel_error": 0.012106512533334252
+    },
+    {
+      "cluster": "ngc0104",
+      "class": "relatively_isolated",
+      "flux_over_tile_rms": 500.0,
+      "attempted": 4,
+      "recovered": 4,
+      "recovery_fraction": 1.0,
+      "recovery_wilson95": [
+        0.5101091635454027,
+        1.0
+      ],
+      "median_detector_position_error_px": 0.5,
+      "median_forced_local_abs_rel_error": 0.06114624500799676,
+      "median_forced_center_abs_rel_error": 0.06894201494540796,
+      "median_local_minus_center_abs_rel_error": -0.0023364159498229335
+    }
+  ],
+  "total_trials": 252,
+  "total_recovered": 229,
+  "source_noise_is_real_HST": true,
+  "injection_photon_noise_simulated": false,
+  "physical_flux_units_calibrated": false,
+  "forced_flux_position_is_known": true,
+  "new_astrometric_precision_proven": false,
+  "stellar_catalog_completeness_proven": false,
+  "instrument_epsf_calibrated": false,
+  "all_nondetections_retained": true,
+  "experiment": "Held-out HST star stamps injected one-at-a-time into original real HST image tiles, into positions selected by original peak separations",
+  "limitations": [
+    "Known injection position supplied to forced model flux fits",
+    "Flux levels are relative to robust tile pixel RMS, not physical SNR",
+    "Relatively isolated positions may have unresolved neighbors",
+    "No injected photon shot noise or detector-noise re-simulation",
+    "No real-star population completeness or calibrated HST magnitude accuracy"
+  ]
+}
