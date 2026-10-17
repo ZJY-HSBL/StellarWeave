@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.15.0 — 2026-10-17
+
+**Real-HST controlled noise robustness and fail-closed instrument-calibration audit.**
+
+- Added `stellarweave/noise_stress.py` to replay all frozen v0.14 injected stars and truth-site geometry under an original-background condition, IID Gaussian added-noise control and spatially correlated Gaussian control with **equal added pixel RMS = 0.5× each real tile's robust RMS** and Gaussian smoothing sigma=1.3 px.
+- Added `stellarweave/noise_results.py` for strict source location/flux/template identity checks, 72 tile-mode noise audits, comparison charts, unfiltered JSON/CSV and original FITS + v0.14 SHA-256 provenance.
+- Experiment: **756 total mode trials on 252 predeclared artificial sources** across actual NGC6397/6752/0104 HST ACSGGCT observations. Total planted recovery 229/252 original, 229/252 IID augmented, 222/252 correlated augmented.
+- The added-noise horizontal lag-one correlation has median ~0.00057 IID versus ~0.86169 correlated with matching pixel-RMS targets. Correlated-mode NGC6397 contains six preexisting noise-only peaks at injection positions; these are recorded as ambiguous/nonrecovered, never falsely accepted.
+- Negative scientific finding preserved: on NGC104, star-pooled median absolute relative known-location local PRF amplitude error rises 15.17% (original) →17.46% (correlated), versus center PRF 14.58%→16.71%. These are NOT instrument-calibrated photometry or blind flux measurements.
+- Audits FITS metadata strings related to units/exposure/gain and explicitly refuses to claim validated HST electron counts or calibrated Drizzle covariance; source Poisson noise is NOT applied to real mosaics. Added a separately tested Poisson primitive accepting independently VERIFIED electron-count units for future observations.
+- Added automated tests for equal-variance/different-correlation noise, deterministic fields, Poisson expectation/variance, prevention of spurious baseline detections, completeness/identity of all frozen sites and figure reproduction; three-cluster real Actions integration and README figures.
+
+**Unresolved:** a physically validated HST detector shot-noise prescription, drizzle weight/covariance maps, independent Gaia residuals, subpixel astrometric uncertainty, and calibrated flux bias or catalogue completeness.
 ## v0.14.0 — 2026-10-17
 
 **Real HST ACSGGCT F606W artificial-star injection-and-recovery controls.**
