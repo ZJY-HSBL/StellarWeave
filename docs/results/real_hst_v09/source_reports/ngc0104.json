@@ -1,0 +1,825 @@
+{
+  "version": "0.9.0",
+  "kind": "INTERNAL_ASTROMETRY_SPATIAL_GENERALIZATION",
+  "image_shape": [
+    6000,
+    6000
+  ],
+  "tile_size": 512,
+  "grid": 3,
+  "tile_count": 9,
+  "anchor_index": 4,
+  "tile_selection": "WCS_CATALOG_MEDIAN_FIXED_3x3_NO_DETECTION_TUNING",
+  "footprint_median_xy": [
+    2967.2675393262034,
+    2969.189370159314
+  ],
+  "anchor_status": "HELDOUT_QC_PASS",
+  "anchor_affine_global": [
+    [
+      1.0000541779370475,
+      -0.00010876082282736627,
+      17.10235171647855
+    ],
+    [
+      -0.00011839766082788236,
+      0.9998768828901273,
+      -5.294090117382893
+    ]
+  ],
+  "transfer_tiles_pass": 8,
+  "transfer_tiles_total": 8,
+  "failed_transfer_tiles": [],
+  "tiles": [
+    {
+      "index": 0,
+      "role": "HELDOUT_REGION",
+      "tile_xy": [
+        2199,
+        2201
+      ],
+      "detected_peaks": 2106,
+      "reference_candidates": 480,
+      "valid_fraction": 1.0,
+      "local_candidate_fit": {
+        "status": "HELDOUT_QC_PASS",
+        "science_calibrated": false,
+        "training_reference_count": 260,
+        "holdout_reference_count": 150,
+        "detected_count": 2106,
+        "selected_seed": {
+          "shift": [
+            17.008136226523675,
+            -6.039753595916409
+          ],
+          "bin_votes": 128,
+          "support_votes": 257
+        },
+        "training_affine": {
+          "matrix": [
+            [
+              0.9999979667185523,
+              0.0003431471284959884,
+              16.87127871366243
+            ],
+            [
+              -0.00011757437317191168,
+              1.0001293130149174,
+              -6.0340122237685465
+            ]
+          ],
+          "matched": 244,
+          "match_fraction": 0.9384615384615385,
+          "rms_px": 0.42915043833088806,
+          "p95_px": 0.6380629412337545,
+          "median_px": 0.3957710364889728,
+          "coverage_fraction_xy": [
+            0.9726725343798243,
+            0.9962908170913941
+          ],
+          "scale_singular_values": [
+            1.0001941797283544,
+            0.9999331530678129
+          ]
+        },
+        "holdout_matches": 143,
+        "holdout_match_fraction": 0.9533333333333334,
+        "holdout_median_residual_px": 0.4201074766900381,
+        "holdout_p95_residual_px": 0.6329219589567138,
+        "null_shift_counts": [
+          4,
+          12,
+          5,
+          2,
+          6,
+          6
+        ],
+        "null_shift_median": 5.5,
+        "holdout_vs_null_ratio": 26.0,
+        "candidate_seed_count": 13,
+        "note": "No independent external astrometric calibration; holdout matches are internal corroboration, not ground truth."
+      },
+      "fixed_anchor_transfer": {
+        "status": "TRANSFER_QC_PASS",
+        "evaluated": 300,
+        "matches": 296,
+        "match_fraction": 0.9866666666666667,
+        "median_residual_px": 0.4222456339948333,
+        "p95_residual_px": 0.6905497412859661,
+        "null_counts": [
+          10,
+          20,
+          14,
+          12,
+          14,
+          14
+        ],
+        "null_median": 14.0,
+        "match_over_null_ratio": 21.142857142857142,
+        "refitted": false
+      }
+    },
+    {
+      "index": 1,
+      "role": "HELDOUT_REGION",
+      "tile_xy": [
+        2711,
+        2201
+      ],
+      "detected_peaks": 2353,
+      "reference_candidates": 480,
+      "valid_fraction": 1.0,
+      "local_candidate_fit": {
+        "status": "HELDOUT_QC_PASS",
+        "science_calibrated": false,
+        "training_reference_count": 260,
+        "holdout_reference_count": 150,
+        "detected_count": 2353,
+        "selected_seed": {
+          "shift": [
+            16.993765327918027,
+            -5.942910933184976
+          ],
+          "bin_votes": 135,
+          "support_votes": 262
+        },
+        "training_affine": {
+          "matrix": [
+            [
+              0.9998202591336254,
+              -5.3752702204716456e-05,
+              17.00964846928575
+            ],
+            [
+              -0.00014721334813921395,
+              1.000390891538155,
+              -6.053926584968682
+            ]
+          ],
+          "matched": 251,
+          "match_fraction": 0.9653846153846154,
+          "rms_px": 0.421492476793855,
+          "p95_px": 0.6746020754213521,
+          "median_px": 0.3832079454165014,
+          "coverage_fraction_xy": [
+            0.9733778371174725,
+            0.9721596247070738
+          ],
+          "scale_singular_values": [
+            1.0004080696897473,
+            0.9998030831655257
+          ]
+        },
+        "holdout_matches": 142,
+        "holdout_match_fraction": 0.9466666666666667,
+        "holdout_median_residual_px": 0.3945282681476461,
+        "holdout_p95_residual_px": 0.6609769646175441,
+        "null_shift_counts": [
+          8,
+          7,
+          9,
+          11,
+          8,
+          9
+        ],
+        "null_shift_median": 8.5,
+        "holdout_vs_null_ratio": 16.705882352941178,
+        "candidate_seed_count": 13,
+        "note": "No independent external astrometric calibration; holdout matches are internal corroboration, not ground truth."
+      },
+      "fixed_anchor_transfer": {
+        "status": "TRANSFER_QC_PASS",
+        "evaluated": 300,
+        "matches": 297,
+        "match_fraction": 0.99,
+        "median_residual_px": 0.38907574249350535,
+        "p95_residual_px": 0.6796343334949758,
+        "null_counts": [
+          13,
+          14,
+          14,
+          21,
+          14,
+          21
+        ],
+        "null_median": 14.0,
+        "match_over_null_ratio": 21.214285714285715,
+        "refitted": false
+      }
+    },
+    {
+      "index": 2,
+      "role": "HELDOUT_REGION",
+      "tile_xy": [
+        3223,
+        2201
+      ],
+      "detected_peaks": 2105,
+      "reference_candidates": 480,
+      "valid_fraction": 1.0,
+      "local_candidate_fit": {
+        "status": "HELDOUT_QC_PASS",
+        "science_calibrated": false,
+        "training_reference_count": 260,
+        "holdout_reference_count": 150,
+        "detected_count": 2105,
+        "selected_seed": {
+          "shift": [
+            16.90663551470425,
+            -5.975665825277474
+          ],
+          "bin_votes": 126,
+          "support_votes": 258
+        },
+        "training_affine": {
+          "matrix": [
+            [
+              0.9999075270546993,
+              6.467373332113138e-05,
+              16.898648306283004
+            ],
+            [
+              0.00017277365472385855,
+              0.9999887356668754,
+              -6.031469154455417
+            ]
+          ],
+          "matched": 247,
+          "match_fraction": 0.95,
+          "rms_px": 0.4179098022187897,
+          "p95_px": 0.6236754314394787,
+          "median_px": 0.39731185966630633,
+          "coverage_fraction_xy": [
+            0.9732480665269304,
+            0.9891482737411681
+          ],
+          "scale_singular_values": [
+            1.0000736080190924,
+            0.999822657624032
+          ]
+        },
+        "holdout_matches": 146,
+        "holdout_match_fraction": 0.9733333333333334,
+        "holdout_median_residual_px": 0.4060445271871202,
+        "holdout_p95_residual_px": 0.6333228203426269,
+        "null_shift_counts": [
+          6,
+          11,
+          6,
+          8,
+          6,
+          10
+        ],
+        "null_shift_median": 7.0,
+        "holdout_vs_null_ratio": 20.857142857142858,
+        "candidate_seed_count": 13,
+        "note": "No independent external astrometric calibration; holdout matches are internal corroboration, not ground truth."
+      },
+      "fixed_anchor_transfer": {
+        "status": "TRANSFER_QC_PASS",
+        "evaluated": 300,
+        "matches": 295,
+        "match_fraction": 0.9833333333333333,
+        "median_residual_px": 0.40832667589299404,
+        "p95_residual_px": 0.652839539256496,
+        "null_counts": [
+          16,
+          19,
+          22,
+          16,
+          16,
+          20
+        ],
+        "null_median": 17.5,
+        "match_over_null_ratio": 16.857142857142858,
+        "refitted": false
+      }
+    },
+    {
+      "index": 3,
+      "role": "HELDOUT_REGION",
+      "tile_xy": [
+        2199,
+        2713
+      ],
+      "detected_peaks": 2320,
+      "reference_candidates": 480,
+      "valid_fraction": 1.0,
+      "local_candidate_fit": {
+        "status": "HELDOUT_QC_PASS",
+        "science_calibrated": false,
+        "training_reference_count": 260,
+        "holdout_reference_count": 150,
+        "detected_count": 2320,
+        "selected_seed": {
+          "shift": [
+            16.972207439703652,
+            -6.042586251771354
+          ],
+          "bin_votes": 125,
+          "support_votes": 253
+        },
+        "training_affine": {
+          "matrix": [
+            [
+              1.0000380934642072,
+              0.00016523036167631378,
+              16.90707446434989
+            ],
+            [
+              -0.00022644892313407978,
+              0.9999461215685718,
+              -5.955603939373715
+            ]
+          ],
+          "matched": 243,
+          "match_fraction": 0.9346153846153846,
+          "rms_px": 0.4187111589582382,
+          "p95_px": 0.6330121579285438,
+          "median_px": 0.38720177589066607,
+          "coverage_fraction_xy": [
+            0.9712755653050855,
+            0.9860455482038065
+          ],
+          "scale_singular_values": [
+            1.000047368303015,
+            0.9999368850832316
+          ]
+        },
+        "holdout_matches": 139,
+        "holdout_match_fraction": 0.9266666666666666,
+        "holdout_median_residual_px": 0.41604851657915737,
+        "holdout_p95_residual_px": 0.6614766984234696,
+        "null_shift_counts": [
+          7,
+          9,
+          8,
+          13,
+          7,
+          10
+        ],
+        "null_shift_median": 8.5,
+        "holdout_vs_null_ratio": 16.352941176470587,
+        "candidate_seed_count": 13,
+        "note": "No independent external astrometric calibration; holdout matches are internal corroboration, not ground truth."
+      },
+      "fixed_anchor_transfer": {
+        "status": "TRANSFER_QC_PASS",
+        "evaluated": 300,
+        "matches": 293,
+        "match_fraction": 0.9766666666666667,
+        "median_residual_px": 0.4020077875301665,
+        "p95_residual_px": 0.6387957256634378,
+        "null_counts": [
+          17,
+          15,
+          17,
+          17,
+          15,
+          18
+        ],
+        "null_median": 17.0,
+        "match_over_null_ratio": 17.235294117647058,
+        "refitted": false
+      }
+    },
+    {
+      "index": 4,
+      "role": "ANCHOR_TRAIN",
+      "tile_xy": [
+        2711,
+        2713
+      ],
+      "detected_peaks": 2903,
+      "reference_candidates": 480,
+      "valid_fraction": 1.0,
+      "local_candidate_fit": {
+        "status": "HELDOUT_QC_PASS",
+        "science_calibrated": false,
+        "training_reference_count": 260,
+        "holdout_reference_count": 150,
+        "detected_count": 2903,
+        "selected_seed": {
+          "shift": [
+            16.939192631449714,
+            -6.0204630008702225
+          ],
+          "bin_votes": 127,
+          "support_votes": 263
+        },
+        "training_affine": {
+          "matrix": [
+            [
+              1.0000541779370475,
+              -0.00010876082282736627,
+              16.954159991483714
+            ],
+            [
+              -0.00011839766082788236,
+              0.9998768828901273,
+              -5.949082894971923
+            ]
+          ],
+          "matched": 247,
+          "match_fraction": 0.95,
+          "rms_px": 0.4356349566120481,
+          "p95_px": 0.6515745401251735,
+          "median_px": 0.4153256860724304,
+          "coverage_fraction_xy": [
+            0.9727725810628909,
+            1.0
+          ],
+          "scale_singular_values": [
+            1.000109608971794,
+            0.9998214518785987
+          ]
+        },
+        "holdout_matches": 138,
+        "holdout_match_fraction": 0.92,
+        "holdout_median_residual_px": 0.43558362654093397,
+        "holdout_p95_residual_px": 0.6701672160553981,
+        "null_shift_counts": [
+          10,
+          10,
+          12,
+          10,
+          12,
+          14
+        ],
+        "null_shift_median": 11.0,
+        "holdout_vs_null_ratio": 12.545454545454545,
+        "candidate_seed_count": 13,
+        "note": "No independent external astrometric calibration; holdout matches are internal corroboration, not ground truth."
+      },
+      "fixed_anchor_transfer": {
+        "status": "ANCHOR_NOT_EVALUATED_AS_TRANSFER",
+        "evaluated": 0,
+        "matches": 0
+      }
+    },
+    {
+      "index": 5,
+      "role": "HELDOUT_REGION",
+      "tile_xy": [
+        3223,
+        2713
+      ],
+      "detected_peaks": 2402,
+      "reference_candidates": 480,
+      "valid_fraction": 1.0,
+      "local_candidate_fit": {
+        "status": "HELDOUT_QC_PASS",
+        "science_calibrated": false,
+        "training_reference_count": 260,
+        "holdout_reference_count": 150,
+        "detected_count": 2402,
+        "selected_seed": {
+          "shift": [
+            16.94783594792125,
+            -6.019286148658921
+          ],
+          "bin_votes": 122,
+          "support_votes": 261
+        },
+        "training_affine": {
+          "matrix": [
+            [
+              0.9997567872333336,
+              -0.0001619693569059649,
+              17.035979785908815
+            ],
+            [
+              0.00025947512631447906,
+              1.0001088641695164,
+              -6.095547374849746
+            ]
+          ],
+          "matched": 245,
+          "match_fraction": 0.9423076923076923,
+          "rms_px": 0.42935973574295,
+          "p95_px": 0.6620455058702549,
+          "median_px": 0.3793722171990908,
+          "coverage_fraction_xy": [
+            0.9719002090909439,
+            0.9971876228458088
+          ],
+          "scale_singular_values": [
+            1.0001155125867514,
+            0.9997501832229441
+          ]
+        },
+        "holdout_matches": 143,
+        "holdout_match_fraction": 0.9533333333333334,
+        "holdout_median_residual_px": 0.375659065753813,
+        "holdout_p95_residual_px": 0.6848016834789115,
+        "null_shift_counts": [
+          10,
+          14,
+          9,
+          10,
+          9,
+          10
+        ],
+        "null_shift_median": 10.0,
+        "holdout_vs_null_ratio": 14.3,
+        "candidate_seed_count": 13,
+        "note": "No independent external astrometric calibration; holdout matches are internal corroboration, not ground truth."
+      },
+      "fixed_anchor_transfer": {
+        "status": "TRANSFER_QC_PASS",
+        "evaluated": 300,
+        "matches": 293,
+        "match_fraction": 0.9766666666666667,
+        "median_residual_px": 0.3924051893197006,
+        "p95_residual_px": 0.6755410200087032,
+        "null_counts": [
+          18,
+          23,
+          20,
+          17,
+          17,
+          16
+        ],
+        "null_median": 17.5,
+        "match_over_null_ratio": 16.742857142857144,
+        "refitted": false
+      }
+    },
+    {
+      "index": 6,
+      "role": "HELDOUT_REGION",
+      "tile_xy": [
+        2199,
+        3225
+      ],
+      "detected_peaks": 2195,
+      "reference_candidates": 480,
+      "valid_fraction": 1.0,
+      "local_candidate_fit": {
+        "status": "HELDOUT_QC_PASS",
+        "science_calibrated": false,
+        "training_reference_count": 260,
+        "holdout_reference_count": 150,
+        "detected_count": 2195,
+        "selected_seed": {
+          "shift": [
+            16.950149690602302,
+            -6.048117739259396
+          ],
+          "bin_votes": 138,
+          "support_votes": 255
+        },
+        "training_affine": {
+          "matrix": [
+            [
+              1.0001496696942405,
+              -4.575260175908237e-05,
+              16.913402362903206
+            ],
+            [
+              -0.00013755373097534203,
+              0.9999951224006156,
+              -5.995992114212471
+            ]
+          ],
+          "matched": 249,
+          "match_fraction": 0.9576923076923077,
+          "rms_px": 0.4206777397451333,
+          "p95_px": 0.6457353186463624,
+          "median_px": 0.39242309923034846,
+          "coverage_fraction_xy": [
+            0.9740798079042198,
+            0.9973442825512577
+          ],
+          "scale_singular_values": [
+            1.0001922783728678,
+            0.9999525158286975
+          ]
+        },
+        "holdout_matches": 141,
+        "holdout_match_fraction": 0.94,
+        "holdout_median_residual_px": 0.3809453227771141,
+        "holdout_p95_residual_px": 0.6297994711503516,
+        "null_shift_counts": [
+          6,
+          6,
+          3,
+          10,
+          7,
+          9
+        ],
+        "null_shift_median": 6.5,
+        "holdout_vs_null_ratio": 21.692307692307693,
+        "candidate_seed_count": 13,
+        "note": "No independent external astrometric calibration; holdout matches are internal corroboration, not ground truth."
+      },
+      "fixed_anchor_transfer": {
+        "status": "TRANSFER_QC_PASS",
+        "evaluated": 300,
+        "matches": 297,
+        "match_fraction": 0.99,
+        "median_residual_px": 0.4002028015307683,
+        "p95_residual_px": 0.6864693528411875,
+        "null_counts": [
+          18,
+          10,
+          20,
+          15,
+          12,
+          12
+        ],
+        "null_median": 13.5,
+        "match_over_null_ratio": 22.0,
+        "refitted": false
+      }
+    },
+    {
+      "index": 7,
+      "role": "HELDOUT_REGION",
+      "tile_xy": [
+        2711,
+        3225
+      ],
+      "detected_peaks": 2359,
+      "reference_candidates": 480,
+      "valid_fraction": 1.0,
+      "local_candidate_fit": {
+        "status": "HELDOUT_QC_PASS",
+        "science_calibrated": false,
+        "training_reference_count": 260,
+        "holdout_reference_count": 150,
+        "detected_count": 2359,
+        "selected_seed": {
+          "shift": [
+            16.906096726794203,
+            -6.048920859904456
+          ],
+          "bin_votes": 132,
+          "support_votes": 264
+        },
+        "training_affine": {
+          "matrix": [
+            [
+              0.9997289291517049,
+              9.290921232048334e-05,
+              16.969024094915223
+            ],
+            [
+              -4.505356515285204e-06,
+              1.0001325980946627,
+              -6.070675800762056
+            ]
+          ],
+          "matched": 251,
+          "match_fraction": 0.9653846153846154,
+          "rms_px": 0.4408548338884737,
+          "p95_px": 0.6415728028795273,
+          "median_px": 0.42747044006510154,
+          "coverage_fraction_xy": [
+            0.9803641965474748,
+            1.0
+          ],
+          "scale_singular_values": [
+            1.0001373827281164,
+            0.9997241468908151
+          ]
+        },
+        "holdout_matches": 146,
+        "holdout_match_fraction": 0.9733333333333334,
+        "holdout_median_residual_px": 0.4039072201730658,
+        "holdout_p95_residual_px": 0.6888962855290757,
+        "null_shift_counts": [
+          10,
+          6,
+          8,
+          12,
+          12,
+          10
+        ],
+        "null_shift_median": 10.0,
+        "holdout_vs_null_ratio": 14.6,
+        "candidate_seed_count": 13,
+        "note": "No independent external astrometric calibration; holdout matches are internal corroboration, not ground truth."
+      },
+      "fixed_anchor_transfer": {
+        "status": "TRANSFER_QC_PASS",
+        "evaluated": 300,
+        "matches": 298,
+        "match_fraction": 0.9933333333333333,
+        "median_residual_px": 0.4104419218210893,
+        "p95_residual_px": 0.6543283435147025,
+        "null_counts": [
+          16,
+          15,
+          9,
+          10,
+          17,
+          15
+        ],
+        "null_median": 15.0,
+        "match_over_null_ratio": 19.866666666666667,
+        "refitted": false
+      }
+    },
+    {
+      "index": 8,
+      "role": "HELDOUT_REGION",
+      "tile_xy": [
+        3223,
+        3225
+      ],
+      "detected_peaks": 2136,
+      "reference_candidates": 480,
+      "valid_fraction": 1.0,
+      "local_candidate_fit": {
+        "status": "HELDOUT_QC_PASS",
+        "science_calibrated": false,
+        "training_reference_count": 260,
+        "holdout_reference_count": 150,
+        "detected_count": 2136,
+        "selected_seed": {
+          "shift": [
+            16.96185433633127,
+            -6.044863768331197
+          ],
+          "bin_votes": 135,
+          "support_votes": 262
+        },
+        "training_affine": {
+          "matrix": [
+            [
+              1.000249439714372,
+              0.00020762111061711202,
+              16.834473570512703
+            ],
+            [
+              -6.860861535273909e-05,
+              1.0000581885365818,
+              -6.0142639108053615
+            ]
+          ],
+          "matched": 252,
+          "match_fraction": 0.9692307692307692,
+          "rms_px": 0.41411988694754864,
+          "p95_px": 0.6699807264250904,
+          "median_px": 0.37592796748749385,
+          "coverage_fraction_xy": [
+            0.9735815522977597,
+            1.0
+          ],
+          "scale_singular_values": [
+            1.0002720411382047,
+            1.000035606185531
+          ]
+        },
+        "holdout_matches": 145,
+        "holdout_match_fraction": 0.9666666666666667,
+        "holdout_median_residual_px": 0.4316889435703257,
+        "holdout_p95_residual_px": 0.7003726429500853,
+        "null_shift_counts": [
+          9,
+          9,
+          6,
+          8,
+          7,
+          3
+        ],
+        "null_shift_median": 7.5,
+        "holdout_vs_null_ratio": 19.333333333333332,
+        "candidate_seed_count": 13,
+        "note": "No independent external astrometric calibration; holdout matches are internal corroboration, not ground truth."
+      },
+      "fixed_anchor_transfer": {
+        "status": "TRANSFER_QC_PASS",
+        "evaluated": 300,
+        "matches": 297,
+        "match_fraction": 0.99,
+        "median_residual_px": 0.41409322028017725,
+        "p95_residual_px": 0.7007027892146508,
+        "null_counts": [
+          15,
+          13,
+          11,
+          14,
+          12,
+          12
+        ],
+        "null_median": 12.5,
+        "match_over_null_ratio": 23.76,
+        "refitted": false
+      }
+    }
+  ],
+  "science_calibrated": false,
+  "independent_external_reference": false,
+  "heldout_tiles_physically_nonoverlapping": true,
+  "transform_frozen_on_heldout_regions": true,
+  "warning": "Candidate FITS-to-catalog consistency, NOT absolute astrometry or independently calibrated photometry",
+  "science_hdu_index": 0,
+  "fits_bunit": "ELECTRONS",
+  "cluster": "ngc0104",
+  "fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765",
+  "catalog_sha256": "8fde17012ecf2c112a9f66c7922a2d9a0a9bac4d7571488f0998eac9ae6ac4ad",
+  "catalog_rows": 158154,
+  "quality_selected_catalog": 106281
+}
