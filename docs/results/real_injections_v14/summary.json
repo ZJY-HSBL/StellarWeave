@@ -1,17 +1,17 @@
 {
   "version": "0.14.0",
   "kind": "REAL_HST_ARTIFICIAL_STAR_RECOVERY_THREE_CLUSTERS",
-  "source_run_id": "39018088023",
-  "source_commit": "3ca6638932f374f31f989b5389c33bab97eda2cd",
+  "source_run_id": "39018234725",
+  "source_commit": "20075f872d3b61a3021e088b97ee37c6024bf471",
   "clusters": [
     {
       "cluster": "ngc6397",
       "attempted": 96,
       "recovered": 84,
       "recovery_fraction": 0.875,
-      "source_report_sha256": "4eba6c5681fde5d5bb9acca4de5b4e8ca504774c23b51339dc07c1141fdc0115",
+      "source_report_sha256": "083b00473b4954351d5f8b077743c07f626af9ddf324e0be8995da54fa6f2b69",
       "fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096",
-      "original_prf_sha256": "d99352f309be809bf37f39436e0f226afcfd8e6d67d44f4e8bfb4e8f89c5d0e3"
+      "original_prf_sha256": "747d446c0adc2a0317fbd7ea8a3c7abff84398846e4bf5c59b6acf36bbce90c9"
     },
     {
       "cluster": "ngc6752",
@@ -27,9 +27,9 @@
       "attempted": 60,
       "recovered": 54,
       "recovery_fraction": 0.9,
-      "source_report_sha256": "baafe47082832d217d164a6343aaa39dd44bbb814097cdd7abfa41e36f772057",
+      "source_report_sha256": "7eccbb217d19c4ce2afb7e4180d1ebd00d85b43c3a25fa91bfdb0e0f11ee15fe",
       "fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765",
-      "original_prf_sha256": "8f4d225b20ea0a6c5ba345459dbfb2c97c4293bdc7e215c0adacbc8c93c73771"
+      "original_prf_sha256": "1a73bf2d22d5d59b7524d00c8b51ff1af3fe620a62947a0b5fb0b8a3e3bdf824"
     }
   ],
   "groups": [

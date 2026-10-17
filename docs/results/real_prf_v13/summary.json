@@ -1,8 +1,8 @@
 {
   "version": "0.13.0",
   "kind": "THREE_CLUSTER_FROZEN_HST_PRF_STRATIFIED_EXPLORATORY",
-  "source_github_actions_run_id": "39018088023",
-  "source_commit": "3ca6638932f374f31f989b5389c33bab97eda2cd",
+  "source_github_actions_run_id": "39018234725",
+  "source_commit": "20075f872d3b61a3021e088b97ee37c6024bf471",
   "clusters": [
     "ngc6397",
     "ngc6752",
@@ -480,8 +480,8 @@
   "input_provenance": [
     {
       "cluster": "ngc6397",
-      "stratification_sha256": "116bf5b7c358aca32510c089e45ee555d89d5630abb19123e2a46c12a1cebbea",
-      "original_prf_sha256": "d99352f309be809bf37f39436e0f226afcfd8e6d67d44f4e8bfb4e8f89c5d0e3",
+      "stratification_sha256": "84f28cd0b8345cfd1eb1250e9fe622c7ae1d50f7384c0c9b60bf2ed8ddbe6744",
+      "original_prf_sha256": "747d446c0adc2a0317fbd7ea8a3c7abff84398846e4bf5c59b6acf36bbce90c9",
       "fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096"
     },
     {
@@ -492,8 +492,8 @@
     },
     {
       "cluster": "ngc0104",
-      "stratification_sha256": "bf762298dfaf81b6cf7835819047ed31a56417d18de2376d3b04f5de5f8c2156",
-      "original_prf_sha256": "8f4d225b20ea0a6c5ba345459dbfb2c97c4293bdc7e215c0adacbc8c93c73771",
+      "stratification_sha256": "51dbf5882efa547a9090fe20e2238f7d806ef252ba9cf718bbb5f2d58bb58d68",
+      "original_prf_sha256": "1a73bf2d22d5d59b7524d00c8b51ff1af3fe620a62947a0b5fb0b8a3e3bdf824",
       "fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765"
     }
   ],

@@ -1,14 +1,14 @@
 {
   "version": "0.15.0",
   "kind": "THREE_CLUSTER_REAL_HST_NOISE_SENSITIVITY_EXPERIMENT",
-  "source_run_id": "39018088023",
-  "source_commit": "3ca6638932f374f31f989b5389c33bab97eda2cd",
+  "source_run_id": "39018234725",
+  "source_commit": "20075f872d3b61a3021e088b97ee37c6024bf471",
   "input_provenance": [
     {
       "cluster": "ngc6397",
-      "noise_report_sha256": "30e35cbf821e8d47c24af8dbade6d4893fefcf725b4bde8ea516c0c423d654c6",
+      "noise_report_sha256": "5ed6ae10292345558774ba633247a84f0de578e80c9f08de5a19d468f99f5f48",
       "original_hst_fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096",
-      "frozen_v014_injection_report_sha256": "4eba6c5681fde5d5bb9acca4de5b4e8ca504774c23b51339dc07c1141fdc0115"
+      "frozen_v014_injection_report_sha256": "083b00473b4954351d5f8b077743c07f626af9ddf324e0be8995da54fa6f2b69"
     },
     {
       "cluster": "ngc6752",
@@ -18,9 +18,9 @@
     },
     {
       "cluster": "ngc0104",
-      "noise_report_sha256": "02387534344e81acdcfac5900db54c5344c045970c435f5e56ca5104efd53221",
+      "noise_report_sha256": "6b7eaeae0d033ef95eec70457ff2ac864b008b5b8d440e8041ba2a8f2ff58cc5",
       "original_hst_fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765",
-      "frozen_v014_injection_report_sha256": "baafe47082832d217d164a6343aaa39dd44bbb814097cdd7abfa41e36f772057"
+      "frozen_v014_injection_report_sha256": "7eccbb217d19c4ce2afb7e4180d1ebd00d85b43c3a25fa91bfdb0e0f11ee15fe"
     }
   ],
   "clusters": [
@@ -167,7 +167,7 @@
       "ambiguous_existing_peaks": 0,
       "median_abs_local_flux_error": 0.17459718787853906,
       "median_abs_center_flux_error": 0.167144828760596,
-      "median_paired_local_minus_center_flux_error": 0.02573836222647405
+      "median_paired_local_minus_center_flux_error": 0.025738362226473938
     }
   ],
   "noise_audits": [
@@ -188,7 +188,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.3456043642727455,
       "target_added_pixel_rms": 2.345604364272745,
-      "added_field_lag1_correlation": 0.0005708736605413897,
+      "added_field_lag1_correlation": 0.0005708736605413879,
       "baseline_peak_count_after_augmentation": 491
     },
     {
@@ -196,9 +196,9 @@
       "tile_index": 0,
       "mode": "correlated_gaussian",
       "added_noise_fraction_of_tile_rms": 0.5,
-      "actual_added_pixel_rms": 2.3456043642727447,
+      "actual_added_pixel_rms": 2.345604364272745,
       "target_added_pixel_rms": 2.345604364272745,
-      "added_field_lag1_correlation": 0.8616324070712686,
+      "added_field_lag1_correlation": 0.8616324070712681,
       "baseline_peak_count_after_augmentation": 587
     },
     {
@@ -218,7 +218,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.935704250295094,
       "target_added_pixel_rms": 2.935704250295094,
-      "added_field_lag1_correlation": 0.0014170914736804199,
+      "added_field_lag1_correlation": 0.0014170914736804186,
       "baseline_peak_count_after_augmentation": 495
     },
     {
@@ -228,7 +228,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.935704250295094,
       "target_added_pixel_rms": 2.935704250295094,
-      "added_field_lag1_correlation": 0.8616940293989699,
+      "added_field_lag1_correlation": 0.8616940293989696,
       "baseline_peak_count_after_augmentation": 605
     },
     {
@@ -248,7 +248,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.35013326850834,
       "target_added_pixel_rms": 2.35013326850834,
-      "added_field_lag1_correlation": 0.0001493826321424767,
+      "added_field_lag1_correlation": 0.0001493826321424765,
       "baseline_peak_count_after_augmentation": 563
     },
     {
@@ -258,7 +258,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.35013326850834,
       "target_added_pixel_rms": 2.35013326850834,
-      "added_field_lag1_correlation": 0.8612483147090535,
+      "added_field_lag1_correlation": 0.8612483147090527,
       "baseline_peak_count_after_augmentation": 641
     },
     {
@@ -278,7 +278,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.9200976891917865,
       "target_added_pixel_rms": 2.9200976891917865,
-      "added_field_lag1_correlation": -0.000701972580903831,
+      "added_field_lag1_correlation": -0.0007019725809038342,
       "baseline_peak_count_after_augmentation": 555
     },
     {
@@ -288,7 +288,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.9200976891917865,
       "target_added_pixel_rms": 2.9200976891917865,
-      "added_field_lag1_correlation": 0.8654002800287596,
+      "added_field_lag1_correlation": 0.8654002800287589,
       "baseline_peak_count_after_augmentation": 644
     },
     {
@@ -308,7 +308,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.9471827276175984,
       "target_added_pixel_rms": 2.947182727617598,
-      "added_field_lag1_correlation": 0.0009830013672319166,
+      "added_field_lag1_correlation": 0.0009830013672319149,
       "baseline_peak_count_after_augmentation": 563
     },
     {
@@ -338,7 +338,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.389160734657733,
       "target_added_pixel_rms": 2.389160734657733,
-      "added_field_lag1_correlation": -0.0026969463827584165,
+      "added_field_lag1_correlation": -0.0026969463827584157,
       "baseline_peak_count_after_augmentation": 632
     },
     {
@@ -348,7 +348,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.389160734657733,
       "target_added_pixel_rms": 2.389160734657733,
-      "added_field_lag1_correlation": 0.8640863971473682,
+      "added_field_lag1_correlation": 0.8640863971473691,
       "baseline_peak_count_after_augmentation": 678
     },
     {
@@ -368,7 +368,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 3.1342035642408557,
       "target_added_pixel_rms": 3.134203564240856,
-      "added_field_lag1_correlation": 0.0010990993136315438,
+      "added_field_lag1_correlation": 0.001099099313631545,
       "baseline_peak_count_after_augmentation": 618
     },
     {
@@ -378,7 +378,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 3.134203564240856,
       "target_added_pixel_rms": 3.134203564240856,
-      "added_field_lag1_correlation": 0.8615760944941353,
+      "added_field_lag1_correlation": 0.8615760944941356,
       "baseline_peak_count_after_augmentation": 700
     },
     {
@@ -398,7 +398,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.2730075203854936,
       "target_added_pixel_rms": 2.2730075203854936,
-      "added_field_lag1_correlation": -0.0009787226602864596,
+      "added_field_lag1_correlation": -0.0009787226602864594,
       "baseline_peak_count_after_augmentation": 520
     },
     {
@@ -408,7 +408,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 2.2730075203854936,
       "target_added_pixel_rms": 2.2730075203854936,
-      "added_field_lag1_correlation": 0.8631167558448877,
+      "added_field_lag1_correlation": 0.863116755844889,
       "baseline_peak_count_after_augmentation": 606
     },
     {
@@ -668,7 +668,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 105.60707222624727,
       "target_added_pixel_rms": 105.60707222624727,
-      "added_field_lag1_correlation": 0.0005708736605413838,
+      "added_field_lag1_correlation": 0.0005708736605413896,
       "baseline_peak_count_after_augmentation": 2055
     },
     {
@@ -676,9 +676,9 @@
       "tile_index": 0,
       "mode": "correlated_gaussian",
       "added_noise_fraction_of_tile_rms": 0.5,
-      "actual_added_pixel_rms": 105.60707222624725,
+      "actual_added_pixel_rms": 105.60707222624727,
       "target_added_pixel_rms": 105.60707222624727,
-      "added_field_lag1_correlation": 0.8616324070712693,
+      "added_field_lag1_correlation": 0.8616324070712682,
       "baseline_peak_count_after_augmentation": 2073
     },
     {
@@ -698,7 +698,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 199.52439540718052,
       "target_added_pixel_rms": 199.52439540718052,
-      "added_field_lag1_correlation": 0.0014170914736804214,
+      "added_field_lag1_correlation": 0.0014170914736804186,
       "baseline_peak_count_after_augmentation": 2297
     },
     {
@@ -706,9 +706,9 @@
       "tile_index": 1,
       "mode": "correlated_gaussian",
       "added_noise_fraction_of_tile_rms": 0.5,
-      "actual_added_pixel_rms": 199.5243954071805,
+      "actual_added_pixel_rms": 199.52439540718052,
       "target_added_pixel_rms": 199.52439540718052,
-      "added_field_lag1_correlation": 0.8616940293989725,
+      "added_field_lag1_correlation": 0.8616940293989706,
       "baseline_peak_count_after_augmentation": 2310
     },
     {
@@ -728,7 +728,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 93.3876458860995,
       "target_added_pixel_rms": 93.3876458860995,
-      "added_field_lag1_correlation": 0.00014938263214247605,
+      "added_field_lag1_correlation": 0.00014938263214247873,
       "baseline_peak_count_after_augmentation": 2066
     },
     {
@@ -738,7 +738,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 93.3876458860995,
       "target_added_pixel_rms": 93.3876458860995,
-      "added_field_lag1_correlation": 0.8612483147090524,
+      "added_field_lag1_correlation": 0.8612483147090534,
       "baseline_peak_count_after_augmentation": 2077
     },
     {
@@ -758,7 +758,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 211.86322851357102,
       "target_added_pixel_rms": 211.86322851357102,
-      "added_field_lag1_correlation": -0.0007019725809038334,
+      "added_field_lag1_correlation": -0.0007019725809038329,
       "baseline_peak_count_after_augmentation": 2283
     },
     {
@@ -768,7 +768,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 211.86322851357102,
       "target_added_pixel_rms": 211.86322851357102,
-      "added_field_lag1_correlation": 0.8654002800287603,
+      "added_field_lag1_correlation": 0.8654002800287606,
       "baseline_peak_count_after_augmentation": 2300
     },
     {
@@ -788,7 +788,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 169.83101669591468,
       "target_added_pixel_rms": 169.83101669591466,
-      "added_field_lag1_correlation": 0.0009830013672319157,
+      "added_field_lag1_correlation": 0.0009830013672319155,
       "baseline_peak_count_after_augmentation": 2362
     },
     {
@@ -798,7 +798,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 169.83101669591466,
       "target_added_pixel_rms": 169.83101669591466,
-      "added_field_lag1_correlation": 0.8613554906934051,
+      "added_field_lag1_correlation": 0.8613554906934061,
       "baseline_peak_count_after_augmentation": 2366
     },
     {
@@ -818,7 +818,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 84.2644237828331,
       "target_added_pixel_rms": 84.2644237828331,
-      "added_field_lag1_correlation": -0.002696946382758421,
+      "added_field_lag1_correlation": -0.0026969463827584157,
       "baseline_peak_count_after_augmentation": 2152
     },
     {
@@ -826,9 +826,9 @@
       "tile_index": 6,
       "mode": "correlated_gaussian",
       "added_noise_fraction_of_tile_rms": 0.5,
-      "actual_added_pixel_rms": 84.2644237828331,
+      "actual_added_pixel_rms": 84.26442378283312,
       "target_added_pixel_rms": 84.2644237828331,
-      "added_field_lag1_correlation": 0.8640863971473687,
+      "added_field_lag1_correlation": 0.8640863971473667,
       "baseline_peak_count_after_augmentation": 2169
     },
     {
@@ -848,7 +848,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 171.19935615485835,
       "target_added_pixel_rms": 171.19935615485835,
-      "added_field_lag1_correlation": 0.0010990993136315444,
+      "added_field_lag1_correlation": 0.001099099313631545,
       "baseline_peak_count_after_augmentation": 2308
     },
     {
@@ -856,9 +856,9 @@
       "tile_index": 7,
       "mode": "correlated_gaussian",
       "added_noise_fraction_of_tile_rms": 0.5,
-      "actual_added_pixel_rms": 171.19935615485838,
+      "actual_added_pixel_rms": 171.19935615485835,
       "target_added_pixel_rms": 171.19935615485835,
-      "added_field_lag1_correlation": 0.8615760944941341,
+      "added_field_lag1_correlation": 0.8615760944941354,
       "baseline_peak_count_after_augmentation": 2306
     },
     {
@@ -878,7 +878,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 82.74523414518386,
       "target_added_pixel_rms": 82.74523414518386,
-      "added_field_lag1_correlation": -0.0009787226602864633,
+      "added_field_lag1_correlation": -0.0009787226602864607,
       "baseline_peak_count_after_augmentation": 2074
     },
     {
@@ -888,7 +888,7 @@
       "added_noise_fraction_of_tile_rms": 0.5,
       "actual_added_pixel_rms": 82.74523414518386,
       "target_added_pixel_rms": 82.74523414518386,
-      "added_field_lag1_correlation": 0.8631167558448885,
+      "added_field_lag1_correlation": 0.8631167558448876,
       "baseline_peak_count_after_augmentation": 2087
     }
   ],

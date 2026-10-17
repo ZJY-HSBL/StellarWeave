@@ -3,8 +3,8 @@
   "kind": "REAL_HST_PLANTED_HELDOUT_STAR_RECOVERY",
   "cluster": "ngc0104",
   "fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765",
-  "plate_sha256": "3291bdd8bc940a1e123c722b0fa130782a3e9277a493e28088975a7956841d15",
-  "prf_sha256": "8f4d225b20ea0a6c5ba345459dbfb2c97c4293bdc7e215c0adacbc8c93c73771",
+  "plate_sha256": "8d7d0630fb62e12511e998d0db2d54c639f834417595e03426bf68fcdadda6e7",
+  "prf_sha256": "1a73bf2d22d5d59b7524d00c8b51ff1af3fe620a62947a0b5fb0b8a3e3bdf824",
   "seed": 42,
   "tile_ids": [
     0,
