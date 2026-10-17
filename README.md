@@ -4,12 +4,75 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.11.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include measured internal ACSGGCT/HST image-to-survey-catalog results from three real globular clusters, with raw reports and reproducible plots below.
+**v0.12.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include real ACSGGCT/HST internal astrometric consistency measurements and held-out native-pixel PSF shape comparisons across three globular clusters, with measured tables, source reports and reproducible plots below.
 
 ## Purpose / 研究目标
 
 StellarWeave is designed to investigate faint stellar source detection, deblending, and measurement reliability in crowded telescope imagery. We are developing physically informed baselines, not merely applying YOLO to astronomy.
 
+## v0.12.0 — Real HST spatial PSF / PRF experiments · 真实哈勃空间 PSF 实验
+
+**Three actual HST/ACS F606W mosaics, 27 predefined disjoint tiles, 24 held-out evaluation regions, 838 evaluated held-out stars.** The same 3×3 grid is used as the astrometric benchmark. The local empirical PRF is estimated only from training stars in each tile; a frozen center-tile PRF and a fixed 2.6-pixel-FWHM Gaussian are scored on **exactly the same held-out star stamps**. No held-out star contributes to a model that is scored on that star.
+
+### Experiment A — held-out native-pixel PRF shape accuracy / 独立恒星形状误差
+
+The score is the L1 distance between **unit-sum normalized 15×15-pixel stellar stamps** and the model template; **lower is better**. Positive paired gain indicates that the local PRF is better than the center PRF. The interval is an exploratory 95% bootstrap over **eight spatial tiles** (not a calibrated uncertainty on flux measurements).
+
+| Real HST cluster | Evaluated test stars in 8 outer tiles | Tiles favoring local PRF | Median tile paired gain vs center | Exploratory tile-bootstrap 95% interval |
+|---|---:|---:|---:|---:|
+| NGC 6397 | 300 | 8/8 | **+18.59%** | +5.66% to +26.52% |
+| NGC 6752 | 283 | 8/8 | **+16.83%** | +4.59% to +25.66% |
+| NGC 104 (47 Tuc) | 255 | 4/8 | **+0.35%** | −0.51% to +2.25% |
+| **Total** | **838** | **20/24** | — | — |
+
+**Important negative/ambiguous result:** NGC 104 does **not** show a consistent local-PRF advantage. Its pooled per-star median L1 is **0.4000 for local vs 0.3861 for frozen center** (local worse), even though the median of tile-level paired gains is +0.35%. These are different aggregation statistics and both are retained. Do not claim a universal performance improvement.
+
+![Actual HST spatial PRF holdout gain for all three clusters](docs/results/real_prf_v12/prf_tile_gains.png)
+
+![Actual HST PRF local center and Gaussian model shape errors](docs/results/real_prf_v12/prf_heldout_comparison.png)
+
+### Experiment B — PSF spatial shape diagnostics / 空间形态差异
+
+Using the same 27 disjoint tiles, all **27/27** yield candidate native-pixel PSF stacks. The measured encircled-energy half-light radius and center-to-tile total-variation distances are **descriptive diagnostics**, not an oversampled instrument ePSF or a calibrated photometric result.
+
+| Cluster | Usable PSF tiles | Approx. median native-pixel r50 | Median outer-tile total variation from center |
+|---|---:|---:|---:|
+| NGC 6397 | 9/9 | 1.414 px | 0.0252 |
+| NGC 6752 | 9/9 | 1.337 px | 0.0310 |
+| NGC 104 | 9/9 | 1.414 px | 0.1330 |
+
+Half-light radii are based on discretely sampled native pixels; the values should not be interpreted as subpixel-accurate optical calibration. The large NGC 104 shape mismatch alongside its weak local-model holdout performance suggests that blending, candidate selection, or model stability require further investigation; it does **not** by itself establish the physical cause.
+
+![Real HST PSF half-light radius across all tiles](docs/results/real_hst_v12/psf_spatial_r50.png)
+
+![Real HST PSF mismatch relative to center](docs/results/real_hst_v12/psf_spatial_mismatch.png)
+
+**Actual PSF template montages (not synthetic illustrations):**
+
+![NGC 6397 real HST nine tile PSF templates](docs/results/real_prf_v12/ngc6397_prf_templates.png)
+
+Additional montages: [NGC 6752](docs/results/real_prf_v12/ngc6752_prf_templates.png) · [NGC 104](docs/results/real_prf_v12/ngc0104_prf_templates.png) · [NGC 104 spatial PSF audit](docs/results/real_hst_v12/ngc0104_psf_montage.png).
+
+### Full experiment evidence and reproduction / 原始数据与图表复现
+
+The committed evidence includes the original three FITS/checksum-linked PRF JSON reports, all **838 held-out star scores** in [per_star.csv](docs/results/real_prf_v12/per_star.csv), [27 tile rows](docs/results/real_prf_v12/per_tile.csv), each cluster's selected-star CSV, PSF template montages, [summary and input hashes](docs/results/real_prf_v12/summary.json), and the separate [spatial shape diagnostics](docs/results/real_hst_v12/summary.json). FITS images are downloaded from the official STScI archive at runtime, not bundled in Git.
+
+Regenerate the two comparative plots **without downloading FITS** from the archived measured JSON/CSV/PNG evidence:
+
+```bash
+python -m pip install -r requirements-smoke.txt
+python -m stellarweave.prf_visualization \
+  docs/results/real_prf_v12/source_reports/*.json \
+  --out outputs/reproduced_prf_figures
+python -m stellarweave.psf_results \
+  --psf-reports docs/results/real_hst_v12/source_psf_reports/*.json \
+  --plate-reports docs/results/real_hst_v09/source_reports/*.json \
+  --out outputs/reproduced_psf_figures
+```
+
+To rerun the **full telescope experiment**, download each supported ACSGGCT F606W FITS/catalog pair and run `stellarweave.survey_cli` first, followed by `stellarweave.psf_spatial` and `stellarweave.spatial_prf` on the same frozen tile geometry. The [cross-region GitHub Actions workflow](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/cross-region.yml) executes the complete three-cluster pipeline, checks the full provenance and republishes the measured figures.
+
+**Scientific limits / 科学边界:** Native-pixel candidate-based PRF is not an oversampled instrument ePSF; the experiment has not validated HST saturation/CTE effects, spatially correlated noise, faint-star completeness, photometric zeropoints, or external Gaia absolute astrometry. The observed L1 reductions are **shape-reconstruction improvements only**, not demonstrated flux-error or astrometric-precision improvements.
 ## Real HST experimental results / 真实哈勃实验数据与可复现图表
 
 **Observed data, not a simulated performance claim.** The following numbers come from actual STScI ACSGGCT F606W FITS mosaics and matching public survey catalogs, processed by [Cross-region / Cross-cluster Astrometry](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/cross-region.yml). Each cluster is fitted on its central 512×512-pixel tile and evaluated using the **same frozen transform** on eight disjoint 512×512 held-out tiles. A separate plate solution is trained for each cluster.
@@ -436,7 +499,8 @@ Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, 
 - **v0.9**: independent 3-cluster, 3×3 nonoverlapping crop benchmark. Fixed center transform passes 24/24 same-cluster test regions, with full per-tile reports; no external astrometric certification.
 - **v0.10**: optional ESA Gaia DR3 TAP retrieval, per-source epoch propagation, frozen-HST-solution comparison on withheld tiles, strict provenance and diagnostic QC. Actual Gaia-on-HST external precision remains unmeasured.
 - **v0.11**: reproducible real-HST experimental dashboard (24 individual tile records and three figures), immutable-source hashes, GitHub Actions evidence snapshots, and real FITS observation-date audits (effective epochs NOT verified).
-- **v0.12 (planned)**: verify constituent-exposure observation epochs, perform actual independent Gaia DR3 comparisons, then study position-dependent instrument ePSF and correlated noise.
+- **v0.12**: measured native-pixel PRF spatial variation on 27 real HST tiles; training/held-out star shape comparisons across 24 outer tiles (838 stars), honest positive/negative results, 5+ real experiment plots, archived raw reports and automatic GitHub Actions reproduction.
+- **v0.13 (planned)**: verify constituent-exposure observation epochs and Gaia DR3 external checks; quantify PSF model stability under crowding and noise, and progress toward instrument-calibrated oversampled ePSF.
 
 Cite the [survey archive](https://archive.stsci.edu/prepds/acsggct/), [Sarajedini et al. (2007)](https://arxiv.org/abs/astro-ph/0612598), and [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) when using the data.
 

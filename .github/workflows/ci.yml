@@ -84,3 +84,7 @@ jobs:
           python -m stellarweave.gaia_eval_cli --help
           python -m stellarweave.epoch_audit --help
           python -m stellarweave.result_visualization --help
+          python -m stellarweave.psf_spatial --help
+          python -m stellarweave.psf_results --help
+          python -m stellarweave.spatial_prf --help
+          python -m stellarweave.prf_visualization --help

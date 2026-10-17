@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.12.0 — 2026-10-17
+
+**Cross-validated native-pixel PRF shape diagnostics on real HST/ACS mosaics.**
+
+- Added `stellarweave/psf_spatial.py` and `stellarweave/psf_results.py` for nine-tile real PSF shape diagnostics (r50, r80, inner moments, core fraction, and total-variation distance to center). 27/27 candidate PSF tiles usable across NGC 6397, NGC 6752 and NGC 104.
+- Added `stellarweave/spatial_prf.py`: strict disjoint train/test star split in every tile, frozen center-PRF vs local PRF vs fixed Gaussian baseline, per-star heldout L1 shape error, tile-bootstrap exploratory intervals, FITS/plate SHA-256 cross-checks and fail-closed geometry validation.
+- Added `stellarweave/prf_visualization.py`: cross-cluster plots, all 838 outer-tile held-out star scores, 27 tile summaries, original reports, per-cluster PRF template montage PNGs, source SHA-256 and GitHub Actions provenance.
+- Actual NGC 6397 median tile paired PRF gain +18.59% (tile-bootstrap 95% interval +5.66 to +26.52); NGC 6752 +16.83% (+4.59 to +25.66); NGC 104 +0.35% (−0.51 to +2.25) and pooled per-star median local L1 worse than frozen center (0.4000 vs 0.3861). **No universal improvement claim.**
+- Published source data and genuine measured PNGs under `docs/results/real_hst_v12/` and `docs/results/real_prf_v12/`, with documented reproduction from archived evidence, including negative results.
+- Added synthetic fixture tests for no leakage, sparse tiles, provenance rejection, source integrity and full dashboard regeneration; all science claims explicitly limited to native-pixel stamp shape rather than photometric precision.
+
+**Not achieved:** independent Gaia-vs-HST astrometry, oversampled instrument ePSF, calibrated flux error/completeness, physical noise covariance or confirmed weighted HST mosaic observation epoch.
+
 ## v0.11.0 — 2026-10-17
 
 **Real HST evidence published as data, charts and provenance rather than claims.**

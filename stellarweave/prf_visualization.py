@@ -79,6 +79,10 @@ def render_prf_summary(paths,out_dir,*,run_id=None,commit=None):
         for optional,suffix in [('heldout_stars.csv','heldout_stars.csv'),
                                 ('spatial_prf_templates.png','prf_templates.png')]:
             src=p.with_name(optional)
+            if not src.is_file() and p.parent.name=='source_reports':
+                # Archived evidence keeps reports under source_reports/ and
+                # matching CSV/PNG sidecars under the parent snapshot.
+                src=p.parent.parent/f'{name}_{suffix}'
             if not src.is_file():
                 raise FileNotFoundError(f'Missing required real evidence: {src}')
             shutil.copyfile(src,out/f'{name}_{suffix}')

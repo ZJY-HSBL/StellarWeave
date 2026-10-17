@@ -58,6 +58,11 @@ def test_aggregate_and_provenance(tmp_path):
                  'summary.json','per_tile.csv','per_star.csv'):
         assert (out/name).stat().st_size>100
     assert len(list((out/'source_reports').glob('*.json')))==3
+    # README reproduction command must work from the committed snapshot.
+    archived=sorted((out/'source_reports').glob('*.json'))
+    replay=render_prf_summary(archived,tmp_path/'reproduced')
+    assert replay['evaluated_heldout_tiles']==24
+    assert (tmp_path/'reproduced'/'prf_tile_gains.png').stat().st_size>100
 
 
 def test_missing_and_false_claim_rejected(tmp_path):
