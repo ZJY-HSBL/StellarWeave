@@ -1,8 +1,8 @@
 {
   "version": "0.16.0",
   "kind": "THREE_CLUSTER_REPEATED_FROZEN_HST_NOISE_SENSITIVITY",
-  "github_actions_run_id": "39021286490",
-  "source_commit": "e2c182b171cc52df32d6200a3afc197030ea96f1",
+  "github_actions_run_id": "39027770579",
+  "source_commit": "f1d9ac75528eab6845139d8eb57f8b2a7e3f6d52",
   "replicate_seeds": [
     11,
     23,
@@ -19,9 +19,9 @@
       "cluster": "ngc6397",
       "frozen_injection_sites": 96,
       "repeated_noise_trials": 960,
-      "source_report_sha256": "11ff66a0ebea3b989022e326e44a7a170b02a64f9a7c3ac88ee169689353e1ec",
+      "source_report_sha256": "c7faffe52c4f01a5297f200c2a3a3ab5985f8cae33e23449e1bd392652201dea",
       "fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096",
-      "v015_baseline_sha256": "30e35cbf821e8d47c24af8dbade6d4893fefcf725b4bde8ea516c0c423d654c6",
+      "v015_baseline_sha256": "4c9c75fea677504aba95dc27e92845ca9882de7e10326189830eb6a9b7f321dd",
       "per_mode": [
         {
           "mode": "iid_gaussian",
@@ -47,7 +47,7 @@
           "median_of_seed_center_forced_errors": 0.06648717558964166,
           "seed_median_local_flux_error_range": [
             0.0457885616189567,
-            0.0675210810085439
+            0.06752108100854376
           ],
           "not_an_independent_source_population_confidence_interval": true
         }
@@ -220,7 +220,7 @@
       "recovered": 81,
       "recovery_fraction": 0.84375,
       "preexisting_noise_peaks": 3,
-      "median_local_forced_abs_relative_error": 0.0675210810085439,
+      "median_local_forced_abs_relative_error": 0.06752108100854376,
       "median_center_forced_abs_relative_error": 0.06835852706950074,
       "median_paired_local_minus_center_abs_relative_error": -0.007980222137339376
     },

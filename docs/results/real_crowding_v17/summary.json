@@ -1,0 +1,710 @@
+{
+  "version": "0.17.0",
+  "kind": "THREE_CLUSTER_EXPANDED_REAL_HST_PLANTED_STAR_BENCHMARK",
+  "source_github_actions_run_id": "39027770579",
+  "source_commit": "f1d9ac75528eab6845139d8eb57f8b2a7e3f6d52",
+  "clusters": [
+    {
+      "cluster": "ngc6397",
+      "injection_trials": 288,
+      "distinct_injection_sites": 96,
+      "recovered": 259,
+      "recovery_fraction": 0.8993055555555556,
+      "source_report_sha256": "d37c8450fc04b59b11fbe2e9dd6ac49bca8c461c2dce039cac29ce68e4a7ad43",
+      "original_fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096",
+      "original_prf_report_sha256": "747d446c0adc2a0317fbd7ea8a3c7abff84398846e4bf5c59b6acf36bbce90c9",
+      "lineage_audit": {
+        "source_hdu_index": 0,
+        "hdu_inventory": [
+          {
+            "index": 0,
+            "extname": "PRIMARY",
+            "pixel_dimensions": [
+              6000,
+              6000
+            ],
+            "header_values": {
+              "INSTRUME": "ACS/WFC",
+              "FILTER1": "F606W",
+              "FILTER2": "CLEAR2L",
+              "BUNIT": "ELECTRONS",
+              "EXPTIME": "15.0",
+              "CCDGAIN": "1",
+              "DATE-OBS": "2006-05-29"
+            },
+            "history_record_count": 0
+          }
+        ],
+        "selected_science_header": {
+          "INSTRUME": "ACS/WFC",
+          "FILTER1": "F606W",
+          "FILTER2": "CLEAR2L",
+          "BUNIT": "ELECTRONS",
+          "EXPTIME": "15.0",
+          "CCDGAIN": "1",
+          "DATE-OBS": "2006-05-29"
+        },
+        "underlying_exposure_ids_verified": false,
+        "effective_exposure_map_verified": false,
+        "pixelwise_noise_covariance_measured": false,
+        "electrons_per_output_pixel_verified": false,
+        "physical_poisson_noise_applied": false,
+        "warning": "A stitched ACS science HDU and BUNIT=ELECTRONS do not establish independent detector-electron observations per mosaic pixel. Exposure lineage/weight maps must be independently verified."
+      }
+    },
+    {
+      "cluster": "ngc6752",
+      "injection_trials": 288,
+      "distinct_injection_sites": 96,
+      "recovered": 247,
+      "recovery_fraction": 0.8576388888888888,
+      "source_report_sha256": "178e43dfdc2feb6e33535d7202700d505a95bb03e6e7825bb8653b086027399a",
+      "original_fits_sha256": "a89a2b91a9c15baeeccc60c8f78a0449cbf2ee444d378def7933d892ac29d860",
+      "original_prf_report_sha256": "23d121f57cf4c4d004c229ed1adbf349fef23c463e483cc077687669615c5196",
+      "lineage_audit": {
+        "source_hdu_index": 0,
+        "hdu_inventory": [
+          {
+            "index": 0,
+            "extname": "PRIMARY",
+            "pixel_dimensions": [
+              6000,
+              6000
+            ],
+            "header_values": {
+              "INSTRUME": "ACS/WFC",
+              "FILTER1": "F606W",
+              "FILTER2": "CLEAR2L",
+              "BUNIT": "ELECTRONS",
+              "EXPTIME": "35.0",
+              "CCDGAIN": "1",
+              "DATE-OBS": "2006-05-24"
+            },
+            "history_record_count": 0
+          }
+        ],
+        "selected_science_header": {
+          "INSTRUME": "ACS/WFC",
+          "FILTER1": "F606W",
+          "FILTER2": "CLEAR2L",
+          "BUNIT": "ELECTRONS",
+          "EXPTIME": "35.0",
+          "CCDGAIN": "1",
+          "DATE-OBS": "2006-05-24"
+        },
+        "underlying_exposure_ids_verified": false,
+        "effective_exposure_map_verified": false,
+        "pixelwise_noise_covariance_measured": false,
+        "electrons_per_output_pixel_verified": false,
+        "physical_poisson_noise_applied": false,
+        "warning": "A stitched ACS science HDU and BUNIT=ELECTRONS do not establish independent detector-electron observations per mosaic pixel. Exposure lineage/weight maps must be independently verified."
+      }
+    },
+    {
+      "cluster": "ngc0104",
+      "injection_trials": 288,
+      "distinct_injection_sites": 96,
+      "recovered": 242,
+      "recovery_fraction": 0.8402777777777778,
+      "source_report_sha256": "fb2bacde40012d0f21cfd8a378cdd706adf33927c04e022c9191246218c5d021",
+      "original_fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765",
+      "original_prf_report_sha256": "8f4d225b20ea0a6c5ba345459dbfb2c97c4293bdc7e215c0adacbc8c93c73771",
+      "lineage_audit": {
+        "source_hdu_index": 0,
+        "hdu_inventory": [
+          {
+            "index": 0,
+            "extname": "PRIMARY",
+            "pixel_dimensions": [
+              6000,
+              6000
+            ],
+            "header_values": {
+              "INSTRUME": "ACS/WFC",
+              "FILTER1": "F606W",
+              "FILTER2": "CLEAR2L",
+              "BUNIT": "ELECTRONS",
+              "EXPTIME": "50.0",
+              "CCDGAIN": "1",
+              "DATE-OBS": "2006-03-13"
+            },
+            "history_record_count": 0
+          }
+        ],
+        "selected_science_header": {
+          "INSTRUME": "ACS/WFC",
+          "FILTER1": "F606W",
+          "FILTER2": "CLEAR2L",
+          "BUNIT": "ELECTRONS",
+          "EXPTIME": "50.0",
+          "CCDGAIN": "1",
+          "DATE-OBS": "2006-03-13"
+        },
+        "underlying_exposure_ids_verified": false,
+        "effective_exposure_map_verified": false,
+        "pixelwise_noise_covariance_measured": false,
+        "electrons_per_output_pixel_verified": false,
+        "physical_poisson_noise_applied": false,
+        "warning": "A stitched ACS science HDU and BUNIT=ELECTRONS do not establish independent detector-electron observations per mosaic pixel. Exposure lineage/weight maps must be independently verified."
+      }
+    }
+  ],
+  "groups": [
+    {
+      "cluster": "ngc6397",
+      "band": "near_4_8",
+      "flux_over_tile_rms": 80.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 22,
+      "recovery_fraction": 0.6875,
+      "median_forced_local_abs_relative_error": 0.09749746999643351,
+      "median_forced_center_abs_relative_error": 0.09649602629761622,
+      "median_of_paired_local_minus_center_error": -0.009465763236122027,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6397",
+      "band": "near_4_8",
+      "flux_over_tile_rms": 200.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 23,
+      "recovery_fraction": 0.71875,
+      "median_forced_local_abs_relative_error": 0.03877759444492883,
+      "median_forced_center_abs_relative_error": 0.05185097679885009,
+      "median_of_paired_local_minus_center_error": -0.01265356349643506,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6397",
+      "band": "near_4_8",
+      "flux_over_tile_rms": 500.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 25,
+      "recovery_fraction": 0.78125,
+      "median_forced_local_abs_relative_error": 0.04295390745233664,
+      "median_forced_center_abs_relative_error": 0.04619413437587578,
+      "median_of_paired_local_minus_center_error": -0.008121274709297754,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6397",
+      "band": "middle_8_12",
+      "flux_over_tile_rms": 80.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 30,
+      "recovery_fraction": 0.9375,
+      "median_forced_local_abs_relative_error": 0.11369527411524752,
+      "median_forced_center_abs_relative_error": 0.10372772931994356,
+      "median_of_paired_local_minus_center_error": 0.0027509133477548672,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6397",
+      "band": "middle_8_12",
+      "flux_over_tile_rms": 200.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 31,
+      "recovery_fraction": 0.96875,
+      "median_forced_local_abs_relative_error": 0.040806634239970274,
+      "median_forced_center_abs_relative_error": 0.04951843845285152,
+      "median_of_paired_local_minus_center_error": -0.007965112048559138,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6397",
+      "band": "middle_8_12",
+      "flux_over_tile_rms": 500.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 32,
+      "recovery_fraction": 1.0,
+      "median_forced_local_abs_relative_error": 0.029443376752497183,
+      "median_forced_center_abs_relative_error": 0.029604083265016297,
+      "median_of_paired_local_minus_center_error": -0.0029391349454223727,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6397",
+      "band": "outer_12_16",
+      "flux_over_tile_rms": 80.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 32,
+      "recovery_fraction": 1.0,
+      "median_forced_local_abs_relative_error": 0.05020054222226472,
+      "median_forced_center_abs_relative_error": 0.05122038384069559,
+      "median_of_paired_local_minus_center_error": 0.0031999575997733384,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6397",
+      "band": "outer_12_16",
+      "flux_over_tile_rms": 200.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 32,
+      "recovery_fraction": 1.0,
+      "median_forced_local_abs_relative_error": 0.029322658440107282,
+      "median_forced_center_abs_relative_error": 0.02739162189999822,
+      "median_of_paired_local_minus_center_error": 0.00354507866722221,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6397",
+      "band": "outer_12_16",
+      "flux_over_tile_rms": 500.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 32,
+      "recovery_fraction": 1.0,
+      "median_forced_local_abs_relative_error": 0.012803245856468089,
+      "median_forced_center_abs_relative_error": 0.020832329049351343,
+      "median_of_paired_local_minus_center_error": -0.007690863134326417,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6752",
+      "band": "near_4_8",
+      "flux_over_tile_rms": 80.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 16,
+      "recovery_fraction": 0.5,
+      "median_forced_local_abs_relative_error": 0.2629998068906132,
+      "median_forced_center_abs_relative_error": 0.3401561999665924,
+      "median_of_paired_local_minus_center_error": -0.013841213792947208,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6752",
+      "band": "near_4_8",
+      "flux_over_tile_rms": 200.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 19,
+      "recovery_fraction": 0.59375,
+      "median_forced_local_abs_relative_error": 0.2162415105731274,
+      "median_forced_center_abs_relative_error": 0.2364174543670872,
+      "median_of_paired_local_minus_center_error": -0.050440912085934084,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6752",
+      "band": "near_4_8",
+      "flux_over_tile_rms": 500.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 27,
+      "recovery_fraction": 0.84375,
+      "median_forced_local_abs_relative_error": 0.10766819170763242,
+      "median_forced_center_abs_relative_error": 0.09177493190262909,
+      "median_of_paired_local_minus_center_error": 0.016101785898117272,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6752",
+      "band": "middle_8_12",
+      "flux_over_tile_rms": 80.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 30,
+      "recovery_fraction": 0.9375,
+      "median_forced_local_abs_relative_error": 0.08583481863479339,
+      "median_forced_center_abs_relative_error": 0.07857951659366326,
+      "median_of_paired_local_minus_center_error": 0.016178019671033717,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6752",
+      "band": "middle_8_12",
+      "flux_over_tile_rms": 200.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 31,
+      "recovery_fraction": 0.96875,
+      "median_forced_local_abs_relative_error": 0.03718364069190903,
+      "median_forced_center_abs_relative_error": 0.06782160549345956,
+      "median_of_paired_local_minus_center_error": 0.00755083392830219,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6752",
+      "band": "middle_8_12",
+      "flux_over_tile_rms": 500.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 31,
+      "recovery_fraction": 0.96875,
+      "median_forced_local_abs_relative_error": 0.08664870649402936,
+      "median_forced_center_abs_relative_error": 0.08961629531819057,
+      "median_of_paired_local_minus_center_error": 0.03021233190712419,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6752",
+      "band": "outer_12_16",
+      "flux_over_tile_rms": 80.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 30,
+      "recovery_fraction": 0.9375,
+      "median_forced_local_abs_relative_error": 0.04190314244012307,
+      "median_forced_center_abs_relative_error": 0.06818910834346609,
+      "median_of_paired_local_minus_center_error": -0.026476217598371925,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6752",
+      "band": "outer_12_16",
+      "flux_over_tile_rms": 200.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 31,
+      "recovery_fraction": 0.96875,
+      "median_forced_local_abs_relative_error": 0.05330729944637945,
+      "median_forced_center_abs_relative_error": 0.05479748674936469,
+      "median_of_paired_local_minus_center_error": 0.017212414110311013,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc6752",
+      "band": "outer_12_16",
+      "flux_over_tile_rms": 500.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 32,
+      "recovery_fraction": 1.0,
+      "median_forced_local_abs_relative_error": 0.047739364064323546,
+      "median_forced_center_abs_relative_error": 0.07003285038003494,
+      "median_of_paired_local_minus_center_error": -0.031325265963473056,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc0104",
+      "band": "near_4_8",
+      "flux_over_tile_rms": 80.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 14,
+      "recovery_fraction": 0.4375,
+      "median_forced_local_abs_relative_error": 0.3519677866819051,
+      "median_forced_center_abs_relative_error": 0.4027393579602477,
+      "median_of_paired_local_minus_center_error": 0.0004883095123037196,
+      "median_detected_peak_position_error_px": 0.5
+    },
+    {
+      "cluster": "ngc0104",
+      "band": "near_4_8",
+      "flux_over_tile_rms": 200.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 19,
+      "recovery_fraction": 0.59375,
+      "median_forced_local_abs_relative_error": 0.1617945662511687,
+      "median_forced_center_abs_relative_error": 0.23326202895937614,
+      "median_of_paired_local_minus_center_error": -0.006965023531795199,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc0104",
+      "band": "near_4_8",
+      "flux_over_tile_rms": 500.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 29,
+      "recovery_fraction": 0.90625,
+      "median_forced_local_abs_relative_error": 0.12986115926716268,
+      "median_forced_center_abs_relative_error": 0.1466060693474736,
+      "median_of_paired_local_minus_center_error": -0.02813386705617816,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc0104",
+      "band": "middle_8_12",
+      "flux_over_tile_rms": 80.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 27,
+      "recovery_fraction": 0.84375,
+      "median_forced_local_abs_relative_error": 0.18691463303899114,
+      "median_forced_center_abs_relative_error": 0.1331723618237271,
+      "median_of_paired_local_minus_center_error": 0.025837844868468622,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc0104",
+      "band": "middle_8_12",
+      "flux_over_tile_rms": 200.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 30,
+      "recovery_fraction": 0.9375,
+      "median_forced_local_abs_relative_error": 0.17583042938191895,
+      "median_forced_center_abs_relative_error": 0.18510407369658116,
+      "median_of_paired_local_minus_center_error": 0.031048620886928224,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc0104",
+      "band": "middle_8_12",
+      "flux_over_tile_rms": 500.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 31,
+      "recovery_fraction": 0.96875,
+      "median_forced_local_abs_relative_error": 0.11153780398223334,
+      "median_forced_center_abs_relative_error": 0.10974339666939935,
+      "median_of_paired_local_minus_center_error": 0.019166807714308995,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc0104",
+      "band": "outer_12_16",
+      "flux_over_tile_rms": 80.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 31,
+      "recovery_fraction": 0.96875,
+      "median_forced_local_abs_relative_error": 0.18049599233898964,
+      "median_forced_center_abs_relative_error": 0.204864263727848,
+      "median_of_paired_local_minus_center_error": 0.011434747874750295,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc0104",
+      "band": "outer_12_16",
+      "flux_over_tile_rms": 200.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 31,
+      "recovery_fraction": 0.96875,
+      "median_forced_local_abs_relative_error": 0.15581955513531787,
+      "median_forced_center_abs_relative_error": 0.12407521633540662,
+      "median_of_paired_local_minus_center_error": 0.015803952019015098,
+      "median_detected_peak_position_error_px": 0.0
+    },
+    {
+      "cluster": "ngc0104",
+      "band": "outer_12_16",
+      "flux_over_tile_rms": 500.0,
+      "site_count": 32,
+      "attempted": 32,
+      "recovered": 30,
+      "recovery_fraction": 0.9375,
+      "median_forced_local_abs_relative_error": 0.14877790115168546,
+      "median_forced_center_abs_relative_error": 0.148735896471345,
+      "median_of_paired_local_minus_center_error": 0.027053351120162994,
+      "median_detected_peak_position_error_px": 0.0
+    }
+  ],
+  "original_tiles": [
+    {
+      "cluster": "ngc6397",
+      "tile_index": 0,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6397",
+      "tile_index": 1,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6397",
+      "tile_index": 2,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6397",
+      "tile_index": 3,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6397",
+      "tile_index": 5,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6397",
+      "tile_index": 6,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6397",
+      "tile_index": 7,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6397",
+      "tile_index": 8,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6752",
+      "tile_index": 0,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6752",
+      "tile_index": 1,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6752",
+      "tile_index": 2,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6752",
+      "tile_index": 3,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6752",
+      "tile_index": 5,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6752",
+      "tile_index": 6,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6752",
+      "tile_index": 7,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc6752",
+      "tile_index": 8,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc0104",
+      "tile_index": 0,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc0104",
+      "tile_index": 1,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc0104",
+      "tile_index": 2,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc0104",
+      "tile_index": 3,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc0104",
+      "tile_index": 5,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc0104",
+      "tile_index": 6,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc0104",
+      "tile_index": 7,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    },
+    {
+      "cluster": "ngc0104",
+      "tile_index": 8,
+      "status": "EVALUATED",
+      "near_4_8_site_count": 4,
+      "middle_8_12_site_count": 4,
+      "outer_12_16_site_count": 4
+    }
+  ],
+  "total_trials": 864,
+  "total_unique_pixel_sites": 288,
+  "total_recovered": 748,
+  "all_eight_tiles_per_cluster_retained": true,
+  "site_geometry_chosen_before_injection_outcomes": true,
+  "same_three_flux_levels_per_site": true,
+  "instrument_noise_calibrated": false,
+  "photometric_zeropoint_calibrated": false,
+  "population_level_completeness": false,
+  "mosaic_exposure_lineage_verified": false,
+  "notes": "Crowding proxy = distance to detected 5-sigma peaks in real HST image, NOT unresolved-star density. Forced amplitude uses known planted site."
+}

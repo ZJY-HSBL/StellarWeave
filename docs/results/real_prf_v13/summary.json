@@ -1,8 +1,8 @@
 {
   "version": "0.13.0",
   "kind": "THREE_CLUSTER_FROZEN_HST_PRF_STRATIFIED_EXPLORATORY",
-  "source_github_actions_run_id": "39021286490",
-  "source_commit": "e2c182b171cc52df32d6200a3afc197030ea96f1",
+  "source_github_actions_run_id": "39027770579",
+  "source_commit": "f1d9ac75528eab6845139d8eb57f8b2a7e3f6d52",
   "clusters": [
     "ngc6397",
     "ngc6752",
@@ -480,8 +480,8 @@
   "input_provenance": [
     {
       "cluster": "ngc6397",
-      "stratification_sha256": "116bf5b7c358aca32510c089e45ee555d89d5630abb19123e2a46c12a1cebbea",
-      "original_prf_sha256": "d99352f309be809bf37f39436e0f226afcfd8e6d67d44f4e8bfb4e8f89c5d0e3",
+      "stratification_sha256": "84f28cd0b8345cfd1eb1250e9fe622c7ae1d50f7384c0c9b60bf2ed8ddbe6744",
+      "original_prf_sha256": "747d446c0adc2a0317fbd7ea8a3c7abff84398846e4bf5c59b6acf36bbce90c9",
       "fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096"
     },
     {
