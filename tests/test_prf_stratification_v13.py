@@ -95,8 +95,10 @@ def test_frozen_holdout_provenance_and_all_strata(tmp_path):
                  'ngc0104_proxy_scatter.png'):
         assert (out/name).stat().st_size>200
     assert len(list((out/'source_reports').glob('*.json')))==3
+    assert len(list((out/'original_prf_reports').glob('*.json')))==3
     again=render_diagnostics(
-        sorted((out/'source_reports').glob('*.json')),prf,
+        sorted((out/'source_reports').glob('*.json')),
+        sorted((out/'original_prf_reports').glob('*.json')),
         tmp_path/'replay')
     assert again['total_original_outer_heldout_stars']==96
 

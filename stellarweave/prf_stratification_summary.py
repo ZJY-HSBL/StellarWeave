@@ -153,8 +153,13 @@ def render_diagnostics(strat_paths, prf_paths, out_dir, *,
     out.mkdir(parents=True,exist_ok=True)
     source = out/'source_reports'
     source.mkdir(exist_ok=True)
+    original_source = out/'original_prf_reports'
+    original_source.mkdir(exist_ok=True)
     for name in CLUSTERS:
         shutil.copyfile(source_files[name],source/f'{name}.json')
+    for path in prf_paths:
+        original = json.loads(Path(path).read_text(encoding='utf-8'))
+        shutil.copyfile(path,original_source/f"{original['cluster']}.json")
     groups, thresholds = summarize_groups(reports)
     stars = [dict(cluster=name,**s)
              for name in CLUSTERS
