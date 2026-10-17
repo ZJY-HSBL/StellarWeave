@@ -1,0 +1,508 @@
+{
+  "version": "0.13.0",
+  "kind": "THREE_CLUSTER_FROZEN_HST_PRF_STRATIFIED_EXPLORATORY",
+  "source_github_actions_run_id": "39008159671",
+  "source_commit": "1518191776823b77fdb0f9c0c4ed7d2c8e2b8b70",
+  "clusters": [
+    "ngc6397",
+    "ngc6752",
+    "ngc0104"
+  ],
+  "total_original_outer_heldout_stars": 838,
+  "all_frozen_test_stars_retained": true,
+  "all_24_outer_tiles_retained": true,
+  "models_retrained": false,
+  "science_calibrated": false,
+  "causal_inference_supported": false,
+  "stratification": "Post-hoc median splits of four predeclared pixel-derived proxies within each cluster, on unchanged v0.12 test stars",
+  "primary_metric": "v0.12 held-out native-pixel PRF shape L1, not flux accuracy",
+  "group_statistics": "star-pooled median and median of within-tile medians; exploratory tile-bootstrap CI",
+  "group_definitions": [
+    {
+      "cluster": "ngc6397",
+      "feature": "peak_over_tile_rms",
+      "median_split_threshold": 878.9593148605798,
+      "nonmissing": 300,
+      "missing": 0,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    },
+    {
+      "cluster": "ngc6397",
+      "feature": "nearest_detected_peak_px",
+      "median_split_threshold": 13.92838827718412,
+      "nonmissing": 300,
+      "missing": 0,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    },
+    {
+      "cluster": "ngc6397",
+      "feature": "neighbors_within_25px",
+      "median_split_threshold": 3.0,
+      "nonmissing": 300,
+      "missing": 0,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    },
+    {
+      "cluster": "ngc6397",
+      "feature": "annulus_mad_over_tile_rms",
+      "median_split_threshold": 1.8616579183975182,
+      "nonmissing": 291,
+      "missing": 9,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "peak_over_tile_rms",
+      "median_split_threshold": 778.0236527517957,
+      "nonmissing": 283,
+      "missing": 0,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "nearest_detected_peak_px",
+      "median_split_threshold": 10.816653826391969,
+      "nonmissing": 283,
+      "missing": 0,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "neighbors_within_25px",
+      "median_split_threshold": 7.0,
+      "nonmissing": 283,
+      "missing": 0,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "annulus_mad_over_tile_rms",
+      "median_split_threshold": 1.6141318648088991,
+      "nonmissing": 278,
+      "missing": 5,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "peak_over_tile_rms",
+      "median_split_threshold": 217.9804854221533,
+      "nonmissing": 255,
+      "missing": 0,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "nearest_detected_peak_px",
+      "median_split_threshold": 9.055385138137417,
+      "nonmissing": 255,
+      "missing": 0,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "neighbors_within_25px",
+      "median_split_threshold": 16.0,
+      "nonmissing": 255,
+      "missing": 0,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "annulus_mad_over_tile_rms",
+      "median_split_threshold": 1.4603529517645586,
+      "nonmissing": 249,
+      "missing": 6,
+      "threshold_is_posthoc_from_frozen_test_stars": true
+    }
+  ],
+  "groups": [
+    {
+      "cluster": "ngc6397",
+      "feature": "peak_over_tile_rms",
+      "group": "low",
+      "n": 150,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 19.580081198643995,
+      "median_star_local_minus_anchor_l1": -0.024672449960914812,
+      "fraction_stars_local_better": 0.7933333333333333,
+      "median_of_tile_median_gains_pct": 16.82987837626308,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        9.474214796072436,
+        24.62838470231298
+      ]
+    },
+    {
+      "cluster": "ngc6397",
+      "feature": "peak_over_tile_rms",
+      "group": "high",
+      "n": 150,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 15.748435312851033,
+      "median_star_local_minus_anchor_l1": -0.012528421575844488,
+      "fraction_stars_local_better": 0.72,
+      "median_of_tile_median_gains_pct": 15.226980524354957,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        4.786206572879504,
+        25.359528340434725
+      ]
+    },
+    {
+      "cluster": "ngc6397",
+      "feature": "nearest_detected_peak_px",
+      "group": "low",
+      "n": 151,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 11.458534782654395,
+      "median_star_local_minus_anchor_l1": -0.016800049616125814,
+      "fraction_stars_local_better": 0.7152317880794702,
+      "median_of_tile_median_gains_pct": 11.581456744927923,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        3.020743129843863,
+        25.912196740983994
+      ]
+    },
+    {
+      "cluster": "ngc6397",
+      "feature": "nearest_detected_peak_px",
+      "group": "high",
+      "n": 149,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 23.234913335088553,
+      "median_star_local_minus_anchor_l1": -0.02324313528155851,
+      "fraction_stars_local_better": 0.7986577181208053,
+      "median_of_tile_median_gains_pct": 24.400250435312515,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        14.389712882266611,
+        26.828605177566942
+      ]
+    },
+    {
+      "cluster": "ngc6397",
+      "feature": "neighbors_within_25px",
+      "group": "low",
+      "n": 173,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 20.87496923633846,
+      "median_star_local_minus_anchor_l1": -0.022511306868475287,
+      "fraction_stars_local_better": 0.815028901734104,
+      "median_of_tile_median_gains_pct": 22.111830067577028,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        12.569862992820319,
+        30.153069360081762
+      ]
+    },
+    {
+      "cluster": "ngc6397",
+      "feature": "neighbors_within_25px",
+      "group": "high",
+      "n": 127,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 10.14145285937075,
+      "median_star_local_minus_anchor_l1": -0.014806317213134058,
+      "fraction_stars_local_better": 0.6771653543307087,
+      "median_of_tile_median_gains_pct": 8.951709917933263,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        1.4099598838246157,
+        24.242419369598547
+      ]
+    },
+    {
+      "cluster": "ngc6397",
+      "feature": "annulus_mad_over_tile_rms",
+      "group": "low",
+      "n": 147,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 23.1324396288957,
+      "median_star_local_minus_anchor_l1": -0.028766643505202305,
+      "fraction_stars_local_better": 0.8367346938775511,
+      "median_of_tile_median_gains_pct": 24.84247116216268,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        14.086049776203245,
+        28.283494295266067
+      ]
+    },
+    {
+      "cluster": "ngc6397",
+      "feature": "annulus_mad_over_tile_rms",
+      "group": "high",
+      "n": 144,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 8.546737849272978,
+      "median_star_local_minus_anchor_l1": -0.01163063963229647,
+      "fraction_stars_local_better": 0.6736111111111112,
+      "median_of_tile_median_gains_pct": 5.881559435755115,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        2.423672261655283,
+        14.24846524492115
+      ]
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "peak_over_tile_rms",
+      "group": "low",
+      "n": 142,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 9.620129235358071,
+      "median_star_local_minus_anchor_l1": -0.022561002100905253,
+      "fraction_stars_local_better": 0.6549295774647887,
+      "median_of_tile_median_gains_pct": 12.956725579641514,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        5.863439558603218,
+        21.596252127502506
+      ]
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "peak_over_tile_rms",
+      "group": "high",
+      "n": 141,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 18.35254630058328,
+      "median_star_local_minus_anchor_l1": -0.028122077065703695,
+      "fraction_stars_local_better": 0.6737588652482269,
+      "median_of_tile_median_gains_pct": 11.934075827564856,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        2.8744066764261467,
+        27.304471269184916
+      ]
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "nearest_detected_peak_px",
+      "group": "low",
+      "n": 142,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 3.172983684886357,
+      "median_star_local_minus_anchor_l1": -0.012245988243594318,
+      "fraction_stars_local_better": 0.6126760563380281,
+      "median_of_tile_median_gains_pct": 2.7422367318676857,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        -0.4499036102351966,
+        3.618912131539178
+      ]
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "nearest_detected_peak_px",
+      "group": "high",
+      "n": 141,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 34.48972303479045,
+      "median_star_local_minus_anchor_l1": -0.047318424307225104,
+      "fraction_stars_local_better": 0.7163120567375887,
+      "median_of_tile_median_gains_pct": 32.696320146019076,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        23.34480446476763,
+        40.74458436101541
+      ]
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "neighbors_within_25px",
+      "group": "low",
+      "n": 170,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 20.783465512990567,
+      "median_star_local_minus_anchor_l1": -0.04325403770741024,
+      "fraction_stars_local_better": 0.6588235294117647,
+      "median_of_tile_median_gains_pct": 20.783465512990567,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        11.43928666387253,
+        30.5178025941969
+      ]
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "neighbors_within_25px",
+      "group": "high",
+      "n": 113,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 5.157373508320214,
+      "median_star_local_minus_anchor_l1": -0.014858261960347674,
+      "fraction_stars_local_better": 0.672566371681416,
+      "median_of_tile_median_gains_pct": 6.803938625952425,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        2.93046848812536,
+        12.540812634829702
+      ]
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "annulus_mad_over_tile_rms",
+      "group": "low",
+      "n": 140,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 28.41815718034885,
+      "median_star_local_minus_anchor_l1": -0.04537792507088574,
+      "fraction_stars_local_better": 0.8142857142857143,
+      "median_of_tile_median_gains_pct": 30.919079560828074,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        14.573652195647785,
+        39.8182283958149
+      ]
+    },
+    {
+      "cluster": "ngc6752",
+      "feature": "annulus_mad_over_tile_rms",
+      "group": "high",
+      "n": 138,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 0.13839520599918578,
+      "median_star_local_minus_anchor_l1": -0.0006309770278280155,
+      "fraction_stars_local_better": 0.5144927536231884,
+      "median_of_tile_median_gains_pct": -1.6057184665054403,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        -2.4948412848028303,
+        2.1954278571860235
+      ]
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "peak_over_tile_rms",
+      "group": "low",
+      "n": 128,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": -1.017889020731655,
+      "median_star_local_minus_anchor_l1": 0.006206654652412047,
+      "fraction_stars_local_better": 0.4453125,
+      "median_of_tile_median_gains_pct": -1.6218501120224176,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        -2.6664841110939212,
+        1.0636437664604588
+      ]
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "peak_over_tile_rms",
+      "group": "high",
+      "n": 127,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 2.986286389052545,
+      "median_star_local_minus_anchor_l1": -0.010705514321734666,
+      "fraction_stars_local_better": 0.5590551181102362,
+      "median_of_tile_median_gains_pct": 3.5651754966550975,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        1.4964842954859263,
+        14.122704098452997
+      ]
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "nearest_detected_peak_px",
+      "group": "low",
+      "n": 131,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": -0.12045469292030175,
+      "median_star_local_minus_anchor_l1": 0.000279303246509377,
+      "fraction_stars_local_better": 0.48854961832061067,
+      "median_of_tile_median_gains_pct": -0.6434328236673692,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        -1.34315930128586,
+        0.20712873200134307
+      ]
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "nearest_detected_peak_px",
+      "group": "high",
+      "n": 124,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 0.6046059803811565,
+      "median_star_local_minus_anchor_l1": -0.0027985012056861297,
+      "fraction_stars_local_better": 0.5161290322580645,
+      "median_of_tile_median_gains_pct": 1.6075614542955834,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        -0.5117007945339178,
+        6.290089581612068
+      ]
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "neighbors_within_25px",
+      "group": "low",
+      "n": 160,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 1.300314285165315,
+      "median_star_local_minus_anchor_l1": -0.005882347421336587,
+      "fraction_stars_local_better": 0.5375,
+      "median_of_tile_median_gains_pct": 0.6678853745300475,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        -0.729546703925398,
+        5.684370214780191
+      ]
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "neighbors_within_25px",
+      "group": "high",
+      "n": 95,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": -0.9314287494930248,
+      "median_star_local_minus_anchor_l1": 0.006121164530496381,
+      "fraction_stars_local_better": 0.4421052631578947,
+      "median_of_tile_median_gains_pct": -1.1202195697640183,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        -4.068081665832397,
+        1.8930746667553886
+      ]
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "annulus_mad_over_tile_rms",
+      "group": "low",
+      "n": 125,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 0.7985241163413721,
+      "median_star_local_minus_anchor_l1": -0.0052320963116726515,
+      "fraction_stars_local_better": 0.512,
+      "median_of_tile_median_gains_pct": 1.666411943004713,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        -2.2878625366028493,
+        2.549751699516494
+      ]
+    },
+    {
+      "cluster": "ngc0104",
+      "feature": "annulus_mad_over_tile_rms",
+      "group": "high",
+      "n": 124,
+      "tiles_with_at_least_2_stars": 8,
+      "median_star_paired_gain_pct": 0.14511657575031955,
+      "median_star_local_minus_anchor_l1": -0.00047322209975814156,
+      "fraction_stars_local_better": 0.5,
+      "median_of_tile_median_gains_pct": 1.4970277420070364,
+      "tile_bootstrap_95ci_median_gain_pct": [
+        -1.0270442046348296,
+        3.4628167271127115
+      ]
+    }
+  ],
+  "input_provenance": [
+    {
+      "cluster": "ngc6397",
+      "stratification_sha256": "116bf5b7c358aca32510c089e45ee555d89d5630abb19123e2a46c12a1cebbea",
+      "original_prf_sha256": "d99352f309be809bf37f39436e0f226afcfd8e6d67d44f4e8bfb4e8f89c5d0e3",
+      "fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096"
+    },
+    {
+      "cluster": "ngc6752",
+      "stratification_sha256": "5a93cf9e15d9dd941100fa72a6e8c047b23b8f879d9fa5029f3fd45c5c90f614",
+      "original_prf_sha256": "23d121f57cf4c4d004c229ed1adbf349fef23c463e483cc077687669615c5196",
+      "fits_sha256": "a89a2b91a9c15baeeccc60c8f78a0449cbf2ee444d378def7933d892ac29d860"
+    },
+    {
+      "cluster": "ngc0104",
+      "stratification_sha256": "51dbf5882efa547a9090fe20e2238f7d806ef252ba9cf718bbb5f2d58bb58d68",
+      "original_prf_sha256": "1a73bf2d22d5d59b7524d00c8b51ff1af3fe620a62947a0b5fb0b8a3e3bdf824",
+      "fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765"
+    }
+  ],
+  "limitations": [
+    "Post-hoc subgroup associations cannot explain causality",
+    "Six-sigma peak-neighbor distances miss unresolved and faint sources",
+    "Candidates are deliberately bright/isolated, not a completeness sample",
+    "Peak-over-tile-RMS is not calibrated SNR or flux",
+    "Subgroups and image backgrounds differ across clusters",
+    "No Gaia absolute astrometry or calibrated photometry"
+  ]
+}

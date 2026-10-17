@@ -42,7 +42,7 @@
       ],
       "median_heldout_total_variation": 0.1329925452915668,
       "input_fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765",
-      "psf_report_sha256": "44487498df33d407816c4786a0e65b01ca014509446126544c0acfeeefa33ce3"
+      "psf_report_sha256": "6c29fac2cdb3db64a551e41d898546d6056b67929995fbc0d8715dad2d438323"
     }
   ],
   "per_tile": [

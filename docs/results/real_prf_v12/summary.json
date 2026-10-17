@@ -1,8 +1,8 @@
 {
   "version": "0.12.0",
   "kind": "REAL_HST_NATIVE_PIXEL_PRF_CROSSVALIDATION",
-  "source_github_actions_run_id": "39006618696",
-  "source_commit": "94a9a6316c9424366dc2fdc690479cded2b619a6",
+  "source_github_actions_run_id": "39008159671",
+  "source_commit": "1518191776823b77fdb0f9c0c4ed7d2c8e2b8b70",
   "clusters": [
     {
       "cluster": "ngc6397",
@@ -54,9 +54,9 @@
       "median_star_local_l1": 0.40002866047921304,
       "median_star_anchor_l1": 0.38614417286105546,
       "median_star_gaussian_l1": 0.45932188754450215,
-      "report_sha256": "8f4d225b20ea0a6c5ba345459dbfb2c97c4293bdc7e215c0adacbc8c93c73771",
+      "report_sha256": "1a73bf2d22d5d59b7524d00c8b51ff1af3fe620a62947a0b5fb0b8a3e3bdf824",
       "fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765",
-      "plate_sha256": "3291bdd8bc940a1e123c722b0fa130782a3e9277a493e28088975a7956841d15"
+      "plate_sha256": "8d7d0630fb62e12511e998d0db2d54c639f834417595e03426bf68fcdadda6e7"
     }
   ],
   "heldout_tile_slots": 24,
