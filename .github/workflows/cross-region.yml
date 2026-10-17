@@ -143,6 +143,9 @@ jobs:
             outputs/cross_region_${{ matrix.cluster }}/psf_spatial.csv
             outputs/cross_region_${{ matrix.cluster }}/psf_montage.png
             outputs/cross_region_${{ matrix.cluster }}/tile_*_native_psf.npy
+            outputs/cross_region_${{ matrix.cluster }}/spatial_prf.json
+            outputs/cross_region_${{ matrix.cluster }}/heldout_stars.csv
+            outputs/cross_region_${{ matrix.cluster }}/spatial_prf_templates.png
           if-no-files-found: ignore
           retention-days: 30
 
@@ -273,7 +276,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/results/real_hst_v09 docs/results/real_hst_v12
+          git add docs/results/real_hst_v09 docs/results/real_hst_v12 docs/results/real_prf_v12
           if git diff --cached --quiet; then
             echo "No experiment evidence changed"
           else
@@ -288,4 +291,5 @@ jobs:
             cross_cluster_summary.json
             docs/results/real_hst_v09/
             docs/results/real_hst_v12/
+            docs/results/real_prf_v12/
           retention-days: 30
