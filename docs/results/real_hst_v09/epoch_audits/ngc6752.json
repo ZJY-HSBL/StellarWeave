@@ -1,0 +1,25 @@
+{
+  "kind": "HST_MOSAIC_EPOCH_PROVENANCE_AUDIT",
+  "file": "hlsp_acsggct_hst_acs-wfc_ngc6752_f606w_v2_img.fits",
+  "headers": [
+    {
+      "hdu": 0,
+      "extname": "PRIMARY",
+      "naxis": 2,
+      "explicit_timing_keywords": {
+        "DATE-OBS": "2006-05-24"
+      },
+      "parsed_mjd": {
+        "DATE-OBS": 53879.0
+      },
+      "history_lines": 0
+    }
+  ],
+  "explicit_parsed_mjd_count": 1,
+  "min_header_mjd": 53879.0,
+  "max_header_mjd": 53879.0,
+  "header_mjd_span_days": 0.0,
+  "effective_mosaic_epoch_verified": false,
+  "gaia_epoch_can_be_inferred_automatically": false,
+  "warning": "FITS mosaic header dates are not necessarily a weighted observation epoch. Inspect exposure provenance before external Gaia astrometry."
+}
