@@ -54,6 +54,19 @@ def _validate(path):
                 raise ValueError('Nonfinite or negative forced flux error')
     if any(keys[mode]!=keys[MODES[0]] for mode in MODES):
         raise ValueError('A mode omitted or altered a trial')
+    expected_audits={(key[0],mode) for key in keys[MODES[0]] for mode in MODES}
+    seen_audits=[(int(a['tile_index']),a['mode']) for a in d.get('noise_audits',[])]
+    if set(seen_audits)!=expected_audits or len(seen_audits)!=len(expected_audits):
+        raise ValueError('Incomplete or duplicate noise auditing for original tiles')
+    for row in d['noise_audits']:
+        expected=float(row['target_added_pixel_rms'])
+        measured=float(row['actual_added_pixel_rms'])
+        if not np.isfinite(measured) or abs(measured-expected)>1e-6*max(1.,expected):
+            raise ValueError('Noise pixel RMS does not match declared target')
+        corr=row.get('added_field_lag1_correlation')
+        if row['mode']=='correlated_gaussian' and (
+                corr is None or float(corr)<.15):
+            raise ValueError('Declared spatially correlated noise is uncorrelated')
     return d
 
 

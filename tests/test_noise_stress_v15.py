@@ -89,7 +89,14 @@ def _fake(path,cluster):
             'photon_shot_noise_applied_to_real_HST':False,
             'all_original_injection_positions_and_shapes_frozen':True,
             'expected_original_trials':len(trials)//3,'trials':trials,
-            'noise_audits':[],
+            'noise_audits':[
+                {'tile_index':tile,'mode':mode,
+                 'target_added_pixel_rms':0.0 if mode=='baseline' else 1.0,
+                 'actual_added_pixel_rms':0.0 if mode=='baseline' else 1.0,
+                 'added_field_lag1_correlation':.8 if mode=='correlated_gaussian'
+                         else .0 if mode=='iid_gaussian' else None,
+                 'baseline_peak_count_after_augmentation':15}
+                for tile in (0,1) for mode in MODES],
             'fits_sha256':'f'*64,'v014_baseline_sha256':'b'*64}
     path.write_text(json.dumps(report))
     return path
