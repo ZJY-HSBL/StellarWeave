@@ -90,3 +90,5 @@ jobs:
           python -m stellarweave.prf_visualization --help
           python -m stellarweave.prf_stratification --help
           python -m stellarweave.prf_stratification_summary --help
+          python -m stellarweave.real_injection --help
+          python -m stellarweave.injection_results --help

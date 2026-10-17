@@ -15,6 +15,8 @@ on:
       - stellarweave/prf_visualization.py
       - stellarweave/prf_stratification.py
       - stellarweave/prf_stratification_summary.py
+      - stellarweave/real_injection.py
+      - stellarweave/injection_results.py
       - stellarweave/psf_spatial.py
       - stellarweave/psf_results.py
   workflow_dispatch:
@@ -157,6 +159,31 @@ jobs:
           assert len(d['tiles'])==8
           print('All frozen held-out sources retained, no refitting')
           PY
+      - name: Run one-at-a-time known-flux planted stars in actual HST backgrounds
+        env:
+          TARGET_CLUSTER: ${{ matrix.cluster }}
+        run: |
+          python -m stellarweave.real_injection \
+            --fits data/raw/${{ matrix.cluster }}/hlsp_acsggct_hst_acs-wfc_${{ matrix.cluster }}_f606w_v2_img.fits \
+            --plate-report outputs/cross_region_${{ matrix.cluster }}/cross_region.json \
+            --prf-report outputs/cross_region_${{ matrix.cluster }}/spatial_prf.json \
+            --cluster ${{ matrix.cluster }} --seed 42 \
+            --out outputs/cross_region_${{ matrix.cluster }}
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          c=os.environ['TARGET_CLUSTER']
+          p=Path('outputs')/f'cross_region_{c}'/'artificial_stars.json'
+          d=json.loads(p.read_text())
+          assert d['total_attempted']==len(d['trials'])
+          assert d['total_attempted']>0, 'No injection trials ran'
+          assert d['total_recovered']==sum(x['detected'] for x in d['trials'])
+          assert d['science_calibrated'] is False
+          assert d['models_fitted_on_injection_sources'] is False
+          assert d['matched_source_position_known_for_forced_flux'] is True
+          assert len(d['groups'])==6
+          print('Actual HST injected-star trials checked without selection bias')
+          PY
       - name: Upload machine-readable evaluation, no original FITS
         if: always()
         uses: actions/upload-artifact@v4
@@ -175,6 +202,8 @@ jobs:
             outputs/cross_region_${{ matrix.cluster }}/spatial_prf_templates.png
             outputs/cross_region_${{ matrix.cluster }}/prf_stratification.json
             outputs/cross_region_${{ matrix.cluster }}/prf_stratification.csv
+            outputs/cross_region_${{ matrix.cluster }}/artificial_stars.json
+            outputs/cross_region_${{ matrix.cluster }}/artificial_stars.csv
           if-no-files-found: ignore
           retention-days: 30
 
@@ -322,12 +351,34 @@ jobs:
           for name in ('stratified_prf_gains.png','ngc0104_failure_map.png','ngc0104_proxy_scatter.png'):
               assert (root/name).stat().st_size>8000
           PY
+      - name: Generate real-HST planted-source recovery and forced-flux charts
+        env:
+          SOURCE_RUN_ID: ${{ github.run_id }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          python -m stellarweave.injection_results \
+            combined/spatial-transfer-*/artificial_stars.json \
+            --out docs/results/real_injections_v14 \
+            --run-id "$SOURCE_RUN_ID" --source-commit "$SOURCE_SHA"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('docs/results/real_injections_v14')
+          d=json.loads((root/'summary.json').read_text())
+          assert d['total_trials']>0
+          assert d['total_trials']==sum(c['attempted'] for c in d['clusters'])
+          assert d['all_nondetections_retained'] is True
+          assert d['physical_flux_units_calibrated'] is False
+          assert len(d['groups'])==18
+          for name in ('recovery_by_flux_crowding.png','forced_flux_error.png','paired_forced_flux_difference.png'):
+              assert (root/name).stat().st_size>8000
+          PY
       - name: Publish immutable-input real-data evidence to main
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/results/real_hst_v09 docs/results/real_hst_v12 docs/results/real_prf_v12 docs/results/real_prf_v13
+          git add docs/results/real_hst_v09 docs/results/real_hst_v12 docs/results/real_prf_v12 docs/results/real_prf_v13 docs/results/real_injections_v14
           if git diff --cached --quiet; then
             echo "No experiment evidence changed"
           else
@@ -344,4 +395,5 @@ jobs:
             docs/results/real_hst_v12/
             docs/results/real_prf_v12/
             docs/results/real_prf_v13/
+            docs/results/real_injections_v14/
           retention-days: 30
