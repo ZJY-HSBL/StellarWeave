@@ -4,12 +4,61 @@
 
 [![CI](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/ci.yml) · [GitHub Releases](https://github.com/ZJY-HSBL/StellarWeave/releases)
 
-**v0.12.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include real ACSGGCT/HST internal astrometric consistency measurements and held-out native-pixel PSF shape comparisons across three globular clusters, with measured tables, source reports and reproducible plots below.
+**v0.13.0 research prototype / 科研原型。** This repository does NOT yet contain a trained neural network, science-grade PSF photometry, or independently validated absolute astrometry. It DOES include real ACSGGCT/HST internal astrometric consistency measurements and held-out native-pixel PSF shape comparisons across three globular clusters, with measured tables, source reports and reproducible plots below.
 
 ## Purpose / 研究目标
 
 StellarWeave is designed to investigate faint stellar source detection, deblending, and measurement reliability in crowded telescope imagery. We are developing physically informed baselines, not merely applying YOLO to astronomy.
 
+## v0.13.0 — Why does NGC 104's local PSF fail? / 真实拥挤场的分层诊断
+
+**Actual archival HST/ACS F606W observations; same 838 previously frozen test stars across 24 outer tiles and three globular clusters.** This update does not retrain the PSF/PRF models, replace test stars, or optimize against the held-out results. Instead, it reopens the original FITS pixels to measure four image-derived **descriptive proxies** for the same v0.12 test sources: peak contrast relative to robust tile pixel RMS, nearest other detected 6-sigma peak, number of other detected peaks within 25 pixels, and 5–10-pixel annular image texture. The threshold for each high/low group is the median of the frozen **test** sources within that cluster, determined **post hoc**; these are exploratory associations, not confirmatory hypothesis tests.
+
+### Actual three-cluster image-environment measurements
+
+| Cluster | Median peak / tile RMS (not calibrated SNR) | Median nearest detected peak | Median detected neighbors within 25 px |
+|---|---:|---:|---:|
+| NGC 6397 | 879.0 | 13.93 px | 3 |
+| NGC 6752 | 778.0 | 10.82 px | 7 |
+| **NGC 104 (47 Tuc)** | **218.0** | **9.06 px** | **16** |
+
+These are computed from **selected bright, approximately isolated candidates** only. Peak/tile-RMS values are **not physical stellar SNR**, and detected-peak counts exclude unresolved/faint neighbors. They should not be treated as calibrated crowding measurements or directly comparable astrophysical source fluxes.
+
+### NGC 104 — the original weak result, separated by environment
+
+**Metric:** per-star median paired improvement in native-pixel PRF **shape L1 error** compared with the frozen center model; positive is better, negative means the local PRF was worse. The table uses **star-pooled medians** within each exploratory subgroup, not the v0.12 median of eight tile medians.
+
+| Post-hoc proxy | Low group (n; median gain) | High group (n; median gain) |
+|---|---:|---:|
+| Peak contrast / tile RMS; split at 217.98 | 128; **−1.02%** | 127; **+2.99%** |
+| Detected neighbors within 25 px; split at 16 | 160; **+1.30%** | 95; **−0.93%** |
+| Nearest detected peak distance; split at 9.06 px | 131; **−0.12%** | 124; **+0.60%** |
+
+NGC 104 has **more detected neighbors and lower peak contrast** than the other two studied fields. Within NGC 104, the lower-contrast group and the higher-neighbor-count group show negative median local-model gains. These findings are **consistent with** source contamination or unstable local PRF estimation contributing to the weak aggregate result; **they do not establish causality**, and field/instrument differences remain confounders. As another contrast, NGC 6752's low- and high-nearest-neighbor-distance groups have median star gains of **+3.17%** and **+34.49%** respectively; these are also exploratory subgroup summaries.
+
+![Real HST post-hoc brightness neighbor and texture stratified PRF errors](docs/results/real_prf_v13/stratified_prf_gains.png)
+
+![NGC 104 real held-out star PRF gain map across all eight test tiles](docs/results/real_prf_v13/ngc0104_failure_map.png)
+
+![NGC 104 real held-out star brightness and nearest detected peak scatter](docs/results/real_prf_v13/ngc0104_proxy_scatter.png)
+
+### Audit trail, source data and exact reproduction / 可追溯原始数据
+
+The full [v0.13 diagnostic snapshot](docs/results/real_prf_v13/) includes **all 838 frozen held-out stars** in [per_star.csv](docs/results/real_prf_v13/per_star.csv), all 24 cluster × proxy × group summaries in [groups.csv](docs/results/real_prf_v13/groups.csv), [all 12 post-hoc thresholds and missingness counts](docs/results/real_prf_v13/thresholds.csv), three unfiltered [source diagnostic reports](docs/results/real_prf_v13/source_reports/), the **exact frozen v0.12 PRF baseline JSON files used for this run** in [original_prf_reports](docs/results/real_prf_v13/original_prf_reports/), and [input checksums, experiment run and limitations](docs/results/real_prf_v13/summary.json). Exact baseline snapshots matter because even harmless last-digit floating-point changes can change JSON SHA-256 between separate HST runs.
+
+Regenerate the three figures from the archived real measurements, without downloading the large FITS mosaics:
+
+```bash
+python -m pip install -r requirements-smoke.txt
+python -m stellarweave.prf_stratification_summary \
+  --strat-reports docs/results/real_prf_v13/source_reports/*.json \
+  --prf-reports docs/results/real_prf_v13/original_prf_reports/*.json \
+  --out outputs/reproduced_v13
+```
+
+For a full new FITS run, the [real-HST workflow](https://github.com/ZJY-HSBL/StellarWeave/actions/workflows/cross-region.yml) reruns v0.12 on the same geometry, then derives v0.13 proxies from **the same FITS** and checks every original test source and score before publishing.
+
+**Limits:** No causal explanation, independent Gaia validation, measured photometric flux bias, oversampled instrument ePSF, or completeness improvement is claimed. Twenty stars lack the annular-texture proxy near tile edges; they are **not removed from the original 838-star dataset**, and missingness is reported per group.
 ## v0.12.0 — Real HST spatial PSF / PRF experiments · 真实哈勃空间 PSF 实验
 
 **Three actual HST/ACS F606W mosaics, 27 predefined disjoint tiles, 24 held-out evaluation regions, 838 evaluated held-out stars.** The same 3×3 grid is used as the astrometric benchmark. The local empirical PRF is estimated only from training stars in each tile; a frozen center-tile PRF and a fixed 2.6-pixel-FWHM Gaussian are scored on **exactly the same held-out star stamps**. No held-out star contributes to a model that is scored on that star.
@@ -500,7 +549,8 @@ Unverified `--alignment wcs` or manual-shift positions are **diagnostic only**, 
 - **v0.10**: optional ESA Gaia DR3 TAP retrieval, per-source epoch propagation, frozen-HST-solution comparison on withheld tiles, strict provenance and diagnostic QC. Actual Gaia-on-HST external precision remains unmeasured.
 - **v0.11**: reproducible real-HST experimental dashboard (24 individual tile records and three figures), immutable-source hashes, GitHub Actions evidence snapshots, and real FITS observation-date audits (effective epochs NOT verified).
 - **v0.12**: measured native-pixel PRF spatial variation on 27 real HST tiles; training/held-out star shape comparisons across 24 outer tiles (838 stars), honest positive/negative results, 5+ real experiment plots, archived raw reports and automatic GitHub Actions reproduction.
-- **v0.13 (planned)**: verify constituent-exposure observation epochs and Gaia DR3 external checks; quantify PSF model stability under crowding and noise, and progress toward instrument-calibrated oversampled ePSF.
+- **v0.13**: exploratory real-FITS brightness/neighbor/annulus stratification of all 838 unchanged held-out test stars; NGC 104 lower-contrast and higher-neighbor-count subgroups show worse local PRF shape gains, with raw evidence, three real figures and exact original PRF snapshots.
+- **v0.14 (planned)**: validate physical flux-bias/noise behavior with injection-and-recovery controls, improve spatial PRF robustness in crowded fields, verify effective observation epochs and pursue independent Gaia DR3 checks.
 
 Cite the [survey archive](https://archive.stsci.edu/prepds/acsggct/), [Sarajedini et al. (2007)](https://arxiv.org/abs/astro-ph/0612598), and [Anderson et al. (2008)](https://arxiv.org/abs/0804.2025) when using the data.
 

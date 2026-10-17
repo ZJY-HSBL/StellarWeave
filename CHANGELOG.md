@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.13.0 — 2026-10-17
+
+**Real HST PSF/PRF failure analysis without test-set refitting or cherry-picking.**
+
+- Added `stellarweave/prf_stratification.py` to reopen original HST FITS mosaics and compute peak-to-tile-RMS contrast, nearest 6-sigma detected-peak distance, detected neighbor count within 25 px and 5–10 px annular image texture for the exact v0.12 frozen test stars.
+- Added `stellarweave/prf_stratification_summary.py`: validates every original held-out star and its unchanged L1 scores, verifies FITS/plate/PRF provenance hashes, and generates three real-data diagnostic PNGs plus complete per-star, group and threshold CSVs.
+- Results: NGC 104 has median 16 detected neighbors within 25 px (NGC 6752: 7; NGC 6397: 3) and peak/tile-RMS contrast 218 (vs 778 and 879). Within NGC 104, low vs high peak-contrast subgroups show median star gains −1.02% vs +2.99%; low vs high neighbor-count subgroups show +1.30% vs −0.93%. **These are exploratory associations, not causal evidence or photometric improvements.**
+- Retained all 838 frozen outer-tile test stars; annulus-texture proxy is missing for 20 sources, explicitly accounted for without dropping the baseline test records.
+- Archived all three exact original PRF baseline reports used in this run alongside three stratification source reports to permit hash-checked regeneration even when independent runs differ in last-digit floating-point output.
+- Extended three-cluster GitHub Actions to rerun the real HST pixel-proxy analysis, archive raw data and plot genuine results directly into README; added tests for source integrity, score tampering, full test-set retention and snapshot reproduction.
+
+**Not achieved:** a causal account of NGC 104, calibrated photometric accuracy, physical source SNR, independent Gaia astrometry or an instrument-calibrated oversampled ePSF.
+
 ## v0.12.0 — 2026-10-17
 
 **Cross-validated native-pixel PRF shape diagnostics on real HST/ACS mosaics.**
