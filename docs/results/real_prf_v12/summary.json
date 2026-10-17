@@ -1,0 +1,70 @@
+{
+  "version": "0.12.0",
+  "kind": "REAL_HST_NATIVE_PIXEL_PRF_CROSSVALIDATION",
+  "source_github_actions_run_id": "39006379815",
+  "source_commit": "d3086d6636ccb620d1b35cbc894db6356e9c7908",
+  "clusters": [
+    {
+      "cluster": "ngc6397",
+      "evaluated_heldout_tiles": 8,
+      "possible_heldout_tiles": 8,
+      "local_prf_better_tiles": 8,
+      "median_tile_paired_gain_pct": 18.586537907625306,
+      "bootstrap_95ci_median_tile_gain_pct": [
+        5.660006242670107,
+        26.52087285805715
+      ],
+      "evaluated_heldout_stars": 300,
+      "median_star_local_l1": 0.08386593933957498,
+      "median_star_anchor_l1": 0.10874727545430232,
+      "median_star_gaussian_l1": 0.2578558567519688,
+      "report_sha256": "d99352f309be809bf37f39436e0f226afcfd8e6d67d44f4e8bfb4e8f89c5d0e3",
+      "fits_sha256": "6833575d7e3aed784f5425d16f96c1550c74827c0428c0fd5e5d591c12e7a096",
+      "plate_sha256": "414f9d33768476be5bf41398307b2f88f75d8ea3f7abaf236bbb8d98517092d9"
+    },
+    {
+      "cluster": "ngc6752",
+      "evaluated_heldout_tiles": 8,
+      "possible_heldout_tiles": 8,
+      "local_prf_better_tiles": 8,
+      "median_tile_paired_gain_pct": 16.833602784852992,
+      "bootstrap_95ci_median_tile_gain_pct": [
+        4.590942563556649,
+        25.65919343350036
+      ],
+      "evaluated_heldout_stars": 283,
+      "median_star_local_l1": 0.16412794177209578,
+      "median_star_anchor_l1": 0.19108660102690672,
+      "median_star_gaussian_l1": 0.2770132949926897,
+      "report_sha256": "23d121f57cf4c4d004c229ed1adbf349fef23c463e483cc077687669615c5196",
+      "fits_sha256": "a89a2b91a9c15baeeccc60c8f78a0449cbf2ee444d378def7933d892ac29d860",
+      "plate_sha256": "8a314f9a54bf3ce2e5bb9493e89b0b409be47b8af55522ef4af67971f29c1ba8"
+    },
+    {
+      "cluster": "ngc0104",
+      "evaluated_heldout_tiles": 8,
+      "possible_heldout_tiles": 8,
+      "local_prf_better_tiles": 4,
+      "median_tile_paired_gain_pct": 0.3524568397638807,
+      "bootstrap_95ci_median_tile_gain_pct": [
+        -0.5117007945339178,
+        2.2547793386019945
+      ],
+      "evaluated_heldout_stars": 255,
+      "median_star_local_l1": 0.40002866047921304,
+      "median_star_anchor_l1": 0.38614417286105546,
+      "median_star_gaussian_l1": 0.45932188754450215,
+      "report_sha256": "8f4d225b20ea0a6c5ba345459dbfb2c97c4293bdc7e215c0adacbc8c93c73771",
+      "fits_sha256": "3a297e695d92b9ee147986996c73ddc03ac471dcafca6399b7fb99c1cfafe765",
+      "plate_sha256": "3291bdd8bc940a1e123c722b0fa130782a3e9277a493e28088975a7956841d15"
+    }
+  ],
+  "heldout_tile_slots": 24,
+  "evaluated_heldout_tiles": 24,
+  "all_failed_tiles_retained": true,
+  "external_gaia_validation": false,
+  "calibrated_photometry": false,
+  "oversampled_instrument_epsf": false,
+  "metric": "L1 difference between normalized star stamp and train-only PRF; lower is better",
+  "limitation": "Native-pixel empirical PRF and bright isolated candidate stamps. Not a measured photometric improvement or science-grade ePSF."
+}

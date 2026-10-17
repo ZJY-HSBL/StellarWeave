@@ -1,0 +1,200 @@
+{
+  "version": "0.12.0",
+  "kind": "REAL_HST_NATIVE_PIXEL_PSF_SPATIAL_DIAGNOSTIC",
+  "cluster": "ngc6752",
+  "tile_size": 512,
+  "stamp_size": 15,
+  "min_usable_stars": 8,
+  "max_usable_stars": 80,
+  "anchor_index": 4,
+  "tile_count": 9,
+  "tiles": [
+    {
+      "tile_index": 0,
+      "tile_xy": [
+        2241,
+        2229
+      ],
+      "valid_fraction": 1.0,
+      "status": "USABLE_NATIVE_PSF",
+      "used_stars": 78,
+      "metrics": {
+        "r50_px": 1.286946611762355,
+        "r80_px": 2.23606797749979,
+        "half_light_diameter_px": 2.57389322352471,
+        "core_3x3_fraction": 0.659202912435713,
+        "moment_ellipticity_inner5px": 0.0761269658438457
+      },
+      "distance_to_anchor_total_variation": 0.03862217837307863,
+      "isolated_candidates": 284
+    },
+    {
+      "tile_index": 1,
+      "tile_xy": [
+        2753,
+        2229
+      ],
+      "valid_fraction": 1.0,
+      "status": "USABLE_NATIVE_PSF",
+      "used_stars": 77,
+      "metrics": {
+        "r50_px": 1.1790970260155222,
+        "r80_px": 2.23606797749979,
+        "half_light_diameter_px": 2.3581940520310445,
+        "core_3x3_fraction": 0.6705437817591877,
+        "moment_ellipticity_inner5px": 0.08506173761036888
+      },
+      "distance_to_anchor_total_variation": 0.05131006304826392,
+      "isolated_candidates": 249
+    },
+    {
+      "tile_index": 2,
+      "tile_xy": [
+        3265,
+        2229
+      ],
+      "valid_fraction": 1.0,
+      "status": "USABLE_NATIVE_PSF",
+      "used_stars": 77,
+      "metrics": {
+        "r50_px": 1.246156532362384,
+        "r80_px": 2.23606797749979,
+        "half_light_diameter_px": 2.492313064724768,
+        "core_3x3_fraction": 0.6658184546267566,
+        "moment_ellipticity_inner5px": 0.0923504400131327
+      },
+      "distance_to_anchor_total_variation": 0.036673556721635206,
+      "isolated_candidates": 272
+    },
+    {
+      "tile_index": 3,
+      "tile_xy": [
+        2241,
+        2741
+      ],
+      "valid_fraction": 1.0,
+      "status": "USABLE_NATIVE_PSF",
+      "used_stars": 79,
+      "metrics": {
+        "r50_px": 1.3373427060612584,
+        "r80_px": 2.23606797749979,
+        "half_light_diameter_px": 2.6746854121225168,
+        "core_3x3_fraction": 0.651865484737335,
+        "moment_ellipticity_inner5px": 0.09768447721067404
+      },
+      "distance_to_anchor_total_variation": 0.03118041100707204,
+      "isolated_candidates": 280
+    },
+    {
+      "tile_index": 4,
+      "tile_xy": [
+        2753,
+        2741
+      ],
+      "valid_fraction": 1.0,
+      "status": "USABLE_NATIVE_PSF",
+      "used_stars": 77,
+      "metrics": {
+        "r50_px": 1.4142135623730951,
+        "r80_px": 2.23606797749979,
+        "half_light_diameter_px": 2.8284271247461903,
+        "core_3x3_fraction": 0.6333184867415416,
+        "moment_ellipticity_inner5px": 0.09355277401111271
+      },
+      "distance_to_anchor_total_variation": 0.0,
+      "isolated_candidates": 175
+    },
+    {
+      "tile_index": 5,
+      "tile_xy": [
+        3265,
+        2741
+      ],
+      "valid_fraction": 1.0,
+      "status": "USABLE_NATIVE_PSF",
+      "used_stars": 78,
+      "metrics": {
+        "r50_px": 1.4084891823142465,
+        "r80_px": 2.23606797749979,
+        "half_light_diameter_px": 2.816978364628493,
+        "core_3x3_fraction": 0.6482923457597368,
+        "moment_ellipticity_inner5px": 0.09514504816855263
+      },
+      "distance_to_anchor_total_variation": 0.02459433569777555,
+      "isolated_candidates": 287
+    },
+    {
+      "tile_index": 6,
+      "tile_xy": [
+        2241,
+        3253
+      ],
+      "valid_fraction": 1.0,
+      "status": "USABLE_NATIVE_PSF",
+      "used_stars": 77,
+      "metrics": {
+        "r50_px": 1.3331144695080754,
+        "r80_px": 2.23606797749979,
+        "half_light_diameter_px": 2.666228939016151,
+        "core_3x3_fraction": 0.6568429182768221,
+        "moment_ellipticity_inner5px": 0.11130803171329001
+      },
+      "distance_to_anchor_total_variation": 0.030801992393683458,
+      "isolated_candidates": 274
+    },
+    {
+      "tile_index": 7,
+      "tile_xy": [
+        2753,
+        3253
+      ],
+      "valid_fraction": 1.0,
+      "status": "USABLE_NATIVE_PSF",
+      "used_stars": 80,
+      "metrics": {
+        "r50_px": 1.4142135623730951,
+        "r80_px": 2.23606797749979,
+        "half_light_diameter_px": 2.8284271247461903,
+        "core_3x3_fraction": 0.6370759407796449,
+        "moment_ellipticity_inner5px": 0.12474722727410356
+      },
+      "distance_to_anchor_total_variation": 0.0204138414768631,
+      "isolated_candidates": 284
+    },
+    {
+      "tile_index": 8,
+      "tile_xy": [
+        3265,
+        3253
+      ],
+      "valid_fraction": 1.0,
+      "status": "USABLE_NATIVE_PSF",
+      "used_stars": 79,
+      "metrics": {
+        "r50_px": 1.4142135623730951,
+        "r80_px": 2.23606797749979,
+        "half_light_diameter_px": 2.8284271247461903,
+        "core_3x3_fraction": 0.6471244792585898,
+        "moment_ellipticity_inner5px": 0.11252345454110428
+      },
+      "distance_to_anchor_total_variation": 0.029669439596062795,
+      "isolated_candidates": 273
+    }
+  ],
+  "usable_tiles": 9,
+  "failed_tiles": 0,
+  "anchor_usable": true,
+  "r50_range_px": [
+    1.1790970260155222,
+    1.4142135623730951
+  ],
+  "median_r50_px": 1.3373427060612584,
+  "median_heldout_total_variation": 0.03099120170037775,
+  "same_tile_origins_as_astrometric_benchmark": true,
+  "native_pixel_psf_not_oversampled_ePSF": true,
+  "not_calibrated_photometry": true,
+  "not_independent_astrometry": true,
+  "limitations": "Peak-selected isolated bright sources; background and centroid approximations, unknown sampling/CTE/drizzle correlation. Spatial differences are descriptive, not calibrated PSF error.",
+  "input_fits_sha256": "a89a2b91a9c15baeeccc60c8f78a0449cbf2ee444d378def7933d892ac29d860",
+  "plate_report_sha256": "8a314f9a54bf3ce2e5bb9493e89b0b409be47b8af55522ef4af67971f29c1ba8"
+}
